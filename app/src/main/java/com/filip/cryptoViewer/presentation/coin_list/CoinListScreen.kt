@@ -17,18 +17,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.filip.cryptoViewer.presentation.Screen
-import com.filip.cryptoViewer.presentation.coin_list.components.CoinListItem
+import com.filip.cryptoViewer.presentation.coin_list.components.CoinTickerListItem
 
 @Composable
 fun CoinListScreen(
     navController: NavController,
     viewModel: CoinListViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.value
+    val state = viewModel.state2
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn ( modifier = Modifier.fillMaxSize()) {
             items(state.coins) { coin ->
-                CoinListItem(coin = coin,
+                CoinTickerListItem(
+                    coin = coin,
                     onItemClick =  {
                         navController.navigate(Screen.CoinDetailScreen.route + "/${coin.id}")
 

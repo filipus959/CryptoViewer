@@ -1,4 +1,6 @@
-package com.filip.cryptoViewer.data.remote.dto
+package com.filip.cryptoViewer.domain.model
+
+import com.filip.cryptoViewer.data.remote.dto.Quotes
 
 data class CoinTickerItem(
     val beta_value: Double,
@@ -12,3 +14,4 @@ data class CoinTickerItem(
     val symbol: String,
     val total_supply: Long
 )
+

@@ -1,10 +1,12 @@
 package com.filip.cryptoViewer.presentation.coin_list
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Resource
+import com.filip.cryptoViewer.domain.use_case.get_Ticker_Coins.GetTickerCoinsUseCase
 import com.filip.cryptoViewer.domain.use_case.get_coins.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,28 +15,56 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
-    private val getCoinsUseCase: GetCoinsUseCase
+    private val getCoinsUseCase: GetCoinsUseCase,
+    private val getTickerCoinsUseCase: GetTickerCoinsUseCase
 ) : ViewModel() {
-    private val _state = mutableStateOf(CoinListState())
-    val state : State<CoinListState> = _state
+    private var _state by mutableStateOf(CoinListState())
+        private set
+
+    var state2 by mutableStateOf(CoinTickerListState.Empty)
+        private set
 
     init {
-        getCoins()
+        // getCoins()
+        getTickerCoins()
     }
 
-    private fun getCoins() {
-        getCoinsUseCase().onEach { result ->
-            when(result) {
+//    private fun getCoins() {
+//        getCoinsUseCase().onEach { result ->
+//            when(result) {
+//                is Resource.Success -> {
+//                    _state.value= CoinListState(coins = result.data ?: emptyList())
+//                }
+//                is Resource.Error -> {
+//                    _state.value = CoinListState(
+//                        error = result.message ?: "An unexpected error occured"
+//                    )
+//                }
+//                is Resource.Loading -> {
+//                    _state.value = CoinListState(isLoading = true)
+//                }
+//            }
+//        }.launchIn(viewModelScope)
+//    }
+
+    private fun getTickerCoins() {
+        getTickerCoinsUseCase().onEach { result ->
+            when (result) {
                 is Resource.Success -> {
-                    _state.value = CoinListState(coins = result.data ?: emptyList())
+                    state2 = state2.copy(coins = result.data, isLoading = false, error = "")
                 }
+
                 is Resource.Error -> {
-                    _state.value = CoinListState(
+                    state2 = state2.copy(
+                        isLoading = false,
                         error = result.message ?: "An unexpected error occured"
                     )
+
                 }
+
                 is Resource.Loading -> {
-                    _state.value = CoinListState(isLoading = true)
+                    state2 = state2.copy(isLoading = true, error = "")
+
                 }
             }
         }.launchIn(viewModelScope)
