@@ -55,6 +55,3 @@ The project follows the **Clean Architecture** pattern, ensuring a clear separat
 
 CryptoViewer uses **Hilt** for dependency injection. Hilt simplifies the process of managing dependencies, and it is integrated across the entire project to provide objects like repositories, use cases, and view models.
 
-## License
-
-This project is licensed under the MIT License. See the License file for details.
