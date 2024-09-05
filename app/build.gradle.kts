@@ -85,17 +85,12 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.lifecycle.runtime.ktx.v231)
 
-    //Dagger - Hilt
-    //implementation ("com.google.dagger:hilt-android:2.38.1")
-  //  kapt( "com.google.dagger:hilt-android-compiler:2.37")
 
     implementation(libs.hilt.android.v248)
     kapt(libs.hilt.android.compiler.v248)
- //   implementation (libs.androidx.hilt.lifecycle.viewmodel)
     kapt (libs.androidx.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
-   // implementation(libs.hilt.android)
-   // kapt(libs.hilt.android.compiler)
+
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
