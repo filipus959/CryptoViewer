@@ -11,6 +11,7 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 - Efficient data handling using **Retrofit** for API calls.
 - Dependency management with **Hilt**.
 - MVVM architecture with **ViewModel** and **Coroutines** for background tasks.
+-  Fetches real-time data using the free **CoinPaprika API**.
 
 ## Technologies Used
 
@@ -21,6 +22,7 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 - **Hilt**: Dependency injection for managing the application's dependencies.
 - **ViewModel**: For managing UI-related data lifecycle-consciously.
 - **Coroutines**: For asynchronous programming and handling API calls efficiently.
+- - **CoinPaprika API**: Free API for fetching cryptocurrency prices and information.
 
 ## Project Structure
 
@@ -50,6 +52,10 @@ The project follows the **Clean Architecture** pattern, ensuring a clear separat
    ./gradlew build
    ```
 4. Run the app on an emulator or a physical device.
+
+### API Setup
+
+CryptoViewer uses the free **CoinPaprika API** to fetch real-time cryptocurrency data. You do not need an API key for basic usage of this API. The application already has the necessary setup to make requests to the CoinPaprika endpoints.
 
 ## Dependency Injection with Hilt
 
