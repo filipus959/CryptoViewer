@@ -22,7 +22,7 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 - **Hilt**: Dependency injection for managing the application's dependencies.
 - **ViewModel**: For managing UI-related data lifecycle-consciously.
 - **Coroutines**: For asynchronous programming and handling API calls efficiently.
-- - **CoinPaprika API**: Free API for fetching cryptocurrency prices and information.
+- **CoinPaprika API**: Free API for fetching cryptocurrency prices and information.
 
 ## Project Structure
 
