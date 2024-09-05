@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -33,16 +32,31 @@ fun CoinListScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "# Coin",
+                text = "#. Coin",
                 style = MaterialTheme.typography.bodySmall,
-                overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.Bold
-            )
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(0.dp,20.dp)
+                    .weight(1f)
 
+            )
+            Text(text = "Price",
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(0.9f)
+                    .padding(0.dp,20.dp),
+                textAlign = TextAlign.End)
+            Text(
+                text = "24H Change",
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f)
+                    .padding(0.dp,20.dp)
+            )
         }
         LazyColumn(modifier = Modifier.run { padding(0.dp,60.dp) }) {
             items(state.coins) { coin ->

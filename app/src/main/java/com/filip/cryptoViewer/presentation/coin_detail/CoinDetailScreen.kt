@@ -40,6 +40,7 @@ fun CoinDetailScreen(
                 contentPadding = PaddingValues(20.dp)
             ) {
                 item {
+                    Spacer(modifier = Modifier.height(20.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
