@@ -42,7 +42,7 @@ The project follows the **Clean Architecture** pattern, ensuring a clear separat
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/cryptoviewer.git
+   git clone https://github.com/filipus30/CryptoViewer.git
    ```
 2. Open the project in **Android Studio**.
 3. Build the project to install necessary dependencies:
@@ -51,14 +51,10 @@ The project follows the **Clean Architecture** pattern, ensuring a clear separat
    ```
 4. Run the app on an emulator or a physical device.
 
-### API Setup
-
-To fetch real-time cryptocurrency data, ensure that you have an API key for a cryptocurrency API (e.g., CoinGecko, CoinMarketCap). Update the `build.gradle` file or a configuration file with your API key.
-
 ## Dependency Injection with Hilt
 
 CryptoViewer uses **Hilt** for dependency injection. Hilt simplifies the process of managing dependencies, and it is integrated across the entire project to provide objects like repositories, use cases, and view models.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the License file for details.
