@@ -86,10 +86,15 @@ dependencies {
     implementation (libs.androidx.lifecycle.runtime.ktx.v231)
 
 
+    //hilt
     implementation(libs.hilt.android.v248)
     kapt(libs.hilt.android.compiler.v248)
     kapt (libs.androidx.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
+
+    //chart
+    implementation (libs.charts)
+
 
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

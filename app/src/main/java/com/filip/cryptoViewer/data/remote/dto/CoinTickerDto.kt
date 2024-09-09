@@ -15,18 +15,7 @@ data class CoinTickerDto(
     val total_supply: Long
 )
 
-//fun CoinTickerDto.toCoinTicker(): CoinTickerItem {
-//    return CoinTickerItem(
-//        coinId =  id,
-//        name = name,
-//        description = description,
-//        symbol = symbol,
-//        isActive = is_active,
-//        rank = rank,
-//        tags = tags.map { it.name},
-//        team = team
-//    )
-//}
+
 fun CoinTickerDto.toCoinTicker(): CoinTickerItem {
     return CoinTickerItem(
         beta_value = beta_value,

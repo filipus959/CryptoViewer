@@ -1,0 +1,68 @@
+package com.filip.cryptoViewer.presentation.coin_chart
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.filip.cryptoViewer.presentation.Screen
+import com.filip.cryptoViewer.presentation.coin_chart.components.PriceLineChart
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CoinChartScreen(
+    navController: NavController,
+    viewModel: CoinChartViewModel = hiltViewModel()
+) {
+    val state = viewModel.state.value
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 30.dp, end = 30.dp, top = 30.dp)
+        ) {
+            Text(text = "Price Chart", style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            // Full width for PriceLineChart
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f) // This allows the chart to expand within the available space
+            ) {
+                PriceLineChart(prices = state.coins)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Marketcap: " + state.marketCap + "$",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Button(
+                modifier = Modifier
+                    .padding(16.dp),
+                onClick = {
+                    navController.navigate(Screen.CoinDetailScreen.route + "/${state.id}")
+                }
+            ) {
+                Text(text = "More info about the coin")
+            }
+        }
+
+
+    }
+}

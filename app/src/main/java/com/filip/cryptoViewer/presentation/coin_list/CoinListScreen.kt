@@ -63,7 +63,7 @@ fun CoinListScreen(
                 CoinTickerListItem(
                     coin = coin,
                     onItemClick = {
-                        navController.navigate(Screen.CoinDetailScreen.route + "/${coin.id}")
+                        navController.navigate(Screen.CoinChartScreen.route + "/${coin.id}")
 
                     }
                 )
