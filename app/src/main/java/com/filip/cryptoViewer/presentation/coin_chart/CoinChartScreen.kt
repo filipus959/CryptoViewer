@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,26 +36,27 @@ fun CoinChartScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 30.dp, end = 30.dp, top = 30.dp)
+                .padding(start = 32.dp, end = 32.dp, top = 32.dp)
         ) {
-            Text(text = "Price Chart", style = MaterialTheme.typography.headlineMedium)
+            Text(text = "Price Chart for ${state.id}", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(16.dp))
             // Full width for PriceLineChart
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // This allows the chart to expand within the available space
+                    .weight(0.9f) // This allows the chart to expand within the available space
             ) {
                 PriceLineChart(prices = state.coins)
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Marketcap: " + state.marketCap + "$",
+                text = "Marketcap: " + formatNumberWithCommas(state.marketCap) + "$",
                 style = MaterialTheme.typography.headlineMedium
             )
             Button(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally),
                 onClick = {
                     navController.navigate(Screen.CoinDetailScreen.route + "/${state.id}")
                 }

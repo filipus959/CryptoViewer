@@ -35,8 +35,8 @@ fun CoinListItem(
             style = MaterialTheme.typography.bodyLarge,
             overflow = TextOverflow.Ellipsis
         )
-        Text(text = if(coin.is_active) "active" else "inactive",
-            color = if(coin.is_active) Color.Green else Color.Red,
+        Text(text = if(coin.isActive) "active" else "inactive",
+            color = if(coin.isActive) Color.Green else Color.Red,
             fontStyle = FontStyle.Italic,
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.bodyMedium,

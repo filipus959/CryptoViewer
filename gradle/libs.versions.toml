@@ -2,6 +2,7 @@
 accompanistFlowlayout = "0.17.0"
 agp = "8.5.2"
 charts = "0.2.4-alpha"
+composeCharts = "0.2.1"
 hiltAndroid = "2.52"
 hiltAndroidCompiler = "2.48"
 hiltAndroidVersion = "2.48"
@@ -32,6 +33,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 charts = { module = "com.github.tehras:charts", version.ref = "charts" }
+compose-charts = { module = "io.github.bytebeats:compose-charts", version.ref = "composeCharts" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 hilt-android-compiler-v248 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }

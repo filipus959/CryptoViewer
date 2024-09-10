@@ -49,3 +49,17 @@ class CoinChartViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 }
+fun formatNumberWithCommas(numberString: String): String {
+    // Remove any existing non-digit characters
+    val cleanedNumber = numberString.replace("[^\\d]".toRegex(), "")
+
+    // Check if the cleaned number is empty or zero
+    if (cleanedNumber.isEmpty()) return "0"
+
+    // Reverse the cleaned number to simplify the insertion of commas
+    val reversedNumber = cleanedNumber.reversed()
+    val withCommasReversed = reversedNumber.chunked(3).joinToString(",")
+
+    // Reverse it back to get the final formatted number
+    return withCommasReversed.reversed()
+}

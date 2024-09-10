@@ -16,7 +16,7 @@ fun CoinDto.toCoin(): Coin {
     return Coin (
         id = id,
         name = name,
-        is_active = is_active,
+        isActive = is_active,
         rank = rank,
         symbol = symbol
     )

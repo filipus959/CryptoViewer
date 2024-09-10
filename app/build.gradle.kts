@@ -94,6 +94,7 @@ dependencies {
 
     //chart
     implementation (libs.charts)
+    implementation(libs.compose.charts)
 
 
     // Retrofit
@@ -102,6 +103,10 @@ dependencies {
     implementation( "com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
+    val room_version = "2.6.1"
+    //room
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
    // kapt {
    //     correctErrorTypes = true
    // }

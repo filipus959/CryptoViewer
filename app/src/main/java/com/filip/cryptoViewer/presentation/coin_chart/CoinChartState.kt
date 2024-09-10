@@ -7,5 +7,6 @@ data class CoinChartState(
     val coins: List<CoinChart> = emptyList(),
     val error: String = "",
     val id: String = "",
-    val marketCap: String = ""
+    val marketCap: String = "",
+    val name: String = ""
 )

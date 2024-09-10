@@ -44,7 +44,7 @@ fun CoinTickerListItem(
         Spacer(modifier = Modifier.width(30.dp))
 
         Text(
-            text = "$"+df.format(coin.quotes.USD.price),
+            text = "$"+ formatter(coin.quotes.USD.price),
             modifier = Modifier.weight(0.8f),
             textAlign = TextAlign.End
         )
@@ -59,5 +59,17 @@ fun CoinTickerListItem(
 
         )
 
+
+    }
+}
+val formatter: (Double) -> String = { value ->
+    when {
+        value < 10 -> {
+            String.format("%.6f", value)
+        }
+        else -> {
+            // If value is less than 1000, show with 2 decimal digits
+            String.format("%.2f", value)
+        }
     }
 }
