@@ -28,6 +28,8 @@ class CoinListViewModel @Inject constructor(
     var searchQuery by mutableStateOf("")
         private set
 
+    private var allCoinsData: List<CoinTickerItem> = emptyList()
+
     init {
         // getCoins()
         getTickerCoins()
@@ -55,7 +57,8 @@ class CoinListViewModel @Inject constructor(
         getTickerCoinsUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    state2 = state2.copy(coins = result.data, isLoading = false, error = "")
+                    allCoinsData = result.data
+                    state2 = state2.copy(coins = filterCoinList(query = state2.searchQuery), isLoading = false, error = "")
                 }
 
                 is Resource.Error -> {
@@ -68,14 +71,18 @@ class CoinListViewModel @Inject constructor(
 
                 is Resource.Loading -> {
                     state2 = state2.copy(isLoading = true, error = "")
-
                 }
             }
         }.launchIn(viewModelScope)
     }
+
     // Function to update the search query and filter the list
-    fun updateSearchQuery(query: String) {
+    fun onSearchQueryUpdated(query: String) {
         searchQuery = query
+        updateListModels(query = query)
+    }
+
+    private fun updateListModels(query: String){
         state2 = state2.copy(
             coins = filterCoinList(query)
         )
@@ -84,9 +91,9 @@ class CoinListViewModel @Inject constructor(
     // Function to filter the coin list based on the `name` field
     private fun filterCoinList(query: String): List<CoinTickerItem> {
         return if (query.isBlank()) {
-            state2.coins
+            allCoinsData
         } else {
-            state2.coins.filter { it.name.contains(query, ignoreCase = true) }
+            allCoinsData.filter { it.name.contains(query, ignoreCase = true) }
         }
     }
 }

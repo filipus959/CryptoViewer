@@ -41,7 +41,9 @@ fun CoinListScreen(
             Spacer(modifier = Modifier.height(30.dp))
             TextField(
                 value = viewModel.searchQuery,
-                onValueChange = { viewModel.updateSearchQuery(it) }, // Call ViewModel to update search query
+                onValueChange = {
+                    viewModel.onSearchQueryUpdated(it)
+                }, // Call ViewModel to update search query
                 label = { Text("Search Coins") },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -70,7 +72,7 @@ fun CoinListScreen(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .weight(0.9f)
-                        .padding(23.dp,0.dp),
+                        .padding(23.dp, 0.dp),
                     textAlign = TextAlign.Start
                 )
                 Text(
