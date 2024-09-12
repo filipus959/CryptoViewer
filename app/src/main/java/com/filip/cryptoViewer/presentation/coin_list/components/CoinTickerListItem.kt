@@ -46,7 +46,7 @@ fun CoinTickerListItem(
         Text(
             text = "$"+ formatter(coin.quotes.USD.price),
             modifier = Modifier.weight(0.8f),
-            textAlign = TextAlign.End
+            textAlign = TextAlign.Start
         )
         Text(
             text = if (pChange > 0) "+${pChange}%" else "${pChange}%",

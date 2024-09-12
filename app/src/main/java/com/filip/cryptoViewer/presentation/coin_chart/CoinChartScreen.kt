@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -32,19 +33,20 @@ fun CoinChartScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .padding(0.dp,46.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                .padding(start = 32.dp, top = 32.dp)
         ) {
             Text(text = "Price Chart for ${state.id}", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(16.dp))
-            // Full width for PriceLineChart
+            // Use a lower weight value for PriceLineChart
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.9f) // This allows the chart to expand within the available space
+                    .weight(0.5f) // Adjust the weight to make it smaller
             ) {
                 PriceLineChart(prices = state.coins)
             }
@@ -55,7 +57,7 @@ fun CoinChartScreen(
             )
             Button(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .offset((-16).dp) //half of the chart padding
                     .align(Alignment.CenterHorizontally),
                 onClick = {
                     navController.navigate(Screen.CoinDetailScreen.route + "/${state.id}")
@@ -63,8 +65,8 @@ fun CoinChartScreen(
             ) {
                 Text(text = "More info about the coin")
             }
-        }
 
+        }
 
     }
 }

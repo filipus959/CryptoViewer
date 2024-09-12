@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Resource
+import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import com.filip.cryptoViewer.domain.use_case.get_Ticker_Coins.GetTickerCoinsUseCase
 import com.filip.cryptoViewer.domain.use_case.get_coins.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,9 @@ class CoinListViewModel @Inject constructor(
         private set
 
     var state2 by mutableStateOf(CoinTickerListState.Empty)
+        private set
+
+    var searchQuery by mutableStateOf("")
         private set
 
     init {
@@ -69,4 +73,21 @@ class CoinListViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+    // Function to update the search query and filter the list
+    fun updateSearchQuery(query: String) {
+        searchQuery = query
+        state2 = state2.copy(
+            coins = filterCoinList(query)
+        )
+    }
+
+    // Function to filter the coin list based on the `name` field
+    private fun filterCoinList(query: String): List<CoinTickerItem> {
+        return if (query.isBlank()) {
+            state2.coins
+        } else {
+            state2.coins.filter { it.name.contains(query, ignoreCase = true) }
+        }
+    }
 }
+

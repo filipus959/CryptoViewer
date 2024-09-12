@@ -96,6 +96,8 @@ dependencies {
     implementation (libs.charts)
     implementation(libs.compose.charts)
 
+    implementation (libs.androidx.runtime.livedata)
+
 
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
