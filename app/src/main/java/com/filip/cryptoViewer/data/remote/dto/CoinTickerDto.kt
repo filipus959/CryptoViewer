@@ -1,7 +1,5 @@
 package com.filip.cryptoViewer.data.remote.dto
 
-import com.filip.cryptoViewer.domain.model.CoinTickerItem
-
 data class CoinTickerDto(
     val beta_value: Double,
     val first_data_at: String,
@@ -13,20 +11,5 @@ data class CoinTickerDto(
     val rank: Int,
     val symbol: String,
     val total_supply: Long
+
 )
-
-
-fun CoinTickerDto.toCoinTicker(): CoinTickerItem {
-    return CoinTickerItem(
-        beta_value = beta_value,
-        id = id,
-        name = name,
-        rank = rank,
-        symbol = symbol,
-        quotes = quotes,
-        last_updated = last_updated,
-        total_supply = total_supply,
-        first_data_at = first_data_at,
-        max_supply = max_supply
-    )
-}

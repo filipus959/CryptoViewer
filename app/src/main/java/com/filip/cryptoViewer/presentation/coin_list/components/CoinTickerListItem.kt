@@ -26,7 +26,9 @@ fun CoinTickerListItem(
     coin: CoinTickerItem,
     onItemClick: (CoinTickerItem) -> Unit
 ) {
-    val pChange = coin.quotes.USD.percent_change_24h
+    val pChange = coin.percent_change_24h
+
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,7 +46,7 @@ fun CoinTickerListItem(
         Spacer(modifier = Modifier.width(30.dp))
 
         Text(
-            text = "$"+ formatter(coin.quotes.USD.price),
+            text = "$"+ formatter(coin.usdPrice),
             modifier = Modifier.weight(0.8f),
             textAlign = TextAlign.Start
         )

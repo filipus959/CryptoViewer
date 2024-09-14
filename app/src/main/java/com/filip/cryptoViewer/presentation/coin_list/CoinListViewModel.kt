@@ -5,19 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filip.cryptoViewer.common.Resource
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
-import com.filip.cryptoViewer.domain.use_case.get_Ticker_Coins.GetTickerCoinsUseCase
-import com.filip.cryptoViewer.domain.use_case.get_coins.GetCoinsUseCase
+import com.filip.cryptoViewer.domain.use_case.get_ticker_coins.GetTickerCoinsUseCase
+import com.filip.cryptoViewer.domain.use_case.observe_Ticker_Coins.ObserveTickerCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
-    private val getCoinsUseCase: GetCoinsUseCase,
-    private val getTickerCoinsUseCase: GetTickerCoinsUseCase
+    private val getTickerCoinsUseCase: GetTickerCoinsUseCase,
+    private val observeTickerCoinsUseCase: ObserveTickerCoinsUseCase
 ) : ViewModel() {
     private var _state by mutableStateOf(CoinListState())
         private set
@@ -32,7 +30,10 @@ class CoinListViewModel @Inject constructor(
 
     init {
         // getCoins()
-        getTickerCoins()
+        viewModelScope.launch {
+            getTickerCoinsUseCase()
+            observeTickerCoins()
+        }
     }
 
 //    private fun getCoins() {
@@ -53,27 +54,28 @@ class CoinListViewModel @Inject constructor(
 //        }.launchIn(viewModelScope)
 //    }
 
-    private fun getTickerCoins() {
-        getTickerCoinsUseCase().onEach { result ->
-            when (result) {
-                is Resource.Success -> {
-                    allCoinsData = result.data
-                    state2 = state2.copy(coins = filterCoinList(query = state2.searchQuery), isLoading = false, error = "")
-                }
+    private suspend fun observeTickerCoins() {
+        state2 = state2.copy(isLoading = true, error = "")
 
-                is Resource.Error -> {
-                    state2 = state2.copy(
-                        isLoading = false,
-                        error = result.message ?: "An unexpected error occured"
-                    )
+        // Collect the flow from the use case
+        try {
+            observeTickerCoinsUseCase().collect { coins ->
+                // Save the full data set to a local variable
+                allCoinsData = coins
 
-                }
-
-                is Resource.Loading -> {
-                    state2 = state2.copy(isLoading = true, error = "")
-                }
+                // Filter the list based on the current search query
+                state2 = state2.copy(
+                    coins = filterCoinList(query = searchQuery),
+                    isLoading = false,
+                    error = ""
+                )
             }
-        }.launchIn(viewModelScope)
+        } catch (e: Exception) {
+            state2 = state2.copy(
+                isLoading = false,
+                error = "An error occurred: ${e.localizedMessage}"
+            )
+        }
     }
 
     // Function to update the search query and filter the list
@@ -82,7 +84,7 @@ class CoinListViewModel @Inject constructor(
         updateListModels(query = query)
     }
 
-    private fun updateListModels(query: String){
+    private fun updateListModels(query: String) {
         state2 = state2.copy(
             coins = filterCoinList(query)
         )

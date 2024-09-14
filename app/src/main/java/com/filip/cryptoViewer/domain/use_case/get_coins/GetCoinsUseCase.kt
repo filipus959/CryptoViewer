@@ -1,7 +1,6 @@
 package com.filip.cryptoViewer.domain.use_case.get_coins
 
 import com.filip.cryptoViewer.common.Resource
-import com.filip.cryptoViewer.data.remote.dto.toCoin
 import com.filip.cryptoViewer.domain.model.Coin
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +15,7 @@ class GetCoinsUseCase @Inject constructor(
     operator fun invoke(): Flow<Resource<List<Coin>>> = flow {
         try {
             emit(Resource.Loading())
-            val coins = repository.getCoins().map { it.toCoin() }
+            val coins = repository.getCoins()
             emit(Resource.Success(coins))
         } catch(e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "Unexpected Error"))

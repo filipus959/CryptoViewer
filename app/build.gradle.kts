@@ -85,6 +85,10 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.lifecycle.runtime.ktx.v231)
 
+    //room
+    implementation (libs.androidx.room.runtime)
+    //kapt (libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
 
     //hilt
     implementation(libs.hilt.android.v248)
@@ -105,10 +109,13 @@ dependencies {
     implementation( "com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
-    val room_version = "2.6.1"
-    //room
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt ("androidx.room:room-compiler:2.6.1")
+
+
+//    val room_version = "2.6.1"
+//    //room
+//    implementation("androidx.room:room-runtime:$room_version")
+//    annotationProcessor("androidx.room:room-compiler:$room_version")
    // kapt {
    //     correctErrorTypes = true
    // }
