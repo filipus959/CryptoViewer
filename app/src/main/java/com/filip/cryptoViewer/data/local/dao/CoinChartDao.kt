@@ -23,18 +23,18 @@ interface CoinChartDao {
     suspend fun updateCoinChart(coinChartEntity: CoinChartEntity)
 
     // Query to get all coin chart data
-    @Query("SELECT * FROM coin_chartsxd")
+    @Query("SELECT * FROM coin_charts")
     suspend fun getAllCoinCharts(): List<CoinChartEntity>
 
     // Query to get coin chart data by coin ID
-    @Query("SELECT * FROM coin_chartsxd WHERE id = :coinId")
+    @Query("SELECT * FROM coin_charts WHERE id = :coinId")
     suspend fun getCoinChartById(coinId: String): CoinChartEntity?
 
     // Query to delete all coin chart data
-    @Query("DELETE FROM coin_chartsxd")
+    @Query("DELETE FROM coin_charts")
     suspend fun deleteAllCoinCharts()
 
     // Query to delete coin chart data by coin ID
-    @Query("DELETE FROM coin_chartsxd WHERE id = :coinId")
+    @Query("DELETE FROM coin_charts WHERE id = :coinId")
     suspend fun deleteCoinChartById(coinId: String)
 }

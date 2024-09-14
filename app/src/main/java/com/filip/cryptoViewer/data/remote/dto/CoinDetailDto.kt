@@ -1,7 +1,5 @@
 package com.filip.cryptoViewer.data.remote.dto
 
-import com.filip.cryptoViewer.domain.model.CoinDetail
-
 data class CoinDetailDto(
     val description: String,
     val development_status: String,
@@ -28,15 +26,15 @@ data class CoinDetailDto(
     val type: String,
     val whitepaper: Whitepaper
 )
-fun CoinDetailDto.toCoinDetal(): CoinDetail {
-    return CoinDetail(
-        coinId =  id,
-        name = name,
-        description = description,
-        symbol = symbol,
-        isActive = is_active,
-        rank = rank,
-        tags = tags.map { it.name},
-        team = team
-    )
-}
+//fun CoinDetailDto.toCoinDetal(): CoinDetail {
+//    return CoinDetail(
+//        coinId =  id,
+//        name = name,
+//        description = description,
+//        symbol = symbol,
+//        isActive = is_active,
+//        rank = rank,
+//        tags = tags.map { it.name},
+//        team = team
+//    )
+//}

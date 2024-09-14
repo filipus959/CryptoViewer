@@ -79,7 +79,7 @@ fun CoinDetailScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         coin.tags.forEach { tag ->
-                            CoinTag(tag = tag)
+                            CoinTag(tag = tag.name)
                         }
                     }
                     Spacer(modifier = Modifier.height(15.dp))

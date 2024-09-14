@@ -23,18 +23,18 @@ interface CoinDetailDao {
     suspend fun updateCoinDetail(coinDetailEntity: CoinDetailEntity)
 
     // Query to get all coin chart data
-    @Query("SELECT * FROM coin_details2")
+    @Query("SELECT * FROM coin_details")
     suspend fun getAllCoinDetails(): List<CoinDetailEntity>
 
     // Query to get coin chart data by coin ID
-    @Query("SELECT * FROM coin_details2 WHERE coinId = :coinId")
+    @Query("SELECT * FROM coin_details WHERE coinId = :coinId")
     suspend fun getCoinDetailById(coinId: String): CoinDetailEntity?
 
     // Query to delete all coin chart data
-    @Query("DELETE FROM coin_details2")
+    @Query("DELETE FROM coin_details")
     suspend fun deleteAllCoinDetails()
 
     // Query to delete coin chart data by coin ID
-    @Query("DELETE FROM coin_details2 WHERE coinId = :coinId")
+    @Query("DELETE FROM coin_details WHERE coinId = :coinId")
     suspend fun deleteCoinDetailById(coinId: String)
 }

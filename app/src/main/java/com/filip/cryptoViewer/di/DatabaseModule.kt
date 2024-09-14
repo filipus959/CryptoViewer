@@ -51,7 +51,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideCoinRepository(coinService: CoinPaprikaApi, coinTickerItemDao: CoinTickerItemDao): CoinRepository {
-        return CoinRepositoryImpl(coinService, coinTickerItemDao)
+    fun provideCoinRepository(coinService: CoinPaprikaApi, coinTickerItemDao: CoinTickerItemDao,coinDetailDao: CoinDetailDao,coinChartDao: CoinChartDao): CoinRepository {
+        return CoinRepositoryImpl(coinService, coinTickerItemDao,coinDetailDao,coinChartDao)
     }
 }

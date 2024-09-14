@@ -1,6 +1,7 @@
 package com.filip.cryptoViewer.data.local.converter
 
 import androidx.room.TypeConverter
+import com.filip.cryptoViewer.data.remote.dto.Tag
 import com.filip.cryptoViewer.data.remote.dto.TeamMember
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -30,4 +31,17 @@ class Converters {
         // Convert the List<String> back to List<TeamMember> (with name only)
         return namesList.map { TeamMember(name = it, position = "", id = "") } // Assuming position isn't needed
     }
+
+    @TypeConverter
+    fun fromTags(tags: List<Tag>?): String? {
+        // Convert list of Tag to a comma-separated String
+        return tags?.joinToString(",") { it.name }
+    }
+
+    @TypeConverter
+    fun toTags(tagNames: String?): List<Tag> {
+        // Convert comma-separated String back to a list of Tag
+        return tagNames?.split(",")?.map { Tag(name = it, id = "", coin_counter = 0, ico_counter = 0) } ?: emptyList()
+    }
+
 }
