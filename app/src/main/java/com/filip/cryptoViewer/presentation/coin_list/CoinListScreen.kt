@@ -1,5 +1,7 @@
 package com.filip.cryptoViewer.presentation.coin_list
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +21,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +36,7 @@ fun CoinListScreen(
     navController: NavController,
     viewModel: CoinListViewModel = hiltViewModel()
 ) {
+    val  darkTheme: Boolean = isSystemInDarkTheme()
     val state = viewModel.state2
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
@@ -53,6 +57,7 @@ fun CoinListScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(color = if(darkTheme) MaterialTheme.colorScheme.onPrimary else Color.LightGray)
                     .padding(horizontal = 20.dp, vertical = 8.dp), // Reduce vertical padding here
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {

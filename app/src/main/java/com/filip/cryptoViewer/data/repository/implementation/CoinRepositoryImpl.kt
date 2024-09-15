@@ -1,6 +1,5 @@
 package com.filip.cryptoViewer.data.repository.implementation
 
-import com.filip.cryptoViewer.common.Resource
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
@@ -14,7 +13,6 @@ import com.filip.cryptoViewer.domain.model.CoinDetail
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
@@ -29,39 +27,33 @@ class CoinRepositoryImpl @Inject constructor(
 
     // Define the function without returning a value
     override suspend fun fetchTickerCoins() {
-        // Create a flow that performs the required operations
-        flow {
-            emit(Resource.Loading<List<CoinTickerItem>>())
+        // Emit loading state and perform API operations without returning a flow
+        try {
+            // Fetch data from the API
+            val tickerCoinsApiResponse = api.getTickerCoins()
 
-            try {
-                // Try to fetch data from the API
-                val tickerCoinsApiResponse = api.getTickerCoins()
-                // Cache the fetched data in the local database
-                coinTickerItemDao.insertAllCoinTickerItems(
-                    tickerCoinsApiResponse.map { apiEntry -> apiEntry.toDbModel() }
-                )
-                emit(Resource.Success(tickerCoinsApiResponse))
+            // Cache the fetched data in the local database
+            coinTickerItemDao.insertAllCoinTickerItems(
+                tickerCoinsApiResponse.map { apiEntry -> apiEntry.toDbModel() }
+            )
 
-            } catch (e: HttpException) {
-                // Handle HTTP exceptions
-                emit(Resource.Error<List<CoinTickerItem>>(e.localizedMessage ?: "Unexpected Error"))
+        } catch (e: HttpException) {
+            // Handle HTTP exceptions (log or handle error state if needed)
+            println("Error: ${e.localizedMessage ?: "Unexpected Error"}")
 
-            } catch (e: IOException) {
-                // Handle IO exceptions (e.g., no internet connection)
-                // Fetch data from the local database as fallback
-                coinTickerItemDao.getAllCoinTickerItems()
-                    .map { dbList -> dbList.map { it.toDomainModel() } } // Convert to API model if needed
-                    .collect { cachedData ->
-                        if (cachedData.isNotEmpty()) {
-                            emit(Resource.Success(cachedData))
-                        } else {
-                            emit(Resource.Error<List<CoinTickerItem>>("Couldn't reach server and no cached data available"))
-                        }
+        } catch (e: IOException) {
+            // Handle IO exceptions (e.g., no internet connection)
+            // Fetch data from the local database as a fallback
+            coinTickerItemDao.getAllCoinTickerItems()
+                .map { dbList -> dbList.map { it.toDomainModel() } }
+                .collect { cachedData ->
+                    if (cachedData.isEmpty()) {
+                        println("Couldn't reach server and no cached data available")
                     }
-            }
+                    // Optionally handle offline cached data
+                }
         }
     }
-
 
     override suspend fun getCoins(): List<Coin> {
         return api.getCoins().map { it.toCoin() }
