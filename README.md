@@ -1,7 +1,7 @@
 
 # CryptoViewer
 
-CryptoViewer is an Android application that allows users to view cryptocurrency prices and detailed information. The project is built with **Clean Architecture** and utilizes modern technologies such as **Kotlin**, **Jetpack Compose**, **Retrofit**, **Hilt**, **ViewModel**, **Coroutines**, and **Dependency Injection**.
+CryptoViewer is an Android application that allows users to view cryptocurrency prices and detailed information. The project is built with **Clean Architecture** and utilizes modern technologies such as **Kotlin**, **Jetpack Compose**, **Retrofit**, **Hilt**, **ViewModel**, **Coroutines**, **Room Database**, **Flow**, and follows the **Single Source of Truth (SSOT)** principle.
 
 ## Features
 
@@ -9,9 +9,13 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 - Access detailed information about each cryptocurrency.
 - A clean, modern user interface built with **Jetpack Compose**.
 - Efficient data handling using **Retrofit** for API calls.
+- Local data storage using **Room Database**.
+- **Flow** integration for reactive data streams from the database.
+- Adheres to the **Single Source of Truth (SSOT)** principle: all data is fetched from the API, stored in the local database, and displayed from there to ensure data consistency.
+- Works offline: The app can function without internet access if data has been previously fetched and stored in the database.
 - Dependency management with **Hilt**.
 - MVVM architecture with **ViewModel** and **Coroutines** for background tasks.
--  Fetches real-time data using the free **CoinPaprika API**.
+- Fetches real-time data using the free **CoinPaprika API**.
 
 ## Technologies Used
 
@@ -19,9 +23,12 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 - **Jetpack Compose**: Modern toolkit for building UI.
 - **Clean Architecture**: Separation of concerns, modularized codebase.
 - **Retrofit**: For making API requests to fetch cryptocurrency data.
+- **Room Database**: Local database for storing and managing cryptocurrency data.
+- **Flow**: Kotlin's reactive streams for observing data from the Room Database.
 - **Hilt**: Dependency injection for managing the application's dependencies.
 - **ViewModel**: For managing UI-related data lifecycle-consciously.
 - **Coroutines**: For asynchronous programming and handling API calls efficiently.
+- **Single Source of Truth (SSOT)**: All data is stored in a single reliable source (Room Database) and consistently served to the UI from there.
 - **CoinPaprika API**: Free API for fetching cryptocurrency prices and information.
 
 ## Project Structure
@@ -29,8 +36,16 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 The project follows the **Clean Architecture** pattern, ensuring a clear separation of responsibilities and modularity. The structure includes:
 
 - **Domain Layer**: Contains business logic and use cases.
-- **Data Layer**: Responsible for data sources such as APIs (Retrofit) and repositories.
+- **Data Layer**: Responsible for data sources such as APIs (Retrofit) and local databases (Room).
 - **Presentation Layer**: Handles UI components with Jetpack Compose and ViewModel.
+
+### Data Flow:
+
+CryptoViewer ensures that all data displayed in the app is retrieved from the local **Room Database** following the **SSOT** principle. Data is fetched from the **CoinPaprika API** and stored locally before being displayed in the UI. This approach guarantees data consistency, improves performance, and enables offline capabilities. The app will continue to function without internet access if there are existing entries in the database.
+
+1. **API Call**: Data is fetched from the **CoinPaprika API** using **Retrofit**.
+2. **Database Storage**: The fetched data is stored in the local **Room Database**.
+3. **UI Display**: The app retrieves data from the database using **Flow** to display it in the UI.
 
 ## Getting Started
 
