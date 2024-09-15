@@ -30,6 +30,7 @@ fun CoinChartScreen(
 ) {
     val state = viewModel.state.value
 
+
     Box(
         modifier = Modifier
             .fillMaxSize()

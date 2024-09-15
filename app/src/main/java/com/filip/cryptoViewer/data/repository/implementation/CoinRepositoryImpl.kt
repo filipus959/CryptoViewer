@@ -1,5 +1,6 @@
 package com.filip.cryptoViewer.data.repository.implementation
 
+import com.filip.cryptoViewer.common.Resource
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
@@ -13,7 +14,10 @@ import com.filip.cryptoViewer.domain.model.CoinDetail
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 class CoinRepositoryImpl @Inject constructor(
@@ -23,46 +27,70 @@ class CoinRepositoryImpl @Inject constructor(
     private val coinChartDao: CoinChartDao
 ) : CoinRepository {
 
+    // Define the function without returning a value
     override suspend fun fetchTickerCoins() {
-        val tickerCoinsApiResponse = api.getTickerCoins()
+        // Create a flow that performs the required operations
+        flow {
+            emit(Resource.Loading<List<CoinTickerItem>>())
 
-//
-//        flow {
-//            try {
-//                emit(Resource.Loading())
-//                val coins = repository.observeTickerCoins()
-//                emit(Resource.Success(coins))
-//            } catch(e: HttpException) {
-//                emit(Resource.Error(e.localizedMessage ?: "Unexpected Error"))
-//            } catch(e: IOException) {
-//                emit(Resource.Error("Couldn't reach server. Please check your server connection"))
-//            }
-//        }
+            try {
+                // Try to fetch data from the API
+                val tickerCoinsApiResponse = api.getTickerCoins()
+                // Cache the fetched data in the local database
+                coinTickerItemDao.insertAllCoinTickerItems(
+                    tickerCoinsApiResponse.map { apiEntry -> apiEntry.toDbModel() }
+                )
+                emit(Resource.Success(tickerCoinsApiResponse))
 
-        coinTickerItemDao.insertAllCoinTickerItems(
-            tickerCoinsApiResponse
-                .map { apiEntry -> apiEntry.toDbModel() }
-        )
+            } catch (e: HttpException) {
+                // Handle HTTP exceptions
+                emit(Resource.Error<List<CoinTickerItem>>(e.localizedMessage ?: "Unexpected Error"))
+
+            } catch (e: IOException) {
+                // Handle IO exceptions (e.g., no internet connection)
+                // Fetch data from the local database as fallback
+                coinTickerItemDao.getAllCoinTickerItems()
+                    .map { dbList -> dbList.map { it.toDomainModel() } } // Convert to API model if needed
+                    .collect { cachedData ->
+                        if (cachedData.isNotEmpty()) {
+                            emit(Resource.Success(cachedData))
+                        } else {
+                            emit(Resource.Error<List<CoinTickerItem>>("Couldn't reach server and no cached data available"))
+                        }
+                    }
+            }
+        }
     }
+
 
     override suspend fun getCoins(): List<Coin> {
         return api.getCoins().map { it.toCoin() }
     }
 
     override suspend fun getCoinById(coinId: String): CoinDetail {
-        // Fetch data from the API
-        val coinByIdApiResponse = api.getCoinById(coinId)
-
-        // Insert the fetched data into the database
-        coinDetailDao.insertCoinDetail(coinByIdApiResponse.toDbModel())
         return try {
-            // Try to get the coin detail from the database
+            // Attempt to fetch the data from the API
+            val coinByIdApiResponse = api.getCoinById(coinId)
+
+            // Insert the fetched data into the database
+            coinDetailDao.insertCoinDetail(coinByIdApiResponse.toDbModel())
+
+            // After fetching, get the updated data from the database and return it
             val coinDetailEntity = coinDetailDao.getCoinDetailById(coinId)
 
+            coinDetailEntity?.toDomainModel()
+                ?: throw IllegalStateException("Expected coin detail to be available after insertion")
 
-            coinDetailEntity?.toDomainModel() ?:
-                throw IllegalStateException("Expected coin detail to be available after insertion")
+        } catch (e: IOException) {
+            // Handle no internet connection by falling back to the local cache
+            val cachedCoinDetailEntity = coinDetailDao.getCoinDetailById(coinId)
+
+            cachedCoinDetailEntity?.toDomainModel() ?: throw RuntimeException(
+                "No internet connection and no cached data available", e
+            )
+
         } catch (e: Exception) {
+            // Handle any other errors
             throw RuntimeException("Failed to get coin detail", e)
         }
     }
@@ -77,15 +105,29 @@ class CoinRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getChartCoinById(coinId: String, date: String): List<CoinChart> {
-        val coinChartByIdApiResponse = api.getChartCoin(coinId, date)
-        // Insert the fetched data into the database
-        coinChartDao.insertAllCoinCharts(coinChartByIdApiResponse.map { it.toDbModel(coinId) })
         return try {
-            // Try to get the coin chart  from the database
+            // Try to fetch data from the API
+            val coinChartByIdApiResponse = api.getChartCoin(coinId, date)
+            // Insert the fetched data into the database
+            coinChartDao.insertAllCoinCharts(coinChartByIdApiResponse.map { it.toDbModel(coinId) })
+
+            // After successful fetch, return the updated data from the database
             val coinChartEntities = coinChartDao.getCoinChartById(coinId)
-            coinChartEntities.map { item -> item.toDomainModel(coinId) } ?:
-            throw IllegalStateException("Expected coin detail to be available after insertion")
+            coinChartEntities.map { item -> item.toDomainModel(coinId) }
+
+        } catch (e: IOException) {
+            // Handle the case when there's no internet connection
+            // Fallback to the cached data in the database
+            val cachedCoinChartEntities = coinChartDao.getCoinChartById(coinId)
+            if (cachedCoinChartEntities.isNotEmpty()) {
+                cachedCoinChartEntities.map { item -> item.toDomainModel(coinId) }
+            } else {
+                // Throw an error if no cached data is available
+                throw RuntimeException("Couldn't reach server and no cached data available", e)
+            }
+
         } catch (e: Exception) {
+            // Handle other exceptions
             throw RuntimeException("Failed to get coin detail", e)
         }
     }

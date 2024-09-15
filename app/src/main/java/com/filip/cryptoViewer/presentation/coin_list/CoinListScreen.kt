@@ -1,6 +1,5 @@
 package com.filip.cryptoViewer.presentation.coin_list
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -54,7 +52,6 @@ fun CoinListScreen(
             // Make the row smaller by reducing the padding
             Row(
                 modifier = Modifier
-                    .background(Color.DarkGray)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 8.dp), // Reduce vertical padding here
                 horizontalArrangement = Arrangement.SpaceBetween,

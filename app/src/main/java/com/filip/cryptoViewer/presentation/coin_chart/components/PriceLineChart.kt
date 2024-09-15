@@ -3,6 +3,7 @@ package com.filip.cryptoViewer.presentation.coin_chart.components
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import java.util.Locale
 @Composable
 fun PriceLineChart(prices: List<CoinChart>) {
 
+    val  darkTheme: Boolean = isSystemInDarkTheme()
     val points = prices.map { coin ->
         Point(coin.price.toFloat(), "")
     }
@@ -44,8 +46,8 @@ fun PriceLineChart(prices: List<CoinChart>) {
         pointDrawer = NoPointDrawer,
         animation = simpleChartAnimation(),
         linesChartData = listOf(lineChartData),
-        yAxisDrawer = SimpleYAxisDrawer(labelTextColor = Color.White, labelValueFormatter = {value -> labelValueFormatter(value)+"$" } ),
-        xAxisDrawer = SimpleXAxisDrawer(labelTextColor = Color.White),
+        yAxisDrawer = SimpleYAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black, labelValueFormatter = {value -> labelValueFormatter(value)+"$" } ),
+        xAxisDrawer = SimpleXAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black),
         labels = getNext12Months()
     )
 }
@@ -65,6 +67,7 @@ fun getNext12Months(): List<String> {
     return months
 }
 
+@SuppressLint("DefaultLocale")
 val labelValueFormatter: (Float) -> String = { value ->
     when {
         value >= 10000 -> {
