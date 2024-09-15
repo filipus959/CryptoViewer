@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "coin_charts")
 
 data class CoinChartEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val coinId: String = "",
     val market_cap: Long,
     val price: Double,
     val timestamp: String,

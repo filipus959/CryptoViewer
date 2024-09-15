@@ -13,7 +13,7 @@ class CoinChartLocalRepository(private val coinChartDao: CoinChartDao) {
         return coinChartDao.getAllCoinCharts()
     }
 
-    suspend fun getCoinChartById(coinId: String): CoinChartEntity? {
+    suspend fun getCoinChartById(coinId: String): List<CoinChartEntity> {
         return coinChartDao.getCoinChartById(coinId)
     }
 

@@ -7,7 +7,6 @@ import com.filip.cryptoViewer.data.local.mapper.toDbModel
 import com.filip.cryptoViewer.data.local.mapper.toDomainModel
 import com.filip.cryptoViewer.data.remote.CoinPaprikaApi
 import com.filip.cryptoViewer.data.remote.dto.toCoin
-import com.filip.cryptoViewer.data.remote.dto.toCoinChart
 import com.filip.cryptoViewer.domain.model.Coin
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.domain.model.CoinDetail
@@ -56,21 +55,19 @@ class CoinRepositoryImpl @Inject constructor(
 
         // Insert the fetched data into the database
         coinDetailDao.insertCoinDetail(coinByIdApiResponse.toDbModel())
-
         return try {
             // Try to get the coin detail from the database
             val coinDetailEntity = coinDetailDao.getCoinDetailById(coinId)
 
-            // Check if the result is null
-            // Convert and return the non-null entity
-            coinDetailEntity?.toDomainModel() ?: // Handle the case where no data is found
+
+            coinDetailEntity?.toDomainModel() ?:
                 throw IllegalStateException("Expected coin detail to be available after insertion")
         } catch (e: Exception) {
-            // Handle exceptions appropriately
-            // For example, you can rethrow the exception or handle it based on your needs
             throw RuntimeException("Failed to get coin detail", e)
         }
     }
+
+
 
     override suspend fun observeTickerCoins(): Flow<List<CoinTickerItem>> {
         return coinTickerItemDao.getAllCoinTickerItems()
@@ -80,6 +77,16 @@ class CoinRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getChartCoinById(coinId: String, date: String): List<CoinChart> {
-        return api.getChartCoin(coinId, date).map { it.toCoinChart() }
+        val coinChartByIdApiResponse = api.getChartCoin(coinId, date)
+        // Insert the fetched data into the database
+        coinChartDao.insertAllCoinCharts(coinChartByIdApiResponse.map { it.toDbModel(coinId) })
+        return try {
+            // Try to get the coin chart  from the database
+            val coinChartEntities = coinChartDao.getCoinChartById(coinId)
+            coinChartEntities.map { item -> item.toDomainModel(coinId) } ?:
+            throw IllegalStateException("Expected coin detail to be available after insertion")
+        } catch (e: Exception) {
+            throw RuntimeException("Failed to get coin detail", e)
+        }
     }
 }

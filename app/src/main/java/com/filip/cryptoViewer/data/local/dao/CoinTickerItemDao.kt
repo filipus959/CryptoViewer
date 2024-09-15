@@ -24,7 +24,7 @@ interface CoinTickerItemDao {
     suspend fun updateCoinTickerItem(coinTickerItemEntity: CoinTickerItemEntity)
 
     // Query to get all coin chart data
-    @Query("SELECT * FROM coin_ticker_items")
+    @Query("SELECT * FROM coin_ticker_items ORDER BY rank ASC")
     fun getAllCoinTickerItems(): Flow<List<CoinTickerItemEntity>>
 
     // Query to get coin chart data by coin ID

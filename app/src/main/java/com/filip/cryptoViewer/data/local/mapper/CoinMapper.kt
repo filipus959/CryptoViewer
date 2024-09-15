@@ -5,20 +5,20 @@ import com.filip.cryptoViewer.domain.model.Coin
 
 fun Coin.toEntity(): CoinEntity {
     return CoinEntity(
-        id = this.id,
-        name = this.name,
-        symbol = this.symbol,
-        isActive = this.isActive,
-        rank = this.rank
+        id = id,
+        name = name,
+        symbol = symbol,
+        isActive = isActive,
+        rank = rank
     )
 }
 
 fun CoinEntity.toDomainModel(): Coin {
     return Coin(
-        id = this.id,
-        name = this.name,
-        symbol = this.symbol,
-        isActive = this.isActive,
-        rank = this.rank
+        id = id,
+        name = name,
+        symbol = symbol,
+        isActive = isActive,
+        rank = rank
     )
 }
