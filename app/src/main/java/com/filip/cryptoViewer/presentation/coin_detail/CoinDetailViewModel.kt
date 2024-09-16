@@ -29,20 +29,16 @@ class CoinDetailViewModel @Inject constructor(
     }
 
     private fun getCoin(coinId: String) {
-        getCoinUseCase(coinId).onEach { result ->
-            when(result) {
-                is Resource.Success -> {
-                    _state.value = CoinDetailState(coin = result.data)
-                }
-                is Resource.Error -> {
-                    _state.value = CoinDetailState(
-                        error = result.message ?: "An unexpected error occured"
+        getCoinUseCase(coinId)
+            .onEach { result ->
+                _state.value = when (result) {
+                    is Resource.Success -> CoinDetailState(coin = result.data)
+                    is Resource.Error -> CoinDetailState(
+                        error = result.message ?: "An unexpected error occurred"
                     )
-                }
-                is Resource.Loading -> {
-                    _state.value = CoinDetailState(isLoading = true)
+                    is Resource.Loading -> CoinDetailState(isLoading = true)
                 }
             }
-        }.launchIn(viewModelScope)
+            .launchIn(viewModelScope) // This line handles the coroutine context implicitly
     }
 }

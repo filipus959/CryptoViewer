@@ -1,5 +1,6 @@
 package com.filip.cryptoViewer.presentation.coin_list.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import java.text.DecimalFormat
 
-val df = DecimalFormat("#.###")
 
 @Composable
 fun CoinTickerListItem(
@@ -47,7 +47,9 @@ fun CoinTickerListItem(
 
         Text(
             text = "$"+ formatter(coin.usdPrice),
-            modifier = Modifier.weight(0.8f),
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .weight(0.8f),
             textAlign = TextAlign.Start
         )
         Text(
@@ -55,8 +57,6 @@ fun CoinTickerListItem(
             color = if (pChange > 0) Color.Green else Color.Red,
             fontStyle = FontStyle.Italic,
             textAlign = TextAlign.End,
-            //style = MaterialTheme.typography.bodyMedium,
-            // modifier = Modifier.align(CenterVertically),
             modifier = Modifier.weight(1f)
 
         )
@@ -64,6 +64,7 @@ fun CoinTickerListItem(
 
     }
 }
+@SuppressLint("DefaultLocale")
 val formatter: (Double) -> String = { value ->
     when {
         value < 10 -> {

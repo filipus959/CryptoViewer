@@ -1,6 +1,7 @@
 package com.filip.cryptoViewer.presentation.coin_list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -37,7 +39,8 @@ fun CoinListScreen(
     viewModel: CoinListViewModel = hiltViewModel()
 ) {
     val  darkTheme: Boolean = isSystemInDarkTheme()
-    val state = viewModel.state2
+    val state = viewModel.state
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             Spacer(modifier = Modifier.height(30.dp))
@@ -54,38 +57,14 @@ fun CoinListScreen(
             )
 
             // Make the row smaller by reducing the padding
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = if(darkTheme) MaterialTheme.colorScheme.onPrimary else Color.LightGray)
-                    .padding(horizontal = 20.dp, vertical = 8.dp), // Reduce vertical padding here
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = "#. Coin",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .weight(1f)
-                )
-                Text(
-                    text = "Price",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .weight(0.9f)
-                        .padding(23.dp, 0.dp),
-                    textAlign = TextAlign.Start
-                )
-                Text(
-                    text = "24H Change",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier
-                        .weight(1f)
-                )
-            }
+            SortingRow(
+                darkTheme = darkTheme,
+                rankArrow = viewModel.rankArrow,
+                priceArrow = viewModel.priceArrow ,
+                changeArrow = viewModel.changeArrow ,
+                onSortByRank = { viewModel.sortCoinsByRank() },
+                onSortByPrice = { viewModel.sortCoinsByPrice() },
+                onSortByChange = { viewModel.sortCoinsByChange() })
 
             LazyColumn {
                 items(state.coins) { coin ->
@@ -115,4 +94,55 @@ fun CoinListScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
+}
+@Composable
+fun SortingRow(
+    darkTheme: Boolean,
+    rankArrow: String,
+    priceArrow: String,
+    changeArrow: String,
+    onSortByRank: () -> Unit,
+    onSortByPrice: () -> Unit,
+    onSortByChange: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = if (darkTheme) MaterialTheme.colorScheme.onPrimary else Color.LightGray)
+            .padding(horizontal = 20.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        SortableText(
+            text = "#. Coin $rankArrow",
+            onClick = onSortByRank,
+        )
+        SortableText(
+            text = "Price $priceArrow",
+            onClick = onSortByPrice,
+            paddingStart = 34.dp,
+            textAlign = TextAlign.Start
+        )
+        SortableText(
+            text = "24H Change $changeArrow",
+            onClick = onSortByChange,
+            textAlign = TextAlign.End
+        )
+    }
+}
+@Composable
+fun SortableText(
+    text: String,
+    onClick: () -> Unit,
+    paddingStart: Dp = 0.dp,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(start = paddingStart),
+        textAlign = textAlign
+    )
 }

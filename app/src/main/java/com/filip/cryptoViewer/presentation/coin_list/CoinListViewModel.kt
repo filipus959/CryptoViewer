@@ -12,91 +12,98 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class SortOrder {
+    ASCENDING, DESCENDING
+}
+
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
     private val getTickerCoinsUseCase: GetTickerCoinsUseCase,
     private val observeTickerCoinsUseCase: ObserveTickerCoinsUseCase
 ) : ViewModel() {
-    private var _state by mutableStateOf(CoinListState())
-        private set
 
-    var state2 by mutableStateOf(CoinTickerListState.Empty)
+    var state by mutableStateOf(CoinTickerListState.Empty)
         private set
 
     var searchQuery by mutableStateOf("")
         private set
 
-    private var allCoinsData: List<CoinTickerItem> = emptyList()
+    private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
+    val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
+
+    private var sortByPriceOrder by mutableStateOf(SortOrder.ASCENDING)
+    private var sortByRankOrder by mutableStateOf(SortOrder.ASCENDING)
+    private var sortByChangeOrder by mutableStateOf(SortOrder.ASCENDING)
+
+    val priceArrow: String get() = getArrow(sortByPriceOrder)
+    val rankArrow: String get() = getArrow(sortByRankOrder)
+    val changeArrow: String get() = getArrow(sortByChangeOrder)
 
     init {
-        // getCoins()
         viewModelScope.launch {
-            getTickerCoinsUseCase()
+            getTickerCoinsUseCase() // Trigger any initial data fetching
             observeTickerCoins()
         }
     }
 
-//    private fun getCoins() {
-//        getCoinsUseCase().onEach { result ->
-//            when(result) {
-//                is Resource.Success -> {
-//                    _state.value= CoinListState(coins = result.data ?: emptyList())
-//                }
-//                is Resource.Error -> {
-//                    _state.value = CoinListState(
-//                        error = result.message ?: "An unexpected error occured"
-//                    )
-//                }
-//                is Resource.Loading -> {
-//                    _state.value = CoinListState(isLoading = true)
-//                }
-//            }
-//        }.launchIn(viewModelScope)
-//    }
+    private fun getArrow(sortOrder: SortOrder) = if (sortOrder == SortOrder.ASCENDING) "↑" else "↓"
+
+    fun sortCoinsByPrice() {
+        sortByPriceOrder = if (sortByPriceOrder == SortOrder.ASCENDING) SortOrder.DESCENDING else SortOrder.ASCENDING
+        _allCoinsData = _allCoinsData.sortedWith(compareBy { it.usdPrice })
+        if (sortByPriceOrder == SortOrder.DESCENDING) {
+            _allCoinsData = _allCoinsData.reversed()
+        }
+        updateListState()
+    }
+
+    fun sortCoinsByRank() {
+        sortByRankOrder = if (sortByRankOrder == SortOrder.ASCENDING) SortOrder.DESCENDING else SortOrder.ASCENDING
+        _allCoinsData = _allCoinsData.sortedWith(compareBy { it.rank })
+        if (sortByRankOrder == SortOrder.DESCENDING) {
+            _allCoinsData = _allCoinsData.reversed()
+        }
+        updateListState()
+    }
+
+    fun sortCoinsByChange() {
+        sortByChangeOrder = if (sortByChangeOrder == SortOrder.ASCENDING) SortOrder.DESCENDING else SortOrder.ASCENDING
+        _allCoinsData = _allCoinsData.sortedWith(compareBy { it.percent_change_24h })
+        if (sortByChangeOrder == SortOrder.DESCENDING) {
+            _allCoinsData = _allCoinsData.reversed()
+        }
+        updateListState()
+    }
 
     private suspend fun observeTickerCoins() {
-        state2 = state2.copy(isLoading = true, error = "")
+        state = state.copy(isLoading = true, error = "")
 
-        // Collect the flow from the use case
         try {
             observeTickerCoinsUseCase().collect { coins ->
-                // Save the full data set to a local variable
-                allCoinsData = coins
-
-                // Filter the list based on the current search query
-                state2 = state2.copy(
-                    coins = filterCoinList(query = searchQuery),
-                    isLoading = false,
-                    error = ""
-                )
+                _allCoinsData = coins
+                updateListState()
             }
         } catch (e: Exception) {
-            state2 = state2.copy(
+            state = state.copy(
                 isLoading = false,
                 error = "An error occurred: ${e.localizedMessage}"
             )
         }
     }
 
-    // Function to update the search query and filter the list
     fun onSearchQueryUpdated(query: String) {
         searchQuery = query
-        updateListModels(query = query)
+        updateListState()
     }
 
-    private fun updateListModels(query: String) {
-        state2 = state2.copy(
-            coins = filterCoinList(query)
+    private fun updateListState() {
+        state = state.copy(
+            coins = filterCoinList(searchQuery),
+            isLoading = false,
+            error = ""
         )
     }
 
-    // Function to filter the coin list based on the `name` field
-    private fun filterCoinList(query: String): List<CoinTickerItem> {
-        return if (query.isBlank()) {
-            allCoinsData
-        } else {
-            allCoinsData.filter { it.name.contains(query, ignoreCase = true) }
-        }
-    }
+    private fun filterCoinList(query: String): List<CoinTickerItem> =
+        if (query.isBlank()) allCoinsData else allCoinsData.filter { it.name.contains(query, ignoreCase = true) }
 }
-
