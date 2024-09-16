@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -41,8 +42,13 @@ fun CoinListScreen(
     val  darkTheme: Boolean = isSystemInDarkTheme()
     val state = viewModel.state
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column {
+
+    Box(modifier = Modifier
+        .fillMaxSize()) {
+        Column(
+            modifier = Modifier
+               .navigationBarsPadding()
+        ) {
             Spacer(modifier = Modifier.height(30.dp))
             TextField(
                 value = viewModel.searchQuery,
@@ -76,6 +82,7 @@ fun CoinListScreen(
                     )
                 }
             }
+
         }
 
         if (state.error.isNotBlank()) {
