@@ -6,8 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
-import com.filip.cryptoViewer.domain.use_case.get_ticker_coins.GetTickerCoinsUseCase
-import com.filip.cryptoViewer.domain.use_case.observe_Ticker_Coins.ObserveTickerCoinsUseCase
+import com.filip.cryptoViewer.domain.repository.CoinRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,8 +17,7 @@ enum class SortOrder {
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
-    private val getTickerCoinsUseCase: GetTickerCoinsUseCase,
-    private val observeTickerCoinsUseCase: ObserveTickerCoinsUseCase
+    private val coinRepository: CoinRepository,
 ) : ViewModel() {
 
     var state by mutableStateOf(CoinTickerListState.Empty)
@@ -29,7 +27,7 @@ class CoinListViewModel @Inject constructor(
         private set
 
     private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
-    val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
+    private val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
 
     private var sortByPriceOrder by mutableStateOf(SortOrder.ASCENDING)
     private var sortByRankOrder by mutableStateOf(SortOrder.ASCENDING)
@@ -41,7 +39,7 @@ class CoinListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getTickerCoinsUseCase() // Trigger any initial data fetching
+            fetchTickerCoins() // Trigger any initial data fetching
             observeTickerCoins()
         }
     }
@@ -79,7 +77,7 @@ class CoinListViewModel @Inject constructor(
         state = state.copy(isLoading = true, error = "")
 
         try {
-            observeTickerCoinsUseCase().collect { coins ->
+            coinRepository.observeTickerCoins().collect { coins ->
                 _allCoinsData = coins
                 updateListState()
             }
@@ -102,6 +100,9 @@ class CoinListViewModel @Inject constructor(
             isLoading = false,
             error = ""
         )
+    }
+    private suspend fun fetchTickerCoins() {
+        coinRepository.fetchTickerCoins()
     }
 
     private fun filterCoinList(query: String): List<CoinTickerItem> =

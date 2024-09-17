@@ -54,7 +54,7 @@ fun CoinChartScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Marketcap: " + formatNumberWithCommas(state.marketCap) + "$",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
             )
             Button(
                 modifier = Modifier
@@ -62,7 +62,8 @@ fun CoinChartScreen(
                     .align(Alignment.CenterHorizontally),
                 onClick = {
                     navController.navigate(Screen.CoinDetailScreen.route + "/${state.id}")
-                }
+                },
+
             ) {
                 Text(text = "More info about the coin")
             }

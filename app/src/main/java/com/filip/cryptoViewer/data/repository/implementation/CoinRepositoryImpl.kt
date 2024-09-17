@@ -1,5 +1,7 @@
 package com.filip.cryptoViewer.data.repository.implementation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
@@ -17,14 +19,23 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class CoinRepositoryImpl @Inject constructor(
     private val api: CoinPaprikaApi,
     private val coinTickerItemDao: CoinTickerItemDao,
     private val coinDetailDao: CoinDetailDao,
-    private val coinChartDao: CoinChartDao
+    private val coinChartDao: CoinChartDao,
+
 ) : CoinRepository {
+    @RequiresApi(Build.VERSION_CODES.O)
+    val currentDateMinus364Days: LocalDate = LocalDate.now().minusDays(364)
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formattedDate = currentDateMinus364Days.format(formatter)
 
     override suspend fun fetchTickerCoins() {
         try {
@@ -79,9 +90,10 @@ class CoinRepositoryImpl @Inject constructor(
             .map { it.map { dbItem -> dbItem.toDomainModel() } }
     }
 
-    override suspend fun getChartCoinById(coinId: String, date: String): List<CoinChart> {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getChartCoinById(coinId: String): List<CoinChart> {
         return try {
-            val chartData = api.getChartCoin(coinId, date).map { it.toDbModel(coinId) }
+            val chartData = api.getChartCoin(coinId,formattedDate).map { it.toDbModel(coinId) }
             coinChartDao.insertAllCoinCharts(chartData)
 
             coinChartDao.getCoinChartById(coinId).map { it.toDomainModel(coinId) }

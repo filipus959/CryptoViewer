@@ -8,45 +8,53 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Constants
-import com.filip.cryptoViewer.common.Resource
-import com.filip.cryptoViewer.domain.use_case.get_coin_chart.GetCoinChartUseCase
+import com.filip.cryptoViewer.domain.repository.CoinRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CoinChartViewModel @Inject constructor(
-    private val getCoinChartUseCase: GetCoinChartUseCase,
+    private val coinRepository: CoinRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = mutableStateOf(CoinChartState())
     val state: State<CoinChartState> = _state
     init {
-        savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
-            getCoinChart(coinId)
+        viewModelScope.launch {
+            savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
+                getCoinChart(coinId)
+            }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getCoinChart(coinId: String) {
-        getCoinChartUseCase(coinId).onEach { result ->
-            when(result) {
-                is Resource.Success -> {
-                    _state.value = CoinChartState(coins = result.data,id = coinId, marketCap = result.data.first().market_cap.toString())
-                }
-                is Resource.Error -> {
-                    _state.value = CoinChartState(
-                        error = result.message ?: "An unexpected error occured"
-                    )
-                }
-                is Resource.Loading -> {
-                    _state.value = CoinChartState(isLoading = true)
-                }
+    private suspend fun getCoinChart(coinId: String) {
+        _state.value = CoinChartState(isLoading = true)  // Set loading state
+
+        try {
+            // Assuming this function returns a List<CoinChart> directly
+            val coinData = coinRepository.getChartCoinById(coinId)
+
+            if (coinData.isNotEmpty()) {
+                _state.value = CoinChartState(
+                    coins = coinData,
+                    id = coinId,
+                    marketCap = coinData.first().market_cap.toString()
+                )
+            } else {
+                _state.value = CoinChartState(
+                    error = "No data available"
+                )
             }
-        }.launchIn(viewModelScope)
+        } catch (e: Exception) {
+            // Handle any errors that occur
+            _state.value = CoinChartState(
+                error = e.message ?: "An unexpected error occurred"
+            )
+        }
     }
 }
 fun formatNumberWithCommas(numberString: String): String {

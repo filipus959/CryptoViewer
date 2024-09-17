@@ -11,7 +11,7 @@ interface CoinRepository {
     suspend fun getCoinById(coinId: String): CoinDetail
     suspend fun observeTickerCoins(): Flow<List<CoinTickerItem>>
 //    suspend fun getTickerCoinById(coinId: String): CoinTickerItem
-    suspend fun getChartCoinById(coinId: String, date: String): List<CoinChart>
+    suspend fun getChartCoinById(coinId: String): List<CoinChart>
 
     suspend fun fetchTickerCoins()
 
