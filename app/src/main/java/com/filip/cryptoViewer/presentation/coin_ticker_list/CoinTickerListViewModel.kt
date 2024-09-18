@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_list
+package com.filip.cryptoViewer.presentation.coin_ticker_list
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

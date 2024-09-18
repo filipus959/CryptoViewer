@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_list
+package com.filip.cryptoViewer.presentation.coin_ticker_list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.filip.cryptoViewer.presentation.Screen
-import com.filip.cryptoViewer.presentation.coin_list.components.CoinTickerListItem
+import com.filip.cryptoViewer.presentation.coin_ticker_list.components.CoinTickerListItem
 
 @Composable
-fun CoinListScreen(
+fun CoinTickerListScreen(
     navController: NavController,
     viewModel: CoinListViewModel = hiltViewModel()
 ) {

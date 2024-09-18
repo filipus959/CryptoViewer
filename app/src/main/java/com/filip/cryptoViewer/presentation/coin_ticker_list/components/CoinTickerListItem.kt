@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_list.components
+package com.filip.cryptoViewer.presentation.coin_ticker_list.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
-import java.text.DecimalFormat
 
 
 @Composable

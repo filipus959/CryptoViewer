@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_list
+package com.filip.cryptoViewer.presentation.coin_ticker_list
 
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 

@@ -14,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.filip.cryptoViewer.presentation.Screen
 import com.filip.cryptoViewer.presentation.coin_chart.CoinChartScreen
 import com.filip.cryptoViewer.presentation.coin_detail.CoinDetailScreen
-import com.filip.cryptoViewer.presentation.coin_list.CoinListScreen
+import com.filip.cryptoViewer.presentation.coin_ticker_list.CoinTickerListScreen
 import com.filip.cryptoViewer.presentation.ui.theme.CryptoViewerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Screen.CoinListScreen.route
                         ) {
-                            CoinListScreen(navController)
+                            CoinTickerListScreen(navController)
                         }
                         composable(
                             route = Screen.CoinDetailScreen.route + "/{coinId}"

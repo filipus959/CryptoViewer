@@ -18,27 +18,26 @@ import com.github.tehras.charts.line.renderer.point.NoPointDrawer
 import com.github.tehras.charts.line.renderer.xaxis.SimpleXAxisDrawer
 import com.github.tehras.charts.line.renderer.yaxis.SimpleYAxisDrawer
 import com.github.tehras.charts.piechart.animation.simpleChartAnimation
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
 
 
 @SuppressLint("DefaultLocale")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PriceLineChart(prices: List<CoinChart>) {
+fun PriceLineChart(
+    prices: List<CoinChart>,
+    timestamps: List<String>
+) {
 
-    val  darkTheme: Boolean = isSystemInDarkTheme()
+    val darkTheme: Boolean = isSystemInDarkTheme()
     val points = prices.map { coin ->
         Point(coin.price.toFloat(), "")
     }
 
     val lineChartData = LineChartData(
-        points = points,
+        points =  points,
         lineDrawer = SolidLineDrawer(color = MaterialTheme.colorScheme.primary),
         startAtZero = false,
     )
-
 
     // Set the chart to fill the available width
     LineChart(
@@ -46,26 +45,14 @@ fun PriceLineChart(prices: List<CoinChart>) {
         pointDrawer = NoPointDrawer,
         animation = simpleChartAnimation(),
         linesChartData = listOf(lineChartData),
-        yAxisDrawer = SimpleYAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black, labelValueFormatter = {value -> labelValueFormatter(value)+"$" } ),
+        yAxisDrawer = SimpleYAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black, labelValueFormatter = { value -> labelValueFormatter(value)+"$" } ),
         xAxisDrawer = SimpleXAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black),
-        labels = getNext12Months()
+        labels = timestamps
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getNext12Months(): List<String> {
-    val currentDate = LocalDate.now()
-    val months = mutableListOf<String>()
 
-    var date = currentDate.minusMonths(11)  // Start from 11 months ago to include the current month in the list
 
-    repeat(12) {
-        months.add(date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault()))
-        date = date.plusMonths(1)
-    }
-
-    return months
-}
 
 @SuppressLint("DefaultLocale")
 val labelValueFormatter: (Float) -> String = { value ->
@@ -73,7 +60,7 @@ val labelValueFormatter: (Float) -> String = { value ->
         value >= 10000 -> {
             // Round to the nearest thousand for values >= 10000
           //  val roundedValue = (value / 1000).roundToInt() * 1000
-            String.format("%.0fK", value/1000)
+            String.format("%.0f", value)
         }
         value >= 1000 -> {
             // If value is between 1000 and 9999.99, show without decimal digits
@@ -88,3 +75,4 @@ val labelValueFormatter: (Float) -> String = { value ->
         }
     }
 }
+
