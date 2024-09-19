@@ -92,6 +92,8 @@ fun CoinChartScreen(
             Text(
                 text = "Marketcap: " + formatNumberWithCommas(state.marketCap) + "$",
                 style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
             )
             Button(
                 modifier = Modifier
