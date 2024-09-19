@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -46,66 +48,83 @@ fun CoinChartScreen(
             .padding(top = 16.dp)
             .navigationBarsPadding()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 32.dp, top = 32.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+        state.coins.let { coins ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 32.dp, top = 32.dp)
             ) {
-                Text(
-                    text = "Price Chart for ${state.id}",
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.weight(1f)
-                )
-
-                // Button to trigger DropdownMenu visibility
-                Button(
-                    onClick = { expanded = true },
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .align(Alignment.CenterVertically)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Range")
-                    ChartRangeMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        onSelectRange = { days ->
-                            viewModel.changeChartRange(days)
-                            expanded = false
-                        }
+                    Text(
+                        text = "Price Chart for ${state.id}",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.weight(1f)
                     )
+
+                    // Button to trigger DropdownMenu visibility
+                    Button(
+                        onClick = { expanded = true },
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        Text(text = "Range")
+                        ChartRangeMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            onSelectRange = { days ->
+                                viewModel.changeChartRange(days)
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.5f)
+                ) {
+                    PriceLineChart(prices = coins, timestamps)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Marketcap: " + formatNumberWithCommas(state.marketCap) + "$",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                )
+                Button(
+                    modifier = Modifier
+                        .offset((-16).dp) //half of the chart padding
+                        .align(Alignment.CenterHorizontally),
+                    onClick = {
+                        navController.navigate(Screen.CoinDetailScreen.route + "/${state.id}")
+                    },
+
+                    ) {
+                    Text(text = "More info about the coin")
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Box(
+
+        }
+        if(state.error.isNotBlank()) {
+            Text(
+                text = state.error,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.5f)
-            ) {
-                PriceLineChart(prices = state.coins, timestamps)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Marketcap: " + formatNumberWithCommas(state.marketCap) + "$",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 20.dp)
+                    .align(Alignment.Center)
             )
-            Button(
-                modifier = Modifier
-                    .offset((-16).dp) //half of the chart padding
-                    .align(Alignment.CenterHorizontally),
-                onClick = {
-                    navController.navigate(Screen.CoinDetailScreen.route + "/${state.id}")
-                },
-
-                ) {
-                Text(text = "More info about the coin")
-            }
+        }
+        if(state.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 }

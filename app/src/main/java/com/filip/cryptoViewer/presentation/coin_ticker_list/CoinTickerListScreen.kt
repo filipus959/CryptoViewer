@@ -45,60 +45,62 @@ fun CoinTickerListScreen(
 
     Box(modifier = Modifier
         .fillMaxSize()) {
-        Column(
-            modifier = Modifier
-               .navigationBarsPadding()
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-            TextField(
-                value = viewModel.searchQuery,
-                onValueChange = {
-                    viewModel.onSearchQueryUpdated(it)
-                }, // Call ViewModel to update search query
-                label = { Text("Search Coins") },
+        state.coins.let { coins ->
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                singleLine = true
-            )
+                    .navigationBarsPadding()
+            ) {
+                Spacer(modifier = Modifier.height(30.dp))
+                TextField(
+                    value = viewModel.searchQuery,
+                    onValueChange = {
+                        viewModel.onSearchQueryUpdated(it)
+                    }, // Call ViewModel to update search query
+                    label = { Text("Search Coins") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    singleLine = true
+                )
 
-            // Make the row smaller by reducing the padding
-            SortingRow(
-                darkTheme = darkTheme,
-                rankArrow = viewModel.rankArrow,
-                priceArrow = viewModel.priceArrow ,
-                changeArrow = viewModel.changeArrow ,
-                onSortByRank = { viewModel.sortCoinsByRank() },
-                onSortByPrice = { viewModel.sortCoinsByPrice() },
-                onSortByChange = { viewModel.sortCoinsByChange() })
+                // Make the row smaller by reducing the padding
+                SortingRow(
+                    darkTheme = darkTheme,
+                    rankArrow = viewModel.rankArrow,
+                    priceArrow = viewModel.priceArrow,
+                    changeArrow = viewModel.changeArrow,
+                    onSortByRank = { viewModel.sortCoinsByRank() },
+                    onSortByPrice = { viewModel.sortCoinsByPrice() },
+                    onSortByChange = { viewModel.sortCoinsByChange() })
 
-            LazyColumn {
-                items(state.coins) { coin ->
-                    CoinTickerListItem(
-                        coin = coin,
-                        onItemClick = {
-                            navController.navigate(Screen.CoinChartScreen.route + "/${coin.id}")
-                        }
-                    )
+                LazyColumn {
+                    items(coins) { coin ->
+                        CoinTickerListItem(
+                            coin = coin,
+                            onItemClick = {
+                                navController.navigate(Screen.CoinChartScreen.route + "/${coin.id}")
+                            }
+                        )
+                    }
                 }
+
             }
 
-        }
+            if (state.error.isNotBlank()) {
+                Text(
+                    text = state.error,
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .align(Alignment.Center)
+                )
+            }
 
-        if (state.error.isNotBlank()) {
-            Text(
-                text = state.error,
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.Center)
-            )
-        }
-
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            if (state.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
 }
