@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +36,8 @@ import com.filip.cryptoViewer.presentation.coin_chart.components.PriceLineChart
 @Composable
 fun CoinChartScreen(
     navController: NavController,
-    viewModel: CoinChartViewModel = hiltViewModel()
+    viewModel: CoinChartViewModel = hiltViewModel(),
+    navBarPadding: PaddingValues
 ) {
     val state = viewModel.state
     val timestamps = viewModel.getTimeStamps()
@@ -44,7 +46,7 @@ fun CoinChartScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp,bottom = 74.dp)
+            .padding(top = 16.dp,bottom = navBarPadding.calculateBottomPadding()/2 )
             .navigationBarsPadding()
     ) {
         state.coins.let { coins ->

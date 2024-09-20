@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,8 +49,7 @@ fun CoinTickerListScreen(){
     Scaffold(
         bottomBar = { BottomNavBar(navController) }
     ) { innerPadding ->
-        NavGraph(navController = navController)
-        innerPadding.calculateBottomPadding()
+        NavGraph(navController = navController,innerPadding)
     }
 }
 
@@ -58,7 +58,8 @@ fun CoinTickerListScreen(){
 @Composable
 fun CoinTickerListScreenContent(
     viewModel: CoinListViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    navBarPadding: PaddingValues
 ) {
 
     val  darkTheme: Boolean = isSystemInDarkTheme()
@@ -69,6 +70,7 @@ fun CoinTickerListScreenContent(
             Column(
                 modifier = Modifier
                     .navigationBarsPadding()
+                    .padding(bottom = navBarPadding.calculateBottomPadding()/2)
             ) {
                 Spacer(modifier = Modifier.height(30.dp))
                 TextField(

@@ -33,10 +33,14 @@ import com.google.accompanist.flowlayout.FlowRow
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CoinDetailScreen(
-    viewModel: CoinDetailViewModel = hiltViewModel()
+    viewModel: CoinDetailViewModel = hiltViewModel(),
+    navBarPadding: PaddingValues
 ) {
     val state = viewModel.state.value
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()
+        .padding(bottom = navBarPadding.calculateBottomPadding()/2)
+    )
+    {
         state.coin?.let { coin ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
