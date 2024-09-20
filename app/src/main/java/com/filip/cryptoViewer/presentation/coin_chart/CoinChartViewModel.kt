@@ -58,7 +58,8 @@ class CoinChartViewModel @Inject constructor(
                 state.copy(
                     coins = _chartList,
                     id = coinId,
-                    marketCap = _chartList.first().market_cap.toString()
+                    marketCap = _chartList.first().market_cap.toString(),
+                    isLoading = false
                 )
             } else {
                 state.copy(

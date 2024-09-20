@@ -1,5 +1,7 @@
 package com.filip.cryptoViewer.presentation.coin_detail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,14 +26,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.filip.cryptoViewer.presentation.coin_detail.components.CoinTag
 import com.filip.cryptoViewer.presentation.coin_detail.components.TeamListItem
 import com.google.accompanist.flowlayout.FlowRow
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CoinDetailScreen(
-    navController: NavController,
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value

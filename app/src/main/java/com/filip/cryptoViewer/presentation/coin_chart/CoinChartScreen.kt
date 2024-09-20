@@ -39,13 +39,12 @@ fun CoinChartScreen(
 ) {
     val state = viewModel.state
     val timestamps = viewModel.getTimeStamps()
-
     var expanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp)
+            .padding(top = 16.dp,bottom = 74.dp)
             .navigationBarsPadding()
     ) {
         state.coins.let { coins ->

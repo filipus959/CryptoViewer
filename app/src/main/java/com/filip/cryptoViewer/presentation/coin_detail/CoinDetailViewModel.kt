@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CoinDetailViewModel @Inject constructor(
     private val coinRepository: CoinRepository,

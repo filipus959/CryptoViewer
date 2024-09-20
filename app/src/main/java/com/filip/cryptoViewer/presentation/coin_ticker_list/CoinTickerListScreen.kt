@@ -1,5 +1,7 @@
 package com.filip.cryptoViewer.presentation.coin_ticker_list
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -31,18 +34,35 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.filip.cryptoViewer.presentation.Screen
 import com.filip.cryptoViewer.presentation.coin_ticker_list.components.CoinTickerListItem
+import com.filip.cryptoViewer.presentation.navigation.BottomNavBar
+import com.filip.cryptoViewer.presentation.navigation.NavGraph
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CoinTickerListScreen(){
+    val navController = rememberNavController()
+
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) }
+    ) { innerPadding ->
+        NavGraph(navController = navController)
+        innerPadding.calculateBottomPadding()
+    }
+}
+
+
 
 @Composable
-fun CoinTickerListScreen(
-    navController: NavController,
-    viewModel: CoinListViewModel = hiltViewModel()
+fun CoinTickerListScreenContent(
+    viewModel: CoinListViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+
     val  darkTheme: Boolean = isSystemInDarkTheme()
     val state = viewModel.state
-
-
     Box(modifier = Modifier
         .fillMaxSize()) {
         state.coins.let { coins ->
@@ -78,7 +98,11 @@ fun CoinTickerListScreen(
                         CoinTickerListItem(
                             coin = coin,
                             onItemClick = {
-                                navController.navigate(Screen.CoinChartScreen.route + "/${coin.id}")
+                                navController.navigate(Screen.CoinChartScreen.route + "/${coin.id}") {
+                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         )
                     }
