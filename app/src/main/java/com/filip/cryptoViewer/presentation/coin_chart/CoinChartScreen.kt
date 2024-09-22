@@ -47,7 +47,7 @@ fun CoinChartScreen(
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding()
-            .padding(top = 16.dp,bottom = navBarPadding.calculateBottomPadding()/2 )
+            .padding(top = 16.dp,bottom = navBarPadding.calculateBottomPadding()/2+16.dp )
     ) {
         state.coins.let { coins ->
             Column(
