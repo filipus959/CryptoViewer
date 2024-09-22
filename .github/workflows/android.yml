@@ -40,10 +40,6 @@ jobs:
       run: ./gradlew test
       continue-on-error: false  # Fail if any unit test fails
       
-    # List all files and directories to locate test reports
-    - name: List all files in the build folder
-      run: ls -R app/build/
-      
     # Upload test results as artifacts
     - name: Upload Unit Test Results
       uses: actions/upload-artifact@v3.2.1-node20
