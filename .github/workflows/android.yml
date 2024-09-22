@@ -30,6 +30,14 @@ jobs:
     - name: Run Unit Tests
       run: ./gradlew test
       continue-on-error: false  # Fail if any unit test fails
+      
+    # Upload test results as artifacts
+    - name: Upload Unit Test Results
+      uses: actions/upload-artifact@v3.2.1-node20
+      with:
+        name: Unit-Test-Results
+        path: app/build/reports/tests/testDebugUnitTest  # Change this path if your test results are in a different folder
+
 
     # Step to build the APK
     - name: Build with Gradle
