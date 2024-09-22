@@ -23,6 +23,11 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 - MVVM architecture with **ViewModel** and **Coroutines** for background tasks.
 - Fetches real-time data using the free **CoinPaprika API**.
 
+
+## Continuous Integration
+
+The project includes Continuous Integration (CI) configured with **GitHub Actions**. Automated tests are run on each commit and pull request to ensure the quality and stability of the application. This setup helps maintain code quality and quickly catch issues during development.
+
 ## Technologies Used
 
 - **Kotlin**: Primary language for the Android application.
