@@ -31,10 +31,24 @@ jobs:
       run: ./gradlew test
       continue-on-error: false  # Fail if any unit test fails
 
-    # Step to run Instrumented Tests (for Android)
-    - name: Run Instrumented Tests
-      run: ./gradlew connectedAndroidTest
-      continue-on-error: false  # Fail if any instrumented test fails
+    # Set up Android SDK
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v2
+      with:
+        api-level: 30
+        build-tools: 30.0.3
+        target: default
+
+    # Start Android Emulator
+    - name: Start Android Emulator
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 30
+        target: google_apis
+        arch: x86_64
+        profile: Nexus 6
+        emulator-options: "-no-snapshot -noaudio -no-window"
+        script: ./gradlew connectedAndroidTest
 
     # Step to build the APK
     - name: Build with Gradle
