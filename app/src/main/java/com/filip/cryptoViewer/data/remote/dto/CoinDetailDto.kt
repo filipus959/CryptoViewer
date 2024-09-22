@@ -26,7 +26,7 @@ data class CoinDetailDto(
     val type: String,
     val whitepaper: Whitepaper
 )
-//fun CoinDetailDto.toCoinDetal(): CoinDetail {
+//fun CoinDetailDto.toCoinDetail(): CoinDetail {
 //    return CoinDetail(
 //        coinId =  id,
 //        name = name,

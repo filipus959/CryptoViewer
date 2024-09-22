@@ -93,12 +93,28 @@ class CoinRepositoryImpl @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getChartCoinById(coinId: String): List<CoinChart> {
         return try {
-            val chartData = api.getChartCoin(coinId,formattedDate).map { it.toDbModel(coinId) }
+            // Fetch data from API
+            val chartDataResponse = api.getChartCoin(coinId, formattedDate)
+
+            // Check if the API response is null or empty
+            if (chartDataResponse.isEmpty()) {
+                throw RuntimeException("Received null or empty data from API")
+            }
+
+            // Map to DB models
+            val chartData = chartDataResponse.map { it.toDbModel(coinId) }
             coinChartDao.insertAllCoinCharts(chartData)
 
-            coinChartDao.getCoinChartById(coinId).map { it.toDomainModel(coinId) }
+            // Fetch from DAO
+            val cachedData = coinChartDao.getCoinChartById(coinId)
+            if (cachedData.isEmpty()) {
+                throw RuntimeException("No data found in the database for coinId: $coinId")
+            }
+
+            cachedData.map { it.toDomainModel(coinId) }
 
         } catch (e: IOException) {
+            // Handle IO exceptions
             val cachedData = coinChartDao.getCoinChartById(coinId)
             if (cachedData.isNotEmpty()) {
                 cachedData.map { it.toDomainModel(coinId) }

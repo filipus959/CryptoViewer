@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 
 }
 
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -53,6 +53,42 @@ android {
 }
 
 dependencies {
+    kapt (libs.hilt.compiler.v248)
+
+    // Unit Testing
+   // testImplementation (libs.junit)
+    implementation (libs.mockito.android.v5130)
+
+    testImplementation (libs.mockito.inline) // use the latest version
+
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.androidx.core.testing)
+    testImplementation (libs.truth)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.mockk)
+    testImplementation (libs.mockito.core.v400)
+    testImplementation (libs.mockito.kotlin) // For Kotlin-specific extensions
+    testImplementation (libs.junit.v412)
+    // required if you want to use Mockito for Android tests
+    androidTestImplementation (libs.mockito.android)
+
+
+
+
+    // Android Instrumentation Testing
+    androidTestImplementation (libs.junit.v113)
+    androidTestImplementation (libs.androidx.espresso.core.v340)
+    androidTestImplementation (libs.ui.test.junit4)
+    androidTestImplementation (libs.androidx.room.testing)
+    androidTestImplementation (libs.kotlinx.coroutines.test)
+
+    // For testing (androidTest)
+    androidTestImplementation (libs.hilt.android.testing)
+    kaptAndroidTest (libs.hilt.compiler)
+    kaptAndroidTest (libs.hilt.android.compiler)
+    androidTestImplementation (libs.okhttp3.mockwebserver)
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -104,20 +140,20 @@ dependencies {
 
 
     // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation( "com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
-    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
-
-    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation( libs.okhttp)
+    implementation (libs.logging.interceptor)
 
 
-//    val room_version = "2.6.1"
-//    //room
-//    implementation("androidx.room:room-runtime:$room_version")
-//    annotationProcessor("androidx.room:room-compiler:$room_version")
-   // kapt {
-   //     correctErrorTypes = true
-   // }
+
+
+    val room_version = "2.6.1"
+    //room
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt ("androidx.room:room-compiler:$room_version") // Use kapt for Kotlin
+
+
 
 }
