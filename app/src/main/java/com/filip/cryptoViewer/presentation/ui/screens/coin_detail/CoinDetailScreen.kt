@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_detail
+package com.filip.cryptoViewer.presentation.ui.screens.coin_detail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -26,8 +26,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.filip.cryptoViewer.presentation.coin_detail.components.CoinTag
-import com.filip.cryptoViewer.presentation.coin_detail.components.TeamListItem
+import com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components.CoinTag
+import com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components.TeamListItem
 import com.google.accompanist.flowlayout.FlowRow
 
 @RequiresApi(Build.VERSION_CODES.O)

@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_chart
+package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.filip.cryptoViewer.presentation.Screen
-import com.filip.cryptoViewer.presentation.coin_chart.components.ChartRangeMenu
-import com.filip.cryptoViewer.presentation.coin_chart.components.PriceLineChart
+import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ChartRangeMenu
+import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.PriceLineChart
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -49,7 +49,7 @@ fun CoinChartScreen(
             .navigationBarsPadding()
             .padding(top = 16.dp,bottom = navBarPadding.calculateBottomPadding()/2+16.dp )
     ) {
-        state.coins.let { coins ->
+        state.coins?.let { coins ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()

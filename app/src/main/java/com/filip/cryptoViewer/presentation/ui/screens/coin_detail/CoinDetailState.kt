@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_detail
+package com.filip.cryptoViewer.presentation.ui.screens.coin_detail
 
 import com.filip.cryptoViewer.domain.model.CoinDetail
 

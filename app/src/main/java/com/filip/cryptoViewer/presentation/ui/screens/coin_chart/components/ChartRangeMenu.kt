@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_chart.components
+package com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi

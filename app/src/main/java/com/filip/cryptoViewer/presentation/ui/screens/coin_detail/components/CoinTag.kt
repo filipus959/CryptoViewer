@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_detail.components
+package com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box

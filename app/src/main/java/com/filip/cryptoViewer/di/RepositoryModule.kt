@@ -2,6 +2,7 @@ package com.filip.cryptoViewer.di
 
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
+import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
 import com.filip.cryptoViewer.data.remote.CoinPaprikaApi
 import com.filip.cryptoViewer.data.repository.implementation.CoinRepositoryImpl
@@ -18,7 +19,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCoinRepository(coinService: CoinPaprikaApi, coinTickerItemDao: CoinTickerItemDao, coinDetailDao: CoinDetailDao, coinChartDao: CoinChartDao): CoinRepository {
-        return CoinRepositoryImpl(coinService, coinTickerItemDao,coinDetailDao,coinChartDao)
+    fun provideCoinRepository(coinService: CoinPaprikaApi, coinTickerItemDao: CoinTickerItemDao, coinDetailDao: CoinDetailDao, coinChartDao: CoinChartDao, coinExchangeDao: CoinExchangeDao): CoinRepository {
+        return CoinRepositoryImpl(coinService, coinTickerItemDao,coinDetailDao,coinChartDao,coinExchangeDao)
     }
 }

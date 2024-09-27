@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
+import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
 import com.filip.cryptoViewer.data.local.mapper.toDbModel
 import com.filip.cryptoViewer.data.local.mapper.toDomainModel
@@ -12,6 +13,7 @@ import com.filip.cryptoViewer.data.remote.dto.toCoin
 import com.filip.cryptoViewer.domain.model.Coin
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.domain.model.CoinDetail
+import com.filip.cryptoViewer.domain.model.CoinExchange
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +30,7 @@ class CoinRepositoryImpl @Inject constructor(
     private val coinTickerItemDao: CoinTickerItemDao,
     private val coinDetailDao: CoinDetailDao,
     private val coinChartDao: CoinChartDao,
+    private val coinExchangeDao: CoinExchangeDao
 
 ) : CoinRepository {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -65,6 +68,20 @@ class CoinRepositoryImpl @Inject constructor(
 
     override suspend fun getCoins(): List<Coin> {
         return api.getCoins().map { it.toCoin() }
+    }
+
+    override suspend fun getCoinExchanges(coinId: String, coinId2: String): CoinExchange {
+        return try {
+            val coinExchange = api.getCoinExchange(coinId, coinId2).toDbModel()
+            coinExchangeDao.insertCoinExchange(coinExchange)
+
+            coinExchangeDao.getCoinExchange(coinId,coinId2)?.toDomainModel()
+               ?: throw IllegalStateException("Coin exchange not found after insertion")
+        } catch (e: IOException) {
+            val cachedExchange = coinExchangeDao.getCoinExchange(coinId,coinId2)
+                ?: throw RuntimeException("No internet and no cached data available", e)
+            cachedExchange.toDomainModel()
+        }
     }
 
     override suspend fun getCoinById(coinId: String): CoinDetail {

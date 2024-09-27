@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_ticker_list.components
+package com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable

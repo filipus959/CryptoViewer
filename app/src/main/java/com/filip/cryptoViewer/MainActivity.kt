@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import com.filip.cryptoViewer.presentation.coin_ticker_list.CoinTickerListScreen
+import com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.CoinTickerListScreen
 import com.filip.cryptoViewer.presentation.ui.theme.CryptoViewerTheme
 import dagger.hilt.android.AndroidEntryPoint
 

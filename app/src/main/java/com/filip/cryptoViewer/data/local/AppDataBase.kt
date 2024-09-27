@@ -9,14 +9,16 @@ import com.filip.cryptoViewer.data.local.converter.Converters
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
+import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
 import com.filip.cryptoViewer.data.local.entity.CoinChartEntity
 import com.filip.cryptoViewer.data.local.entity.CoinDetailEntity
 import com.filip.cryptoViewer.data.local.entity.CoinEntity
+import com.filip.cryptoViewer.data.local.entity.CoinExchangeEntity
 import com.filip.cryptoViewer.data.local.entity.CoinTickerItemEntity
 
 @Database(
-    entities = [CoinEntity::class, CoinDetailEntity::class, CoinChartEntity::class, CoinTickerItemEntity::class],
+    entities = [CoinEntity::class, CoinDetailEntity::class, CoinChartEntity::class, CoinTickerItemEntity::class, CoinExchangeEntity::class],
     version = 1,
     exportSchema = false
 )
@@ -27,6 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun coinDetailDao(): CoinDetailDao
     abstract fun coinChartDao(): CoinChartDao
     abstract fun coinTickerItemDao(): CoinTickerItemDao
+    abstract fun coinExchangeDao(): CoinExchangeDao
 
     companion object {
         @Volatile

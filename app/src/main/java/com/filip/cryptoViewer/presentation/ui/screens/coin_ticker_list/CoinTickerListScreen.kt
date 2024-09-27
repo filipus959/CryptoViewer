@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_ticker_list
+package com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -37,7 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.filip.cryptoViewer.presentation.Screen
-import com.filip.cryptoViewer.presentation.coin_ticker_list.components.CoinTickerListItem
+import com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.components.CoinTickerListItem
 import com.filip.cryptoViewer.presentation.navigation.BottomNavBar
 import com.filip.cryptoViewer.presentation.navigation.NavGraph
 

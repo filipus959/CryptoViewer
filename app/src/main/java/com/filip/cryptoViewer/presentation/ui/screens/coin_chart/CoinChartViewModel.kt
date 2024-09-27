@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_chart
+package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -92,9 +92,9 @@ class CoinChartViewModel @Inject constructor(
 
     fun getTimeStamps(): List<String> {
         val stamps = state.coins
-        timestamps = stamps.map { coin ->
+        timestamps = stamps?.map { coin ->
             formatTimestampToMonthDay(coin.timestamp)
-        }
+        }!!
         return if(timestamps.size > 300)
             getNext12Months()
         else

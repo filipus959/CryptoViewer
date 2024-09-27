@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-//@Entity(tableName = "coin_charts")\
 @Entity(tableName = "coin_charts",
         indices = [Index(value = ["coinId", "timestamp"], unique = true)])
 

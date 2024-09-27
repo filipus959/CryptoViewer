@@ -5,6 +5,7 @@ import com.filip.cryptoViewer.data.local.AppDatabase
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
+import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
 import dagger.Module
 import dagger.Provides
@@ -44,5 +45,10 @@ object DatabaseModule {
     @Singleton
     fun provideCoinTickerItemDao(appDatabase: AppDatabase): CoinTickerItemDao {
         return appDatabase.coinTickerItemDao()
+    }
+    @Provides
+    @Singleton
+    fun provideCoinExchangeDao(appDatabase: AppDatabase): CoinExchangeDao {
+        return appDatabase.coinExchangeDao()
     }
 }

@@ -1,9 +1,9 @@
 package com.filip.cryptoViewer.domain.model
 
 data class Coin(
-    val id: String,
+    var id: String,
     val isActive: Boolean,
-    val name: String,
+    var name: String,
     val rank: Int,
     val symbol: String,
 )

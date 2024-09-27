@@ -1,6 +1,7 @@
 
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
+import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
 import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
 import com.filip.cryptoViewer.data.local.entity.CoinTickerItemEntity
 import com.filip.cryptoViewer.data.local.mapper.toDbModel
@@ -40,6 +41,7 @@ class CoinRepositoryImplTest {
     private lateinit var coinTickerItemDao: CoinTickerItemDao
     private lateinit var coinDetailDao: CoinDetailDao
     private lateinit var coinChartDao: CoinChartDao
+    private lateinit var coinExchangeDao: CoinExchangeDao
 
     @Before
     fun setup() {
@@ -47,8 +49,9 @@ class CoinRepositoryImplTest {
         coinTickerItemDao = mock(CoinTickerItemDao::class.java)
         coinDetailDao = mock(CoinDetailDao::class.java)
         coinChartDao = mock(CoinChartDao::class.java)
+        coinExchangeDao = mock(CoinExchangeDao::class.java)
 
-        repository = CoinRepositoryImpl(api, coinTickerItemDao, coinDetailDao, coinChartDao)
+        repository = CoinRepositoryImpl(api, coinTickerItemDao, coinDetailDao, coinChartDao, coinExchangeDao)
     }
 
     @Test

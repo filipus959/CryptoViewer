@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.coin_chart.components
+package com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -45,7 +45,7 @@ fun PriceLineChart(
         pointDrawer = NoPointDrawer,
         animation = simpleChartAnimation(),
         linesChartData = listOf(lineChartData),
-        yAxisDrawer = SimpleYAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black, labelValueFormatter = { value -> labelValueFormatter(value)+"$" } ),
+        yAxisDrawer = SimpleYAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black, labelValueFormatter = { value -> labelValueFormatter(value) +"$" } ),
         xAxisDrawer = SimpleXAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black),
         labels = timestamps
     )
