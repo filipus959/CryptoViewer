@@ -53,8 +53,8 @@ fun CoinConverterScreenPreviewLight() {
                 error = ""
 
             )
-            selectedCoin1 = state.coins[0]  // Bitcoin
-            selectedCoin2 = state.coins[1]  // Ethereum
+            selectedCoin1 = state.coins!![0]  // Bitcoin
+            selectedCoin2 = state.coins!![1]  // Ethereum
             result = "0.0667 BTC"
         }
 
@@ -106,8 +106,8 @@ fun CoinConverterScreenPreviewDark() {
                 error = ""
 
             )
-            selectedCoin1 = state.coins[0]  // Bitcoin
-            selectedCoin2 = state.coins[1]  // Ethereum
+            selectedCoin1 = state.coins!![0]  // Bitcoin
+            selectedCoin2 = state.coins!![1]  // Ethereum
             result = "0.0667 BTC"
         }
 
