@@ -84,6 +84,8 @@ class CoinRepositoryImpl @Inject constructor(
         }
     }
 
+
+
     override suspend fun getCoinById(coinId: String): CoinDetail {
         return try {
             val coinDetail = api.getCoinById(coinId).toDbModel()
