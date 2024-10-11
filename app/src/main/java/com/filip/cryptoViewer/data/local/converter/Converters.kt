@@ -8,16 +8,7 @@ import com.google.gson.reflect.TypeToken
 
 class Converters {
 
-    @TypeConverter
-    fun fromStringList(value: List<String>): String {
-        return Gson().toJson(value)
-    }
 
-    @TypeConverter
-    fun toStringList(value: String): List<String> {
-        val listType = object : TypeToken<List<String>>() {}.type
-        return Gson().fromJson(value, listType)
-    }
     @TypeConverter
     fun fromTeamMemberList(team: List<TeamMember>): String {
         val namesList = team.map { it.name } // Extract only names from TeamMember
@@ -41,7 +32,7 @@ class Converters {
     @TypeConverter
     fun toTags(tagNames: String?): List<Tag> {
         // Convert comma-separated String back to a list of Tag
-        return tagNames?.split(",")?.map { Tag(name = it, id = "", coin_counter = 0, ico_counter = 0) } ?: emptyList()
+        return tagNames?.split(",")?.map { Tag(name = it, id = "", coinCounter = 0, icoCounter = 0) } ?: emptyList()
     }
 
 }

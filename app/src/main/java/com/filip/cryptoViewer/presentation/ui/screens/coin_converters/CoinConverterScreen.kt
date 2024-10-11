@@ -1,12 +1,13 @@
+package com.filip.cryptoViewer.presentation.ui.screens.coin_converters
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -23,127 +23,132 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterViewModel
+import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 
 @Composable
 fun CoinConverterScreen(
     viewModel: CoinConverterViewModel = hiltViewModel(),
-    navBarPadding: PaddingValues
 ) {
     val state = viewModel.state
-    Box(modifier = Modifier.fillMaxSize()) {
-        state.coins?.let { coins ->
-            // Title
-            Text(
-                text = "Converter",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 36.dp)
-            )
 
-            // Selected Coins, Colon, Result, and Convert Button
+    LoadableScreen(state) {
+        CoinConverterScreenContent(
+            state = state,
+            selectedCoin1 = viewModel.selectedCoin1,
+            selectedCoin2 = viewModel.selectedCoin2,
+            result = viewModel.result,
+            searchQuery = viewModel.searchQuery,
+            onConvert = viewModel::runExchangeRate,
+            onSearchQueryChange = viewModel::onSearchQueryUpdated,
+            onFirstSelection = viewModel::firstSelection,
+            onSecondSelection = viewModel::secondSelection,
+        )
+    }
+
+}
+
+@Composable
+fun BoxScope.CoinConverterScreenContent(
+    state: CoinConverterState,
+    selectedCoin1: CoinTickerItem,
+    selectedCoin2: CoinTickerItem,
+    result: String,
+    searchQuery: String,
+    onConvert: () -> Unit,
+    onSearchQueryChange: (String) -> Unit,
+    onFirstSelection: (CoinTickerItem) -> Unit,
+    onSecondSelection: (CoinTickerItem) -> Unit,
+)  {
+        state.coins?.let { coins ->
             Column(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 100.dp),
+                    .padding(top = 36.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    text = "Converter",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Selected coins and conversion result
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    CoinBox(text = viewModel.selectedCoin1.name, padding = 8.dp)
+                    CoinBox(text = selectedCoin1.name, padding = 8.dp)
                     Text(
                         "->",
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
-                    CoinBox(text = viewModel.selectedCoin2.name, padding = 8.dp)
+                    CoinBox(text = selectedCoin2.name, padding = 8.dp)
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
-                    text = viewModel.result,
+                    text = result,
                     style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier
-                        .padding(16.dp)
+                    modifier = Modifier.padding(16.dp)
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { viewModel.runExchangeRate() }) {
+
+                // Convert button
+                Button(onClick = { onConvert() }) {
                     Text("Convert")
                 }
-                Spacer(modifier = Modifier.height(56.dp))
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Search field
                 SearchField(
-                    value = viewModel.searchQuery,
-                    onValueChange = viewModel::onSearchQueryUpdated,
+                    value = searchQuery,
+                    onValueChange = onSearchQueryChange,
                     label = "Search Coins",
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
+                    modifier = Modifier.fillMaxWidth(0.9f)
                 )
             }
 
-            // LazyColumns for From and To coin lists
+            Spacer(modifier = Modifier.height(24.dp)) // Add extra space between search field and lists
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = navBarPadding.calculateBottomPadding() / 2 + 20.dp)
-                    .fillMaxHeight(0.5f)  // Limit the height to 50% of the screen
+                  //  .padding(bottom = navBarPadding.calculateBottomPadding() / 2 + 20.dp)
+                    .fillMaxHeight(0.5f)
             ) {
                 LazyColumnWithLabel(
                     label = "From:",
                     coins = coins,
-                    onSelectCoin = { viewModel.firstSelection(it) },
+                    onSelectCoin = onFirstSelection,
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 LazyColumnWithLabel(
                     label = "To:",
                     coins = coins,
-                    onSelectCoin = { viewModel.secondSelection(it) },
+                    onSelectCoin = onSecondSelection,
                     modifier = Modifier.weight(1f)
                 )
             }
         }
 
-        if (state.error.isNotBlank()) {
-            Text(
-                text = state.error,
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.Center)
-            )
-        }
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        }
     }
-}
-
-@Composable
-fun CoinBox(text: String, padding: Dp) {
-    Box(
-        modifier = Modifier
-            //     .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-            .padding(padding)
-    ) {
-        Text(text = text, style = MaterialTheme.typography.headlineMedium)
-    }
-}
 
 @Composable
 fun LazyColumnWithLabel(
     label: String,
-    coins: List<CoinTickerItem>,  // Assume you're using CoinTickerItem here
+    coins: List<CoinTickerItem>,
     onSelectCoin: (CoinTickerItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -154,7 +159,7 @@ fun LazyColumnWithLabel(
             modifier = Modifier.padding(bottom = 8.dp)
         )
         LazyColumn(
-            modifier = Modifier.fillMaxHeight() // Make sure each column takes the remaining height in the Row
+            modifier = Modifier.fillMaxHeight()
         ) {
             items(coins) { coin ->
                 ListItem(coin = coin, onItemClick = { onSelectCoin(coin) })
@@ -163,7 +168,6 @@ fun LazyColumnWithLabel(
     }
 }
 
-// Modified ListItem based on your provided structure
 @Composable
 fun ListItem(
     coin: CoinTickerItem,
@@ -173,9 +177,8 @@ fun ListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onItemClick(coin.id) }
-            .padding(20.dp),
+            .padding(20.dp)
     ) {
-        // Display coin name and symbol
         Text(
             text = "${coin.name} (${coin.symbol})",
             style = MaterialTheme.typography.bodyLarge,
@@ -183,16 +186,16 @@ fun ListItem(
             modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.width(30.dp))
+    }
+}
 
-        // Display coin price if needed (commented out)
-        // Uncomment if you want to display price
-//        Text(
-//            text = "$" + formatter(coin.usdPrice),
-//            modifier = Modifier
-//                .padding(start = 12.dp)
-//                .weight(0.8f),
-//            textAlign = TextAlign.Start
-//        )
+@Composable
+fun CoinBox(text: String, padding: Dp) {
+    Box(
+        modifier = Modifier
+            .padding(padding)
+    ) {
+        Text(text = text, style = MaterialTheme.typography.headlineMedium)
     }
 }
 

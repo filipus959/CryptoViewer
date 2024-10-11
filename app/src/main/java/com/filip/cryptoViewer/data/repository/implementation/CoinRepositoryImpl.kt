@@ -1,7 +1,5 @@
 package com.filip.cryptoViewer.data.repository.implementation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
 import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
@@ -9,8 +7,6 @@ import com.filip.cryptoViewer.data.local.dao.CoinTickerItemDao
 import com.filip.cryptoViewer.data.local.mapper.toDbModel
 import com.filip.cryptoViewer.data.local.mapper.toDomainModel
 import com.filip.cryptoViewer.data.remote.CoinPaprikaApi
-import com.filip.cryptoViewer.data.remote.dto.toCoin
-import com.filip.cryptoViewer.domain.model.Coin
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.domain.model.CoinDetail
 import com.filip.cryptoViewer.domain.model.CoinExchange
@@ -33,12 +29,9 @@ class CoinRepositoryImpl @Inject constructor(
     private val coinExchangeDao: CoinExchangeDao
 
 ) : CoinRepository {
-    @RequiresApi(Build.VERSION_CODES.O)
-    val currentDateMinus364Days: LocalDate = LocalDate.now().minusDays(364)
-    @RequiresApi(Build.VERSION_CODES.O)
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    @RequiresApi(Build.VERSION_CODES.O)
-    val formattedDate = currentDateMinus364Days.format(formatter)
+    private val currentDateMinus364Days: LocalDate = LocalDate.now().minusDays(364)
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val formattedDate: String = currentDateMinus364Days.format(formatter)
 
     override suspend fun fetchTickerCoins() {
         try {
@@ -66,9 +59,7 @@ class CoinRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCoins(): List<Coin> {
-        return api.getCoins().map { it.toCoin() }
-    }
+
 
     override suspend fun getCoinExchanges(coinId: String, coinId2: String): CoinExchange {
         return try {
@@ -109,7 +100,6 @@ class CoinRepositoryImpl @Inject constructor(
             .map { it.map { dbItem -> dbItem.toDomainModel() } }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getChartCoinById(coinId: String): List<CoinChart> {
         return try {
             // Fetch data from API

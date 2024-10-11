@@ -1,12 +1,13 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_converters
 
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
+import com.filip.cryptoViewer.presentation.UIState
 
 data class CoinConverterState(
-    val isLoading: Boolean,
-    val error: String,
+    override val isLoading: Boolean,
+    override val error: String,
     val coins : List<CoinTickerItem>?
-)
+) : UIState
 {
     companion object {
         val Empty = CoinConverterState(

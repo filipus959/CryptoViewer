@@ -1,23 +1,18 @@
 package com.filip.cryptoViewer.data.remote.dto
 
-import com.filip.cryptoViewer.domain.model.CoinChart
+import com.google.gson.annotations.SerializedName
 
 data class CoinChartDtoItem(
-    val market_cap: Long,
+    @SerializedName("market_cap")
+    val marketCap: Long,
+    @SerializedName("price")
     val price: Double,
+    @SerializedName("timestamp")
     val timestamp: String,
-    val volume_24h: Long,
+    @SerializedName("volume_24h")
+    val volume24h: Long,
+    @SerializedName("coinId")
     val coinId: String
 )
 
-
-fun CoinChartDtoItem.toCoinChart() : CoinChart {
-    return CoinChart(
-        market_cap = volume_24h,
-        price = price,
-        timestamp = timestamp,
-        volume_24h = volume_24h,
-        coinId = coinId,
-    )
-}
 

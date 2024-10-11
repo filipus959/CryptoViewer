@@ -9,13 +9,13 @@ fun CoinTickerDto.toDbModel() = CoinTickerItemEntity(
     name = name,
     symbol = symbol,
     rank = rank,
-    percent_change_24h = quotes.USD.percent_change_24h,
-    usdPrice = quotes.USD.price,
-    first_data_at = first_data_at,
-    last_updated = last_updated,
-    max_supply = max_supply,
-    beta_value = beta_value,
-    total_supply = total_supply
+    percentChange24h = quotes.usd.percentChange24h,
+    usdPrice = quotes.usd.price,
+    firstDataAt = firstDataAt,
+    lastUpdated = lastUpdated,
+    maxSupply = maxSupply,
+    betaValue = betaValue,
+    totalSupply = totalSupply
 )
 
 fun CoinTickerItemEntity.toDomainModel() = CoinTickerItem(
@@ -24,5 +24,5 @@ fun CoinTickerItemEntity.toDomainModel() = CoinTickerItem(
     usdPrice = usdPrice,
     rank= rank,
     symbol= symbol,
-    percent_change_24h = percent_change_24h,
+    percentChange24h = percentChange24h,
 )

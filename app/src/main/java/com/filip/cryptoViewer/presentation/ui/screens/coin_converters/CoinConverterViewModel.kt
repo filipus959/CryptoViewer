@@ -23,8 +23,8 @@ data class CoinConverterViewModel @Inject constructor(
     private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
     private val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
     var result by mutableStateOf("result")
-    var selectedCoin1 by mutableStateOf(CoinTickerItem(id = "",name = "select coin", rank = 0, symbol = "", percent_change_24h = 0.0, usdPrice = 0.0))
-    var selectedCoin2 by mutableStateOf(CoinTickerItem(id = "",name = "select coin", rank = 0, symbol = "", percent_change_24h = 0.0, usdPrice = 0.0))
+    var selectedCoin1 by mutableStateOf(CoinTickerItem(id = "",name = "select coin", rank = 0, symbol = "", percentChange24h = 0.0, usdPrice = 0.0))
+    var selectedCoin2 by mutableStateOf(CoinTickerItem(id = "",name = "select coin", rank = 0, symbol = "", percentChange24h = 0.0, usdPrice = 0.0))
     var searchQuery by mutableStateOf("")
         private set
 
@@ -46,6 +46,9 @@ data class CoinConverterViewModel @Inject constructor(
                     coinRepository.getCoinExchanges(selectedCoin1.id, selectedCoin2.id)
                         .let { exchangePrice ->
                             result = String.format("%.4f", exchangePrice.price)
+                            state = state.copy(
+                                isLoading = false
+                            )
                         }
                 } catch (e: Exception) {
                     state = state.copy(
@@ -53,8 +56,12 @@ data class CoinConverterViewModel @Inject constructor(
                         error = "An error occurred: ${e.localizedMessage}"
                     )
                 }
-            else
+            else {
                 result = "Please select two coins"
+                state = state.copy(
+                    isLoading = false
+                )
+            }
 
     }
 

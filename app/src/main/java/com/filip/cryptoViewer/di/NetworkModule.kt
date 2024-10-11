@@ -18,7 +18,7 @@ object NetworkModule {
     @Singleton
     fun providePaprikaAoi(): CoinPaprikaApi{
         return Retrofit.Builder()
-            .baseUrl(Constants.Base_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CoinPaprikaApi::class.java)

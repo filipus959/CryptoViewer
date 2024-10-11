@@ -1,6 +1,6 @@
 [versions]
 accompanistFlowlayout = "0.17.0"
-agp = "8.5.2"
+agp = "8.6.1"
 androidxJunitVersion = "1.1.3"
 charts = "0.2.4-alpha"
 composeCharts = "0.2.1"

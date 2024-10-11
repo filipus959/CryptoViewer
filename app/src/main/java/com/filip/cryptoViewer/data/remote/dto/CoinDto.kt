@@ -1,23 +1,21 @@
 package com.filip.cryptoViewer.data.remote.dto
 
 import com.filip.cryptoViewer.domain.model.Coin
+import com.google.gson.annotations.SerializedName
 
 data class CoinDto(
+    @SerializedName("id")
     val id: String,
+    @SerializedName("is_active")
     val is_active: Boolean,
+    @SerializedName("is_new")
     val is_new: Boolean,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("rank")
     val rank: Int,
+    @SerializedName("symbol")
     val symbol: String,
+    @SerializedName("type")
     val type: String
 )
-
-fun CoinDto.toCoin(): Coin {
-    return Coin (
-        id = id,
-        name = name,
-        isActive = is_active,
-        rank = rank,
-        symbol = symbol
-    )
-}

@@ -1,7 +1,5 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,7 +19,6 @@ import java.time.format.TextStyle
 import java.util.Locale
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CoinChartViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
@@ -45,7 +42,6 @@ class CoinChartViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getCoinChart(coinId: String) {
         state = CoinChartState(isLoading = true)  // Set loading state
 
@@ -58,7 +54,7 @@ class CoinChartViewModel @Inject constructor(
                 state.copy(
                     coins = _chartList,
                     id = coinId,
-                    marketCap = _chartList.first().market_cap.toString(),
+                    marketCap = _chartList.first().marketCap.toString(),
                     isLoading = false
                 )
             } else {
@@ -108,7 +104,6 @@ class CoinChartViewModel @Inject constructor(
 
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun getNext12Months(): List<String> {
     val currentDate = LocalDate.now()
     val months = mutableListOf<String>()
@@ -124,7 +119,6 @@ fun getNext12Months(): List<String> {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun formatTimestampToMonthDay(timestamp: String): String {
     return try {
         // Define the input format (ISO 8601)

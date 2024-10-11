@@ -1,12 +1,10 @@
 package com.filip.cryptoViewer.presentation.ui.screens.preview
 
-import CoinConverterScreen
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
+import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterState
 import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterViewModel
 import com.filip.cryptoViewer.presentation.ui.theme.CryptoViewerTheme
@@ -30,7 +28,7 @@ fun CoinConverterScreenPreviewLight() {
                         name = "Bitcoin",
                         rank = 1,
                         symbol = "BTC",
-                        percent_change_24h = 1.5,
+                        percentChange24h = 1.5,
                         usdPrice = 30000.0
                     ),
                     CoinTickerItem(
@@ -38,7 +36,7 @@ fun CoinConverterScreenPreviewLight() {
                         name = "Ethereum",
                         rank = 2,
                         symbol = "ETH",
-                        percent_change_24h = -0.8,
+                        percentChange24h = -0.8,
                         usdPrice = 2000.0
                     ),
                     CoinTickerItem(
@@ -46,7 +44,7 @@ fun CoinConverterScreenPreviewLight() {
                         name = "Litecoin",
                         rank = 3,
                         symbol = "LTC",
-                        percent_change_24h = 0.3,
+                        percentChange24h = 0.3,
                         usdPrice = 150.0
                     )
                 ), isLoading = false,
@@ -60,7 +58,6 @@ fun CoinConverterScreenPreviewLight() {
 
         CoinConverterScreen(
             viewModel = viewModel,
-            navBarPadding = PaddingValues(16.dp)
         )
     }
 }
@@ -83,7 +80,7 @@ fun CoinConverterScreenPreviewDark() {
                         name = "Bitcoin",
                         rank = 1,
                         symbol = "BTC",
-                        percent_change_24h = 1.5,
+                        percentChange24h = 1.5,
                         usdPrice = 30000.0
                     ),
                     CoinTickerItem(
@@ -91,7 +88,7 @@ fun CoinConverterScreenPreviewDark() {
                         name = "Ethereum",
                         rank = 2,
                         symbol = "ETH",
-                        percent_change_24h = -0.8,
+                        percentChange24h = -0.8,
                         usdPrice = 2000.0
                     ),
                     CoinTickerItem(
@@ -99,7 +96,7 @@ fun CoinConverterScreenPreviewDark() {
                         name = "Litecoin",
                         rank = 3,
                         symbol = "LTC",
-                        percent_change_24h = 0.3,
+                        percentChange24h = 0.3,
                         usdPrice = 150.0
                     )
                 ), isLoading = false,
@@ -113,7 +110,6 @@ fun CoinConverterScreenPreviewDark() {
 
         CoinConverterScreen(
             viewModel = viewModel,
-            navBarPadding = PaddingValues(16.dp)
         )
     }
 }

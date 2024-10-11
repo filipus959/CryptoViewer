@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -12,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.Filip.cryptoviewer"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -21,6 +24,18 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+
+        if (localPropertiesFile.exists()) {
+            localProperties.load(FileInputStream(localPropertiesFile))
+        }
+
+        // Get API_URL from local.properties, default to an empty string if not found
+        val apiUrl = localProperties.getProperty("API_URL", "")
+
+        // Add it to BuildConfig
+        buildConfigField("String", "API_URL", "\"$apiUrl\"")
     }
 
     buildTypes {
@@ -41,6 +56,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -148,11 +164,10 @@ dependencies {
 
 
 
-    val room_version = "2.6.1"
     //room
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    kapt ("androidx.room:room-compiler:$room_version") // Use kapt for Kotlin
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    kapt (libs.androidx.room.compiler) // Use kapt for Kotlin
 
 
 

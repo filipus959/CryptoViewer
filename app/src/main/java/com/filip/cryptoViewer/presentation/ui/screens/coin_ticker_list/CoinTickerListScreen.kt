@@ -1,31 +1,22 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,103 +24,89 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.filip.cryptoViewer.presentation.Screen
+import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.components.CoinTickerListItem
-import com.filip.cryptoViewer.presentation.navigation.BottomNavBar
-import com.filip.cryptoViewer.presentation.navigation.NavGraph
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
-fun CoinTickerListScreen(){
-    val navController = rememberNavController()
-
-    Scaffold(
-        bottomBar = { BottomNavBar(navController) }
-    ) { innerPadding ->
-        NavGraph(navController = navController,innerPadding)
+fun CoinTickerListScreen(
+    viewModel: CoinListViewModel = hiltViewModel(),
+    goToCoinChartScreen: (String) -> Unit
+) {
+    val state = viewModel.state
+    LoadableScreen(state) {
+        CoinTickerListScreenContent(
+            state = viewModel.state,
+            searchQuery = viewModel.searchQuery,
+            rankArrow = viewModel.rankArrow,
+            changeArrow = viewModel.changeArrow,
+            priceArrow = viewModel.priceArrow,
+            onSortByRank = viewModel::sortCoinsByRank,
+            onSortByChange = viewModel::sortCoinsByChange,
+            onSortByPrice = viewModel::sortCoinsByPrice,
+            onSearchQueryChange = viewModel::onSearchQueryUpdated,
+            goToCoinChartScreen = goToCoinChartScreen
+        )
     }
+
 }
-
-
 
 @Composable
 fun CoinTickerListScreenContent(
-    viewModel: CoinListViewModel = hiltViewModel(),
-    navController: NavController,
-    navBarPadding: PaddingValues
+    state: CoinTickerListState,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    goToCoinChartScreen: (String) -> Unit,
+    rankArrow: String,
+    changeArrow: String,
+    priceArrow: String,
+    onSortByRank: () -> Unit,
+    onSortByChange: () -> Unit,
+    onSortByPrice: () -> Unit
 ) {
+    val darkTheme = isSystemInDarkTheme()
 
-    val  darkTheme: Boolean = isSystemInDarkTheme()
-    val state = viewModel.state
-    Box(modifier = Modifier
-        .fillMaxSize()) {
-        state.coins.let { coins ->
-            Column(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(bottom = navBarPadding.calculateBottomPadding()/2)
-            ) {
-                Spacer(modifier = Modifier.height(30.dp))
-                TextField(
-                    value = viewModel.searchQuery,
-                    onValueChange = {
-                        viewModel.onSearchQueryUpdated(it)
-                    }, // Call ViewModel to update search query
-                    label = { Text("Search Coins") },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    singleLine = true
-                )
+    state.coins.let { coins ->
+        Column(
+            //     modifier = Modifier
+            //       .padding(bottom = navBarPadding.calculateBottomPadding() / 2)
+        ) {
+            Spacer(modifier = Modifier.height(30.dp))
+            TextField(
+                value = searchQuery,
+                onValueChange = onSearchQueryChange,
+                label = { Text("Search Coins") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                singleLine = true
+            )
 
-                // Make the row smaller by reducing the padding
-                SortingRow(
-                    darkTheme = darkTheme,
-                    rankArrow = viewModel.rankArrow,
-                    priceArrow = viewModel.priceArrow,
-                    changeArrow = viewModel.changeArrow,
-                    onSortByRank = { viewModel.sortCoinsByRank() },
-                    onSortByPrice = { viewModel.sortCoinsByPrice() },
-                    onSortByChange = { viewModel.sortCoinsByChange() })
+            SortingRow(
+                darkTheme = darkTheme,
+                rankArrow = rankArrow,
+                priceArrow = priceArrow,
+                changeArrow = changeArrow,
+                onSortByRank = onSortByRank,
+                onSortByPrice = onSortByPrice,
+                onSortByChange = onSortByChange
+            )
 
-                LazyColumn {
-                    items(coins) { coin ->
-                        CoinTickerListItem(
-                            coin = coin,
-                            onItemClick = {
-                                navController.navigate(Screen.CoinChartScreen.route + "/${coin.id}") {
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        )
-                    }
+            LazyColumn {
+                items(coins) { coin ->
+                    CoinTickerListItem(
+                        coin = coin,
+                        onItemClick = { goToCoinChartScreen(coin.id) }
+                    )
                 }
-
             }
 
-            if (state.error.isNotBlank()) {
-                Text(
-                    text = state.error,
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .align(Alignment.Center)
-                )
-            }
 
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
         }
     }
 }
+
 @Composable
 fun SortingRow(
     darkTheme: Boolean,
@@ -147,10 +124,7 @@ fun SortingRow(
             .padding(horizontal = 20.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        SortableText(
-            text = "#. Coin $rankArrow",
-            onClick = onSortByRank,
-        )
+        SortableText(text = "#. Coin $rankArrow", onClick = onSortByRank)
         SortableText(
             text = "Price $priceArrow",
             onClick = onSortByPrice,
@@ -164,6 +138,8 @@ fun SortingRow(
         )
     }
 }
+
+// 4. Sortable Text Composable
 @Composable
 fun SortableText(
     text: String,
@@ -173,7 +149,7 @@ fun SortableText(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .clickable(onClick = onClick)
@@ -181,3 +157,4 @@ fun SortableText(
         textAlign = textAlign
     )
 }
+

@@ -1,3 +1,5 @@
+package com.filip.cryptoViewer.repository
+
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
 import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
@@ -8,7 +10,6 @@ import com.filip.cryptoViewer.data.local.mapper.toDomainModel
 import com.filip.cryptoViewer.data.remote.CoinPaprikaApi
 import com.filip.cryptoViewer.data.remote.dto.CoinChartDtoItem
 import com.filip.cryptoViewer.data.remote.dto.CoinDetailDto
-import com.filip.cryptoViewer.data.remote.dto.CoinDto
 import com.filip.cryptoViewer.data.remote.dto.CoinExchangeDto
 import com.filip.cryptoViewer.data.remote.dto.CoinTickerDto
 import com.filip.cryptoViewer.data.remote.dto.Links
@@ -18,7 +19,6 @@ import com.filip.cryptoViewer.data.remote.dto.Stats
 import com.filip.cryptoViewer.data.remote.dto.Tag
 import com.filip.cryptoViewer.data.remote.dto.USD
 import com.filip.cryptoViewer.data.remote.dto.Whitepaper
-import com.filip.cryptoViewer.data.remote.dto.toCoin
 import com.filip.cryptoViewer.data.repository.implementation.CoinRepositoryImpl
 import com.filip.cryptoViewer.domain.model.CoinExchange
 import kotlinx.coroutines.flow.first
@@ -48,13 +48,13 @@ class CoinRepositoryImplTest {
 
     private val mockCoinExchangeDto = CoinExchangeDto(
         amount = 1000,
-        base_currency_id = "btc",
-        base_currency_name = "Bitcoin",
-        base_price_last_updated = "2023-09-30T10:15:30Z",
+        baseCurrencyId = "btc",
+        baseCurrencyName = "Bitcoin",
+        basePriceLastUpdated = "2023-09-30T10:15:30Z",
         price = 45000.75,
-        quote_currency_id = "usd",
-        quote_currency_name = "US Dollar",
-        quote_price_last_updated = "2023-09-30T10:15:30Z"
+        quoteCurrencyId = "usd",
+        quoteCurrencyName = "US Dollar",
+        quotePriceLastUpdated = "2023-09-30T10:15:30Z"
     )
 
     private val mockCoinExchange = CoinExchange(
@@ -105,30 +105,30 @@ class CoinRepositoryImplTest {
                     rank = 1,
                     quotes = Quotes(
                         USD(
-                            ath_date = "",
-                            ath_price = 0.0,
-                            market_cap = 0,
-                            market_cap_change_24h = 0.0,
-                            percent_change_24h = 0.0,
-                            percent_change_1h = 0.0,
-                            percent_change_7d = 0.0,
-                            percent_change_30d = 0.0,
+                            athDate = "",
+                            athPrice = 0.0,
+                            marketCap = 0,
+                            marketCapChange24h = 0.0,
+                            percentChange24h = 0.0,
+                            percentChange1h = 0.0,
+                            percentChange7d = 0.0,
+                            percentChange30d = 0.0,
                             price = 30000.0,
-                            volume_24h = 100000.0,
-                            volume_24h_change_24h = 0.0,
-                            percent_change_1y = 0.0,
-                            percent_change_6h = 0.0,
-                            percent_change_12h = 0.0,
-                            percent_change_15m = 0.0,
-                            percent_change_30m = 0.0,
-                            percent_from_price_ath = 0.5
+                            volume24h = 100000.0,
+                            volume24hChange24h = 0.0,
+                            percentChange1y = 0.0,
+                            percentChange6h = 0.0,
+                            percentChange12h = 0.0,
+                            percentChange15m = 0.0,
+                            percentChange30m = 0.0,
+                            percentFromPriceAth = 0.5
                         )
                     ),
-                    first_data_at = "",
-                    last_updated = "",
-                    max_supply = 21000000,
-                    total_supply = 19000000,
-                    beta_value = 0.1
+                    firstDataAt = "",
+                    lastUpdated = "",
+                    maxSupply = 21000000,
+                    totalSupply = 19000000,
+                    betaValue = 0.1
                 ),
                 CoinTickerDto(
                     id = "ethereum",
@@ -137,30 +137,30 @@ class CoinRepositoryImplTest {
                     rank = 2,
                     quotes = Quotes(
                         USD(
-                            ath_date = "",
-                            ath_price = 0.0,
-                            market_cap = 0,
-                            market_cap_change_24h = 0.0,
-                            percent_change_24h = 0.0,
-                            percent_change_1h = 0.0,
-                            percent_change_7d = 0.0,
-                            percent_change_30d = 0.0,
+                            athDate = "",
+                            athPrice = 0.0,
+                            marketCap = 0,
+                            marketCapChange24h = 0.0,
+                            percentChange24h = 0.0,
+                            percentChange1h = 0.0,
+                            percentChange7d = 0.0,
+                            percentChange30d = 0.0,
                             price = 2000.0,
-                            volume_24h = 50000.0,
-                            volume_24h_change_24h = 0.0,
-                            percent_change_1y = 0.0,
-                            percent_change_6h = 0.0,
-                            percent_change_12h = 0.0,
-                            percent_change_15m = 0.0,
-                            percent_change_30m = 0.0,
-                            percent_from_price_ath = 0.5
+                            volume24h = 50000.0,
+                            volume24hChange24h = 0.0,
+                            percentChange1y = 0.0,
+                            percentChange6h = 0.0,
+                            percentChange12h = 0.0,
+                            percentChange15m = 0.0,
+                            percentChange30m = 0.0,
+                            percentFromPriceAth = 0.5
                         )
                     ),
-                    first_data_at = "",
-                    last_updated = "",
-                    max_supply = 10,
-                    total_supply = 120000000,
-                    beta_value = 0.01
+                    firstDataAt = "",
+                    lastUpdated = "",
+                    maxSupply = 10,
+                    totalSupply = 120000000,
+                    betaValue = 0.01
                 )
             )
         )
@@ -175,35 +175,6 @@ class CoinRepositoryImplTest {
 
 
     @Test
-    fun `test GetCoins - returns MappedCoins`() = runBlocking {
-        val mockCoinsDto = listOf(
-            CoinDto(
-                id = "bitcoin",
-                is_active = true,
-                is_new = false,
-                name = "Bitcoin",
-                rank = 1,
-                symbol = "BTC",
-                type = "coin"
-            ),
-            CoinDto(
-                id = "ethereum",
-                is_active = true,
-                is_new = false,
-                name = "Ethereum",
-                rank = 2,
-                symbol = "ETH",
-                type = "coin"
-            )
-        )
-        `when`(api.getCoins()).thenReturn(mockCoinsDto)
-
-        val result = repository.getCoins()
-
-        assertEquals(mockCoinsDto.map { it.toCoin() }, result)
-    }
-
-    @Test
     fun `test GetCoinById - successfully Returns CoinDetail`() = runBlocking {
         val coinId = "bitcoin"
         val mockCoinDetail = CoinDetailDto(
@@ -211,33 +182,33 @@ class CoinRepositoryImplTest {
             symbol = "BTC",
             description = "A decentralized digital currency.",
             rank = 1,
-            tags = listOf(Tag(1, id = "", name = "", ico_counter = 1)),
+            tags = listOf(Tag(1, id = "", name = "", icoCounter = 1)),
             team = listOf(),
             id = coinId,
-            first_data_at = "",
-            is_active = false,
-            development_status = "",
-            hash_algorithm = "",
-            links_extended = listOf(LinksExtended(type = "", url = "", stats = Stats(1, 1, 1, 1))),
+            firstDataAt = "",
+            isActive = false,
+            developmentStatus = "",
+            hashAlgorithm = "",
+            linksExtended = listOf(LinksExtended(type = "", url = "", stats = Stats(1, 1, 1, 1))),
             logo = "",
             type = "",
-            proof_type = "",
-            started_at = "",
-            whitepaper = Whitepaper("", ""),
-            last_data_at = "",
-            org_structure = "",
-            open_source = false,
+            proofType = "",
+            startedAt = "",
+            whitePaper = Whitepaper("", ""),
+            lastDataAt = "",
+            orgStructure = "",
+            openSource = false,
             links = (Links(
                 explorer = emptyList(),
                 facebook = emptyList(),
                 reddit = emptyList(),
                 website = emptyList(),
-                source_code = emptyList(),
+                sourceCode = emptyList(),
                 youtube = emptyList()
             )),
-            is_new = false,
+            isNew = false,
             message = "",
-            hardware_wallet = true
+            hardwareWallet = true
 
 
         )
@@ -266,9 +237,9 @@ class CoinRepositoryImplTest {
         val mockDbItems = listOf(
             CoinTickerItemEntity(
                 id = "bitcoin", name = "Bitcoin", symbol = "BTC", rank = 1,
-                usdPrice = 30000.0, percent_change_24h = 0.0,
-                first_data_at = "", last_updated = "",
-                max_supply = 21000000, beta_value = 1.0, total_supply = 19000000
+                usdPrice = 30000.0, percentChange24h = 0.0,
+                firstDataAt = "", lastUpdated = "",
+                maxSupply = 21000000, betaValue = 1.0, totalSupply = 19000000
             )
         )
         `when`(coinTickerItemDao.getAllCoinTickerItems()).thenReturn(flowOf(mockDbItems))
@@ -287,10 +258,10 @@ class CoinRepositoryImplTest {
         val mockChartData = ArrayList<CoinChartDtoItem>(
             listOf(
                 CoinChartDtoItem(
-                    market_cap = 500000000,
+                    marketCap = 500000000,
                     price = 30000.0,
                     timestamp = "2023-09-22T00:00:00Z",
-                    volume_24h = 10000000,
+                    volume24h = 10000000,
                     coinId = coinId
                 )
             )

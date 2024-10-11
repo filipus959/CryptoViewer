@@ -12,7 +12,7 @@ fun CoinDetailDto.toDbModel(): CoinDetailEntity {
         rank = rank,
         tags = tags,
         coinId = id,
-        isActive = is_active,
+        isActive = isActive,
         team = team
     )
 }

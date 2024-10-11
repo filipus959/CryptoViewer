@@ -1,15 +1,15 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.filip.cryptoViewer.domain.model.CoinChart
+import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.CoinChartViewModel
 import com.github.tehras.charts.line.LineChart
 import com.github.tehras.charts.line.LineChartData
 import com.github.tehras.charts.line.LineChartData.Point
@@ -21,13 +21,11 @@ import com.github.tehras.charts.piechart.animation.simpleChartAnimation
 
 
 @SuppressLint("DefaultLocale")
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PriceLineChart(
     prices: List<CoinChart>,
-    timestamps: List<String>
 ) {
-
+    val viewModel: CoinChartViewModel = hiltViewModel()
     val darkTheme: Boolean = isSystemInDarkTheme()
     val points = prices.map { coin ->
         Point(coin.price.toFloat(), "")
@@ -47,7 +45,7 @@ fun PriceLineChart(
         linesChartData = listOf(lineChartData),
         yAxisDrawer = SimpleYAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black, labelValueFormatter = { value -> labelValueFormatter(value) +"$" } ),
         xAxisDrawer = SimpleXAxisDrawer(labelTextColor = if(darkTheme) Color.White else Color.Black),
-        labels = timestamps
+        labels = viewModel.getTimeStamps()
     )
 }
 

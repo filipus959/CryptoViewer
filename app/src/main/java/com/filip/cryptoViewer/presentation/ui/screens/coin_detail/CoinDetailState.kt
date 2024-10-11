@@ -1,9 +1,10 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_detail
 
 import com.filip.cryptoViewer.domain.model.CoinDetail
+import com.filip.cryptoViewer.presentation.UIState
 
 data class CoinDetailState(
-    val isLoading: Boolean = false,
+    override val isLoading: Boolean = false,
     val coin: CoinDetail? = null,
-    val error: String = ""
-)
+    override val error: String = ""
+) : UIState

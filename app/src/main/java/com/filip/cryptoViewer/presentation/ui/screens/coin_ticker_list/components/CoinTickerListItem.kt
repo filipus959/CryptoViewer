@@ -25,7 +25,7 @@ fun CoinTickerListItem(
     coin: CoinTickerItem,
     onItemClick: (CoinTickerItem) -> Unit
 ) {
-    val pChange = coin.percent_change_24h
+    val pChange = coin.percentChange24h
 
 
     Row(

@@ -29,6 +29,7 @@ class CoinListViewModel @Inject constructor(
     private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
     private val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
 
+    // todo polaczyc co ma sens w jeden / dwa staty
     private var sortByPriceOrder by mutableStateOf(SortOrder.ASCENDING)
     private var sortByRankOrder by mutableStateOf(SortOrder.ASCENDING)
     private var sortByChangeOrder by mutableStateOf(SortOrder.ASCENDING)
@@ -66,7 +67,7 @@ class CoinListViewModel @Inject constructor(
 
     fun sortCoinsByChange() {
         sortByChangeOrder = if (sortByChangeOrder == SortOrder.ASCENDING) SortOrder.DESCENDING else SortOrder.ASCENDING
-        _allCoinsData = _allCoinsData.sortedWith(compareBy { it.percent_change_24h })
+        _allCoinsData = _allCoinsData.sortedWith(compareBy { it.percentChange24h })
         if (sortByChangeOrder == SortOrder.DESCENDING) {
             _allCoinsData = _allCoinsData.reversed()
         }
