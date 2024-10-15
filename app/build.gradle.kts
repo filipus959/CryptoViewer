@@ -100,23 +100,11 @@ dependencies {
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.androidx.room.ktx)
 
-    // Mockito
-    implementation(libs.mockito.android.v5130)
-    testImplementation(libs.mockito.core.v400) // Ensure no conflicting versions
-    testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.junit.v412)
+    implementation("org.mockito:mockito-core:5.14.2")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation ("org.mockito:mockito-inline:5.1.0")
 
-     //Testing libraries
-    androidTestImplementation(libs.hilt.android.testing)
-    //kspAndroidTest(libs.dagger.hilt.compiler)
 
-     //Android Instrumentation Testing
-    androidTestImplementation(libs.junit.v113)
-    androidTestImplementation(libs.androidx.espresso.core.v340)
-    androidTestImplementation(libs.ui.test.junit4)
-    androidTestImplementation(libs.androidx.room.testing)
-    androidTestImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.okhttp3.mockwebserver)
 
     // AndroidX Libraries
     implementation(libs.androidx.core.ktx)
