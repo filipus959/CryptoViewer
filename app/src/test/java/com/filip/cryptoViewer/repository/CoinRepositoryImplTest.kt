@@ -77,18 +77,18 @@ class CoinRepositoryImplTest {
     @Test
     fun `test getCoinExchanges - success from API and cache`() = runTest {
         // Mock API and DAO behavior
-        whenever(api.getCoinExchange("btc", "usd")).thenReturn(mockCoinExchangeDto)
-        whenever(coinExchangeDao.getCoinExchange("btc", "usd")).thenReturn(
+        whenever(api.getCoinExchange("btc", "usd",1)).thenReturn(mockCoinExchangeDto)
+        whenever(coinExchangeDao.getCoinExchange("btc", "usd", 1)).thenReturn(
             mockCoinExchangeDto.toDbModel()
         )
 
         // Execute method
-        val result = repository.getCoinExchanges("btc", "usd")
+        val result = repository.getCoinExchanges("btc", "usd",1)
 
         // Verify the expected behavior
-        verify(api).getCoinExchange("btc", "usd")
+        verify(api).getCoinExchange("btc", "usd",1)
         verify(coinExchangeDao).insertCoinExchange(mockCoinExchangeDto.toDbModel())
-        verify(coinExchangeDao).getCoinExchange("btc", "usd")
+        verify(coinExchangeDao).getCoinExchange("btc", "usd", 1)
 
         // Validate the result
         assertEquals(mockCoinExchange, result)

@@ -2,6 +2,7 @@ package com.filip.cryptoViewer.presentation.ui.screens.coin_converters
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -23,8 +24,9 @@ data class CoinConverterViewModel @Inject constructor(
     private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
     private val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
     var result by mutableStateOf("result")
-    var selectedCoin1 by mutableStateOf(CoinTickerItem(id = "",name = "select coin", rank = 0, symbol = "", percentChange24h = 0.0, usdPrice = 0.0))
-    var selectedCoin2 by mutableStateOf(CoinTickerItem(id = "",name = "select coin", rank = 0, symbol = "", percentChange24h = 0.0, usdPrice = 0.0))
+    var amount by mutableIntStateOf(1)
+    var selectedCoin1 by mutableStateOf<CoinTickerItem?>(null)
+    var selectedCoin2 by mutableStateOf<CoinTickerItem?>(null)
     var searchQuery by mutableStateOf("")
         private set
 
@@ -34,35 +36,39 @@ data class CoinConverterViewModel @Inject constructor(
         }
     }
 
-    fun runExchangeRate() = viewModelScope.launch {
+    private fun runExchangeRate() = viewModelScope.launch {
         getExchangeRate()
     }
 
     @SuppressLint("DefaultLocale")
     private suspend fun getExchangeRate() {
-            state = state.copy(isLoading = true, error = "")
-            if (selectedCoin1.name != "select coin" && selectedCoin2.name != "select coin")
-                try {
-                    coinRepository.getCoinExchanges(selectedCoin1.id, selectedCoin2.id)
-                        .let { exchangePrice ->
-                            result = String.format("%.4f", exchangePrice.price)
-                            state = state.copy(
-                                isLoading = false
-                            )
-                        }
-                } catch (e: Exception) {
-                    state = state.copy(
-                        isLoading = false,
-                        error = "An error occurred: ${e.localizedMessage}"
-                    )
-                }
-            else {
-                result = "Please select two coins"
+        state = state.copy(isLoading = true, error = "")
+
+        // Check if selectedCoin1 and selectedCoin2 are not null before proceeding
+        if (selectedCoin1 != null && selectedCoin2 != null) {
+            try {
+                // Fetch the exchange rate using the coin IDs
+                coinRepository.getCoinExchanges(selectedCoin1!!.id, selectedCoin2!!.id, amount)
+                    .let { exchangePrice ->
+                        result = String.format("%.4f", exchangePrice.price)
+                        state = state.copy(
+                            isLoading = false
+                        )
+                    }
+            } catch (e: Exception) {
+                // Handle any error that occurs during the API call
                 state = state.copy(
-                    isLoading = false
+                    isLoading = false,
+                    error = "An error occurred: ${e.localizedMessage}"
                 )
             }
-
+        } else {
+            // If either coin is not selected, show a message asking the user to select two coins
+            result = "Please select two coins"
+            state = state.copy(
+                isLoading = false
+            )
+        }
     }
 
     private suspend fun observeTickerCoins() {
@@ -81,6 +87,7 @@ data class CoinConverterViewModel @Inject constructor(
             )
         }
     }
+
     private fun updateListState() {
         state = state.copy(
             isLoading = false,
@@ -88,14 +95,16 @@ data class CoinConverterViewModel @Inject constructor(
             coins = filterCoinList(searchQuery)
         )
     }
+
     fun firstSelection(coin: CoinTickerItem) {
         selectedCoin1 = coin
-        result = "result"
+        runExchangeRate()
 
     }
+
     fun secondSelection(coin: CoinTickerItem) {
         selectedCoin2 = coin
-        result = "result"
+        runExchangeRate()
 
 
     }
@@ -104,9 +113,19 @@ data class CoinConverterViewModel @Inject constructor(
         searchQuery = query
         updateListState()
     }
-    private fun filterCoinList(query: String): List<CoinTickerItem> =
-        if (query.isBlank()) allCoinsData else allCoinsData.filter { it.name.contains(query, ignoreCase = true) }
 
+    private fun filterCoinList(query: String): List<CoinTickerItem> =
+        if (query.isBlank()) allCoinsData else allCoinsData.filter {
+            it.name.contains(
+                query,
+                ignoreCase = true
+            )
+        }
+
+    fun onAmountChange(newAmount: String) {
+        amount = newAmount.toIntOrNull() ?: 1
+        runExchangeRate()
+    }
 
 }
 

@@ -1,20 +1,25 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
 
+//    alias(libs.plugins.jetbrains.kotlin.android)
+//    id("com.google.devtools.ksp")
+//    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.Filip.cryptoviewer"
+    namespace = "com.filip.cryptoViewer"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.Filip.cryptoviewer"
+        applicationId = "com.filip.cryptoViewer"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -24,6 +29,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Load API_URL from local.properties
         val localProperties = Properties()
         val localPropertiesFile = rootProject.file("local.properties")
 
@@ -31,13 +38,9 @@ android {
             localProperties.load(FileInputStream(localPropertiesFile))
         }
 
-        // Get API_URL from local.properties, default to an empty string if not found
         val apiUrl = localProperties.getProperty("API_URL", "")
-
-        // Add it to BuildConfig
         buildConfigField("String", "API_URL", "\"$apiUrl\"")
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -47,65 +50,75 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.9.0"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
-    kapt (libs.hilt.compiler.v248)
+    implementation(libs.androidx.junit.ktx)
+    //hilt
+    ksp (libs.hilt.compiler.ksp)
+    implementation (libs.hilt.android)
+    implementation (libs.hilt.navigation.compose)
+    implementation (libs.hilt.common)
+//    implementation (libs.hilt.android)
+//    ksp (libs.dagger.hilt.compiler.v252)
+//    ksp(libs.symbol.processing.api)
+//    implementation (libs.androidx.hilt.navigation.compose)
 
-    // Unit Testing
-   // testImplementation (libs.junit)
-    implementation (libs.mockito.android.v5130)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler.v250)
+    implementation(libs.androidx.room.ktx)
 
-    testImplementation (libs.mockito.inline) // use the latest version
+    // Mockito
+    implementation(libs.mockito.android.v5130)
+    testImplementation(libs.mockito.core.v400) // Ensure no conflicting versions
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.junit.v412)
 
-    testImplementation (libs.mockito.core)
-    testImplementation (libs.androidx.core.testing)
-    testImplementation (libs.truth)
-    testImplementation (libs.kotlinx.coroutines.test)
-    testImplementation (libs.mockk)
-    testImplementation (libs.mockito.core.v400)
-    testImplementation (libs.mockito.kotlin) // For Kotlin-specific extensions
-    testImplementation (libs.junit.v412)
-    // required if you want to use Mockito for Android tests
-    androidTestImplementation (libs.mockito.android)
+     //Testing libraries
+    androidTestImplementation(libs.hilt.android.testing)
+    //kspAndroidTest(libs.dagger.hilt.compiler)
 
+     //Android Instrumentation Testing
+    androidTestImplementation(libs.junit.v113)
+    androidTestImplementation(libs.androidx.espresso.core.v340)
+    androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(libs.androidx.room.testing)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.okhttp3.mockwebserver)
 
-
-
-    // Android Instrumentation Testing
-    androidTestImplementation (libs.junit.v113)
-    androidTestImplementation (libs.androidx.espresso.core.v340)
-    androidTestImplementation (libs.ui.test.junit4)
-    androidTestImplementation (libs.androidx.room.testing)
-    androidTestImplementation (libs.kotlinx.coroutines.test)
-
-    // For testing (androidTest)
-    androidTestImplementation (libs.hilt.android.testing)
-    kaptAndroidTest (libs.hilt.compiler)
-    kaptAndroidTest (libs.hilt.android.compiler)
-    androidTestImplementation (libs.okhttp3.mockwebserver)
-
-
-
+    // AndroidX Libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -114,61 +127,40 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation (libs.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     // Compose dependencies
-    implementation( libs.androidx.lifecycle.viewmodel.compose)
-    implementation (libs.androidx.navigation.compose)
-    implementation (libs.accompanist.flowlayout)
-
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.flowlayout)
 
     // Coroutines
-    implementation( libs.kotlinx.coroutines.core)
-    implementation (libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Coroutine Lifecycle Scopes
-    implementation (libs.androidx.lifecycle.viewmodel.ktx)
-    implementation (libs.androidx.lifecycle.runtime.ktx.v231)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v231)
 
-    //room
-    implementation (libs.androidx.room.runtime)
-    //kapt (libs.androidx.room.compiler)
-    implementation (libs.androidx.room.ktx)
-
-    //hilt
-    implementation(libs.hilt.android.v248)
-    kapt(libs.hilt.android.compiler.v248)
-    kapt (libs.androidx.hilt.compiler)
-    implementation (libs.androidx.hilt.navigation.compose)
-
-    //chart
-    implementation (libs.charts)
+    // Chart Libraries
+    implementation(libs.charts)
     implementation(libs.compose.charts)
 
-    implementation (libs.androidx.runtime.livedata)
-
-
     // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-    implementation( libs.okhttp)
-    implementation (libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
+    // Testing dependencies
+    testImplementation(libs.truth)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
 
-
-
-    //room
-    implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
-    kapt (libs.androidx.room.compiler) // Use kapt for Kotlin
-
-
-
+    // Debugging and Testing
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+}
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }

@@ -11,6 +11,6 @@ interface CoinExchangeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCoinExchange(coinExchange: CoinExchangeEntity)
 
-    @Query("SELECT * FROM coin_exchanges WHERE coinId = :coinId AND coinId2 = :coinId2")
-    suspend fun getCoinExchange(coinId: String, coinId2: String): CoinExchangeEntity?
+    @Query("SELECT * FROM coin_exchanges WHERE coinId = :coinId AND coinId2 = :coinId2 AND amount = :amount")
+    suspend fun getCoinExchange(coinId: String, coinId2: String, amount: Int): CoinExchangeEntity?
 }

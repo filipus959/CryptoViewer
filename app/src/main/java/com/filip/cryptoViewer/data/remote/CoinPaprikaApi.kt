@@ -28,7 +28,7 @@ interface CoinPaprikaApi {
     suspend fun getCoinExchange(
         @Query("base_currency_id") coinId: String,
         @Query("quote_currency_id") coinId2: String,
-        @Query("amount") amount: Double = 1.0,
+        @Query("amount") amount: Int,
 
     ): CoinExchangeDto
 }

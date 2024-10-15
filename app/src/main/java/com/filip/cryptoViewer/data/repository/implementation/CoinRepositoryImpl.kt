@@ -61,15 +61,15 @@ class CoinRepositoryImpl @Inject constructor(
 
 
 
-    override suspend fun getCoinExchanges(coinId: String, coinId2: String): CoinExchange {
+    override suspend fun getCoinExchanges(coinId: String, coinId2: String, amount: Int): CoinExchange {
         return try {
-            val coinExchange = api.getCoinExchange(coinId, coinId2).toDbModel()
+            val coinExchange = api.getCoinExchange(coinId, coinId2,amount).toDbModel()
             coinExchangeDao.insertCoinExchange(coinExchange)
 
-            coinExchangeDao.getCoinExchange(coinId,coinId2)?.toDomainModel()
+            coinExchangeDao.getCoinExchange(coinId,coinId2,amount)?.toDomainModel()
                ?: throw IllegalStateException("Coin exchange not found after insertion")
         } catch (e: IOException) {
-            val cachedExchange = coinExchangeDao.getCoinExchange(coinId,coinId2)
+            val cachedExchange = coinExchangeDao.getCoinExchange(coinId,coinId2,amount)
                 ?: throw RuntimeException("No internet and no cached data available", e)
             cachedExchange.toDomainModel()
         }

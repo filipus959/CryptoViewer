@@ -1,115 +1,69 @@
 package com.filip.cryptoViewer.presentation.ui.screens.preview
 
-import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterScreen
+import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterScreenContent
 import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterState
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterViewModel
 import com.filip.cryptoViewer.presentation.ui.theme.CryptoViewerTheme
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Light Mode")
 @Composable
-fun CoinConverterScreenPreviewLight() {
-    CryptoViewerTheme {
+fun PreviewLightCoinConverterScreen() {
 
+        CryptoViewerTheme(darkTheme = false) { // Explicitly set light mode
+            PreviewCoinConverterScreen()
 
-        // Use the fake repository to simulate coin data
-        val fakeRepository = FakeCoinRepository()
-
-        // Create a ViewModel using the fake repository
-        val viewModel = CoinConverterViewModel(fakeRepository).apply {
-            // Set the mock state for preview
-            state = CoinConverterState(
-                coins = listOf(
-                    CoinTickerItem(
-                        id = "bitcoin",
-                        name = "Bitcoin",
-                        rank = 1,
-                        symbol = "BTC",
-                        percentChange24h = 1.5,
-                        usdPrice = 30000.0
-                    ),
-                    CoinTickerItem(
-                        id = "ethereum",
-                        name = "Ethereum",
-                        rank = 2,
-                        symbol = "ETH",
-                        percentChange24h = -0.8,
-                        usdPrice = 2000.0
-                    ),
-                    CoinTickerItem(
-                        id = "litecoin",
-                        name = "Litecoin",
-                        rank = 3,
-                        symbol = "LTC",
-                        percentChange24h = 0.3,
-                        usdPrice = 150.0
-                    )
-                ), isLoading = false,
-                error = ""
-
-            )
-            selectedCoin1 = state.coins!![0]  // Bitcoin
-            selectedCoin2 = state.coins!![1]  // Ethereum
-            result = "0.0667 BTC"
-        }
-
-        CoinConverterScreen(
-            viewModel = viewModel,
-        )
     }
+
 }
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+
+@Preview(name = "Dark Mode")
 @Composable
-fun CoinConverterScreenPreviewDark() {
-    CryptoViewerTheme(darkTheme = true) {
+fun PreviewDarkCoinConverterScreen() {
 
+        CryptoViewerTheme(darkTheme = true) { // Explicitly set dark mode
+            PreviewCoinConverterScreen()
 
-        // Use the fake repository to simulate coin data
-        val fakeRepository = FakeCoinRepository()
-
-        // Create a ViewModel using the fake repository
-        val viewModel = CoinConverterViewModel(fakeRepository).apply {
-            // Set the mock state for preview
-            state = CoinConverterState(
-                coins = listOf(
-                    CoinTickerItem(
-                        id = "bitcoin",
-                        name = "Bitcoin",
-                        rank = 1,
-                        symbol = "BTC",
-                        percentChange24h = 1.5,
-                        usdPrice = 30000.0
-                    ),
-                    CoinTickerItem(
-                        id = "ethereum",
-                        name = "Ethereum",
-                        rank = 2,
-                        symbol = "ETH",
-                        percentChange24h = -0.8,
-                        usdPrice = 2000.0
-                    ),
-                    CoinTickerItem(
-                        id = "litecoin",
-                        name = "Litecoin",
-                        rank = 3,
-                        symbol = "LTC",
-                        percentChange24h = 0.3,
-                        usdPrice = 150.0
-                    )
-                ), isLoading = false,
-                error = ""
-
-            )
-            selectedCoin1 = state.coins!![0]  // Bitcoin
-            selectedCoin2 = state.coins!![1]  // Ethereum
-            result = "0.0667 BTC"
-        }
-
-        CoinConverterScreen(
-            viewModel = viewModel,
-        )
     }
+
+}
+@Composable
+fun PreviewCoinConverterScreen() {
+    val mockState = CoinConverterState(
+        coins = listOf(
+            CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
+            CoinTickerItem(id = "2", name = "Ethereum", symbol = "ETH", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
+            CoinTickerItem(id = "3", name = "Ripple", symbol = "XRP", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
+        ), error = "", isLoading = false
+    )
+
+    val selectedCoin1 = CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
+    val selectedCoin2 = CoinTickerItem(id = "2", name = "Ethereum", symbol = "ETH", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
+    val result = "1 BTC = 30 ETH"
+    val searchQuery = ""
+    val amount = 1
+    Surface {
+        CryptoViewerTheme {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CoinConverterScreenContent(
+                    state = mockState,
+                    selectedCoin1 = selectedCoin1,
+                    selectedCoin2 = selectedCoin2,
+                    result = result,
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { /* Mock action */ },
+                    onFirstSelection = { /* Mock action */ },
+                    onSecondSelection = { /* Mock action */ },
+                    onAmountChange = { /* Mock action */ },
+                    amount = amount,
+                )
+            }
+        }
+    }
+
+
 }

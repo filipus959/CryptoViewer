@@ -9,6 +9,7 @@ fun CoinExchangeDto.toDbModel(): CoinExchangeEntity {
             coinId = baseCurrencyId ,
             price = price,
             coinId2 = quoteCurrencyId,
+            amount = amount,
     )
 }
 
