@@ -6,7 +6,7 @@ CryptoViewer is an Android application that allows users to view cryptocurrency 
 ## Screenshots
 
 ![Screenshot of Home Screen](./screens/Screenshot%202024-09-22%20170754.png)
-![Screenshot of "Chart Screen](./screens/Screenshot%202024-09-22%20170952.png)
+![Screenshot of "Chart Screen](./screens/chart.png)
 ![Screenshot of Details Screen](./screens/Screenshot%202024-09-22%20171017.png)
 
 ## Features
