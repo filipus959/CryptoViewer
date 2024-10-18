@@ -170,6 +170,7 @@ fun CoinChartScreenContent(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
+            Spacer(Modifier.height(16.dp))
             // Button to Navigate to Coin Details
             Button(
                 modifier = Modifier
