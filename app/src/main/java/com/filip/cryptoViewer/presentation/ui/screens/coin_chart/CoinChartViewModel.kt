@@ -1,6 +1,7 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Constants
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.domain.repository.CoinRepository
+import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.DataPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -27,9 +29,6 @@ class CoinChartViewModel @Inject constructor(
 
     var state by mutableStateOf(CoinChartState())
         private set
-
-    private var showStamps by mutableStateOf(false)
-    private var timestamps by mutableStateOf(emptyList<String>())
     private var _chartList by mutableStateOf(emptyList<CoinChart>())
     private val chartList: List<CoinChart> get() = _chartList
 
@@ -70,14 +69,15 @@ class CoinChartViewModel @Inject constructor(
         }
     }
     fun changeChartRange(days: Int) {
-        showStamps = days != 365
-        var modifiedList = chartList.takeLast(days)
-        if (days == 30) {
-        modifiedList = modifiedList.filterIndexed { index, _ -> index % 4 == 0 }
+        val modifiedList = chartList.takeLast(days).let { list ->
+            when (days) {
+                365 -> list.filterIndexed { index, _ -> index % 30 == 0 }
+                30 -> list.filterIndexed { index, _ -> index % 4 == 0 }
+                else -> list
+            }
         }
         updateListState(modifiedList)
     }
-
     private fun updateListState(modifiedList: List<CoinChart>) {
         state = state.copy(
             coins = modifiedList,
@@ -86,37 +86,21 @@ class CoinChartViewModel @Inject constructor(
         )
     }
 
-    fun getTimeStamps(): List<String> {
-        val stamps = state.coins
-        timestamps = stamps?.map { coin ->
-            formatTimestampToMonthDay(coin.timestamp)
-        }!!
-        return if(timestamps.size > 300)
-            getNext12Months()
-        else
-            timestamps
+
+    fun getDataPoints() : List<DataPoint> {
+        val coins = state.coins
+        val points = coins?.map { coin ->
+            val zonedDateTime = ZonedDateTime.parse(coin.timestamp, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+            val timestamp = zonedDateTime.toEpochSecond().toFloat()
+            DataPoint(y = coin.price.toFloat(), x = timestamp, xLabel = formatTimestampToMonthDay(coin.timestamp))
+
+        }
+       return points ?: emptyList()
     }
-
-
-
-
 }
 
 
 
-fun getNext12Months(): List<String> {
-    val currentDate = LocalDate.now()
-    val months = mutableListOf<String>()
-
-    var date = currentDate.minusMonths(11)  // Start from 11 months ago to include the current month in the list
-
-    repeat(12) {
-        months.add(date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault()))
-        date = date.plusMonths(1)
-    }
-
-    return months
-}
 
 
 fun formatTimestampToMonthDay(timestamp: String): String {
@@ -127,11 +111,13 @@ fun formatTimestampToMonthDay(timestamp: String): String {
         // Parse the timestamp to ZonedDateTime
         val dateTime = ZonedDateTime.parse(timestamp, inputFormatter)
 
+
+
         // Define the output format
         val outputFormatter = DateTimeFormatter.ofPattern("MM.dd")
 
         // Format the ZonedDateTime to the desired format
-        dateTime.format(outputFormatter)
+        dateTime.minusDays(1).format(outputFormatter)
     } catch (e: DateTimeParseException) {
         // Handle parsing errors (e.g., invalid timestamp format)
         "Invalid date"

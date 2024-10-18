@@ -85,21 +85,21 @@ android {
 
 dependencies {
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.common)
+    implementation(libs.generativeai)
     //hilt
     ksp (libs.hilt.compiler.ksp)
     implementation (libs.hilt.android)
     implementation (libs.hilt.navigation.compose)
     implementation (libs.hilt.common)
-//    implementation (libs.hilt.android)
-//    ksp (libs.dagger.hilt.compiler.v252)
-//    ksp(libs.symbol.processing.api)
-//    implementation (libs.androidx.hilt.navigation.compose)
 
     // Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler.v250)
     implementation(libs.androidx.room.ktx)
 
+
+    //mockito
     implementation("org.mockito:mockito-core:5.14.2")
     testImplementation ("org.mockito.kotlin:mockito-kotlin:5.1.0")
     testImplementation ("org.mockito:mockito-inline:5.1.0")
@@ -129,9 +129,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx.v231)
 
-    // Chart Libraries
-    implementation(libs.charts)
-    implementation(libs.compose.charts)
 
     // Retrofit
     implementation(libs.retrofit)

@@ -40,11 +40,9 @@ class CoinRepositoryImpl @Inject constructor(
             coinTickerItemDao.insertAllCoinTickerItems(tickerCoins)
 
         } catch (e: HttpException) {
-            // Log or handle HTTP exceptions
             println("Error: ${e.localizedMessage ?: "Unexpected Error"}")
 
         } catch (e: IOException) {
-            // Handle IO exceptions (e.g., no internet connection)
             handleNoInternet()
         }
     }
@@ -74,8 +72,6 @@ class CoinRepositoryImpl @Inject constructor(
             cachedExchange.toDomainModel()
         }
     }
-
-
 
     override suspend fun getCoinById(coinId: String): CoinDetail {
         return try {

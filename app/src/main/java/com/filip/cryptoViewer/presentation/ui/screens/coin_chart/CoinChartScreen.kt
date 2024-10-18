@@ -1,30 +1,40 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
 
 
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ChartRangeMenu
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.PriceLineChart
+import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ChartStyle
+import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.DataPoint
+import com.plcoding.cryptotracker.crypto.presentation.coin_detail.PriceChart
 
 @Composable
 fun CoinChartScreen(
@@ -44,7 +54,8 @@ fun CoinChartScreen(
                 viewModel.changeChartRange(days)
                 expanded = false
             },
-            goToDetails = goToDetails
+            goToDetails = goToDetails,
+            dataPoints = viewModel.getDataPoints()
         )
     }
 }
@@ -56,13 +67,15 @@ fun CoinChartScreenContent(
     onExpandClick: () -> Unit,
     onDismissExpand: () -> Unit,
     onSelectRange: (Int) -> Unit,
-    goToDetails: (String) -> Unit
+    goToDetails: (String) -> Unit,
+    dataPoints : List<DataPoint>
 ) {
-    state.coins?.let { coins ->
+    state.coins?.let {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 32.dp, top = 32.dp)
+                .padding( top = 32.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             // Price Chart Title and Dropdown Menu
             Row(
@@ -97,14 +110,62 @@ fun CoinChartScreenContent(
                     .fillMaxWidth()
                     .weight(0.5f)
             ) {
-                PriceLineChart(prices = coins)
+               // PriceLineChart(prices = coins)
+                var selectedDataPoint by remember {
+                    mutableStateOf<DataPoint?>(null)
+                }
+                var labelWidth by remember {
+                    mutableFloatStateOf(0f)
+                }
+                var totalChartWidth by remember {
+                    mutableFloatStateOf(0f)
+                }
+                val amountOfVisibleDataPoints = if(labelWidth > 0) {
+                    ((totalChartWidth - 2.5 * labelWidth) / labelWidth).toInt()
+                } else {
+                    0
+                }
+                val startIndex = (dataPoints.lastIndex - amountOfVisibleDataPoints)
+                    .coerceAtLeast(0)
+                PriceChart(
+                    dataPoints = dataPoints,
+                    style = ChartStyle(
+                        chartLineColor = MaterialTheme.colorScheme.primary,
+                        unselectedColor = MaterialTheme.colorScheme.secondary.copy(
+                            alpha = 0.3f
+                        ),
+                        selectedColor = MaterialTheme.colorScheme.primary,
+                        helperLinesThicknessPx = 5f,
+                        axisLinesThicknessPx = 5f,
+                        labelFontSize = 14.sp,
+                        minYLabelSpacing = 25.dp,
+                        verticalPadding = 8.dp,
+                        horizontalPadding = 8.dp,
+                        xAxisLabelSpacing = 8.dp
+                    ),
+                    visibleDataPointsIndices = startIndex..dataPoints.lastIndex,
+                    unit = "$",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onSizeChanged { totalChartWidth = it.width.toFloat() },
+                    selectedDataPoint = selectedDataPoint,
+                    onSelectedDataPoint = {
+                        selectedDataPoint = it
+                    },
+                    onXLabelWidthChange = { labelWidth = it }
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Market Cap Info
             Text(
-                text = "Market cap: " + formatNumberWithCommas(state.marketCap) + "$",
+                text = "Market cap:",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = formatNumberWithCommas(state.marketCap) + "$",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -112,7 +173,6 @@ fun CoinChartScreenContent(
             // Button to Navigate to Coin Details
             Button(
                 modifier = Modifier
-                    .offset((-16).dp)
                     .align(Alignment.CenterHorizontally),
                 onClick = { goToDetails(state.id) }
             ) {
