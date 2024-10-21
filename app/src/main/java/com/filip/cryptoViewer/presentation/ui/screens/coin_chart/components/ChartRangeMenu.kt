@@ -13,7 +13,6 @@ fun ChartRangeMenu(
     onDismissRequest: () -> Unit,
     onSelectRange: (Int) -> Unit,
 ) {
-  //  var text by remember { mutableStateOf("") }
     DropdownMenu(expanded = expanded, onDismissRequest = onDismissRequest) {
         DropdownMenuItem(
             text = { Text("Last 365 Days") },
@@ -24,14 +23,6 @@ fun ChartRangeMenu(
         DropdownMenuItem(
             text = { Text("Last 7 Days") },
             onClick = { onSelectRange(7);onDismissRequest() })
-//        TextField(
-//            value = text,
-//            onValueChange = { newText -> text = newText;onSelectRange(text.toInt()) },
-//            label = { Text("Custom") },
-//            keyboardOptions = KeyboardOptions.Default.copy(
-//                keyboardType = KeyboardType.Number
-//            )
-//        )
 
     }
 }

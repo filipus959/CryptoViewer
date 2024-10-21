@@ -38,12 +38,11 @@ fun PreviewCoinConverterScreen() {
             CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
             CoinTickerItem(id = "2", name = "Ethereum", symbol = "ETH", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
             CoinTickerItem(id = "3", name = "Ripple", symbol = "XRP", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
-        ), error = "", isLoading = false, result = ""
+        ), error = "", isLoading = false, result = "1 BTC = 30 ETH"
     )
 
     val selectedCoin1 = CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
     val selectedCoin2 = CoinTickerItem(id = "2", name = "Ethereum", symbol = "ETH", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
-    val result = "1 BTC = 30 ETH"
     val searchQuery = ""
     val amount = 1
     Surface {
@@ -53,7 +52,6 @@ fun PreviewCoinConverterScreen() {
                     state = mockState,
                     selectedCoin1 = selectedCoin1,
                     selectedCoin2 = selectedCoin2,
-                    result = result,
                     searchQuery = searchQuery,
                     onSearchQueryChange = { /* Mock action */ },
                     onFirstSelection = { /* Mock action */ },

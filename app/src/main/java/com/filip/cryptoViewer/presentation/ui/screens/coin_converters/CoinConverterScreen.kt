@@ -1,5 +1,6 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_converters
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +25,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -42,7 +45,6 @@ fun CoinConverterScreen(
             state = state,
             selectedCoin1 = viewModel.selectedCoin1,
             selectedCoin2 = viewModel.selectedCoin2,
-            result = state.result,
             amount = viewModel.amount,
             searchQuery = viewModel.searchQuery,
             onSearchQueryChange = viewModel::onSearchQueryUpdated,
@@ -59,7 +61,6 @@ fun BoxScope.CoinConverterScreenContent(
     state: CoinConverterState,
     selectedCoin1: CoinTickerItem?,
     selectedCoin2: CoinTickerItem?,
-    result: String,
     amount: Int,
     searchQuery: String,
     onAmountChange: (String) -> Unit,
@@ -100,13 +101,14 @@ fun BoxScope.CoinConverterScreenContent(
                 TextField(
                     value = amount.toString(),
                     onValueChange = { newValue ->
-                        if (newValue.isEmpty() || newValue.all { it.isDigit() || it == '.' }) {
+                        if (newValue.isEmpty() || newValue.all { it.isDigit() }) {
                             onAmountChange(newValue)
                         }
                     },
-                    modifier = Modifier.wrapContentSize()
+                    modifier = Modifier
+                        .wrapContentSize()
                         .widthIn(min = 20.dp, max = 200.dp),
-                    label = { Text("Amount") }, // Placeholder text
+                    label = { Text("Amount") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done,
                         keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal // Numeric keyboard
@@ -136,7 +138,7 @@ fun BoxScope.CoinConverterScreenContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp)) // Add extra space between search field and lists
+        Spacer(modifier = Modifier.height(24.dp))
 
         Row(
             modifier = Modifier
@@ -148,14 +150,16 @@ fun BoxScope.CoinConverterScreenContent(
                 label = "From:",
                 coins = coins,
                 onSelectCoin = onFirstSelection,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                selectedCoin = selectedCoin1,
             )
             Spacer(modifier = Modifier.width(8.dp))
             LazyColumnWithLabel(
                 label = "To:",
                 coins = coins,
                 onSelectCoin = onSecondSelection,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                selectedCoin = selectedCoin2,
             )
         }
     }
@@ -167,6 +171,7 @@ fun LazyColumnWithLabel(
     label: String,
     coins: List<CoinTickerItem>,
     onSelectCoin: (CoinTickerItem) -> Unit,
+    selectedCoin: CoinTickerItem?,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -179,7 +184,11 @@ fun LazyColumnWithLabel(
             modifier = Modifier.fillMaxHeight()
         ) {
             items(coins) { coin ->
-                ListItem(coin = coin, onItemClick = { onSelectCoin(coin) })
+                ListItem(
+                    coin = coin,
+                    onItemClick = { onSelectCoin(coin) },
+                    isSelected = coin == selectedCoin // Determine if the item is selected
+                )
             }
         }
     }
@@ -187,19 +196,30 @@ fun LazyColumnWithLabel(
 
 @Composable
 fun ListItem(
-    coin: CoinTickerItem, onItemClick: (String) -> Unit
+    coin: CoinTickerItem,
+    onItemClick: (String) -> Unit,
+    isSelected: Boolean
 ) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onItemClick(coin.id) }
-        .padding(20.dp)) {
-        Text(
-            text = "${coin.name} (${coin.symbol})",
-            style = MaterialTheme.typography.bodyLarge,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(if (isSelected) Color.DarkGray else Color.Transparent)
+    ) {
+
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onItemClick(coin.id) }
+            .padding(20.dp)
         )
-        Spacer(modifier = Modifier.width(30.dp))
+        {
+            Text(
+                text = "${coin.name} (${coin.symbol})",
+                style = MaterialTheme.typography.bodyLarge,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(30.dp))
+        }
     }
 }
 
