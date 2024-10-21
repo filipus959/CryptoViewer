@@ -9,7 +9,7 @@ data class CoinTickerListState(
     val coins: List<CoinTickerItem>,
     override val error: String,
     val searchQuery: String = ""
-) : UIState{
+) : UIState {
     companion object {
         val Empty = CoinTickerListState(
             isLoading = false,

@@ -1,27 +1,26 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_detail
-
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Constants
 import com.filip.cryptoViewer.domain.repository.CoinRepository
+import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CoinDetailViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(CoinDetailState())
-    val state : State<CoinDetailState> = _state
+    var state by mutableStateOf(CoinDetailState.Empty)
+    private set
+
 
     init {
         viewModelScope.launch {
@@ -31,20 +30,19 @@ class CoinDetailViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getCoin(coinId: String) {
-        _state.value = CoinDetailState(isLoading = true)  // Set loading state
+        state = state.copy(isLoading = true)
 
         try {
             val coinData = coinRepository.getCoinById(coinId)
-
-            _state.value = CoinDetailState(
-                coin = coinData
+            state = state.copy(
+                coin = coinData,
+                isLoading = false
             )
         } catch (e: Exception) {
-            // Handle any errors that occur
-            _state.value = CoinDetailState(
-                error = e.message ?: "An unexpected error occurred"
+            state = state.copy(
+                error = e.message ?: "An unexpected error occurred",
+                isLoading = false
             )
         }
     }

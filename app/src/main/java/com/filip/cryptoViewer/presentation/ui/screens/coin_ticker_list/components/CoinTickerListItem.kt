@@ -22,19 +22,16 @@ import com.filip.cryptoViewer.domain.model.CoinTickerItem
 
 @Composable
 fun CoinTickerListItem(
-    coin: CoinTickerItem,
-    onItemClick: (CoinTickerItem) -> Unit
+    coin: CoinTickerItem, onItemClick: (CoinTickerItem) -> Unit
 ) {
     val pChange = coin.percentChange24h
 
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(coin) }
-            .padding(20.dp),
-        verticalAlignment = CenterVertically
-    ) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onItemClick(coin) }
+        .padding(20.dp),
+        verticalAlignment = CenterVertically) {
         Text(
             text = "${coin.rank}. ${coin.name} ${coin.symbol}",
             style = MaterialTheme.typography.bodyLarge,
@@ -45,7 +42,7 @@ fun CoinTickerListItem(
         Spacer(modifier = Modifier.width(30.dp))
 
         Text(
-            text = "$"+ formatter(coin.usdPrice),
+            text = "$" + formatter(coin.usdPrice),
             modifier = Modifier
                 .padding(start = 12.dp)
                 .weight(0.8f),
@@ -63,14 +60,15 @@ fun CoinTickerListItem(
 
     }
 }
+
 @SuppressLint("DefaultLocale")
 val formatter: (Double) -> String = { value ->
     when {
         value < 10 -> {
             String.format("%.6f", value)
         }
+
         else -> {
-            // If value is less than 1000, show with 2 decimal digits
             String.format("%.2f", value)
         }
     }

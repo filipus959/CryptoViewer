@@ -30,7 +30,7 @@ import com.google.accompanist.flowlayout.FlowRow
 fun CoinDetailScreen(
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.value
+    val state = viewModel.state
     LoadableScreen(state) {
         CoinDetailScreenContent(
             state = state

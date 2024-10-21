@@ -100,9 +100,9 @@ dependencies {
 
 
     //mockito
-    implementation("org.mockito:mockito-core:5.14.2")
-    testImplementation ("org.mockito.kotlin:mockito-kotlin:5.1.0")
-    testImplementation ("org.mockito:mockito-inline:5.1.0")
+    implementation(libs.mockito.core.v5142)
+    testImplementation (libs.mockito.kotlin.v510)
+    testImplementation (libs.mockito.inline)
 
 
 

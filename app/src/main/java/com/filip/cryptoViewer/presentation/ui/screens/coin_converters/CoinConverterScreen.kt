@@ -42,7 +42,7 @@ fun CoinConverterScreen(
             state = state,
             selectedCoin1 = viewModel.selectedCoin1,
             selectedCoin2 = viewModel.selectedCoin2,
-            result = viewModel.result,
+            result = state.result,
             amount = viewModel.amount,
             searchQuery = viewModel.searchQuery,
             onSearchQueryChange = viewModel::onSearchQueryUpdated,
@@ -98,9 +98,8 @@ fun BoxScope.CoinConverterScreenContent(
 
             Row {
                 TextField(
-                    value = amount.toString(), // Display the amount as string
+                    value = amount.toString(),
                     onValueChange = { newValue ->
-                        // Allow only digits and decimal point
                         if (newValue.isEmpty() || newValue.all { it.isDigit() || it == '.' }) {
                             onAmountChange(newValue)
                         }
@@ -116,8 +115,12 @@ fun BoxScope.CoinConverterScreenContent(
 
 
                 Text(
-                    text = result,
-                    style = MaterialTheme.typography.headlineLarge,
+                    text = state.result,
+                    style = if (state.result == "Please select two coins") {
+                        MaterialTheme.typography.bodySmall
+                    } else {
+                        MaterialTheme.typography.headlineLarge
+                    },
                     modifier = Modifier.padding(16.dp)
                 )
             }
@@ -125,7 +128,6 @@ fun BoxScope.CoinConverterScreenContent(
 
             Spacer(modifier = Modifier.height(26.dp))
 
-            // Search field
             SearchField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
@@ -140,7 +142,6 @@ fun BoxScope.CoinConverterScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                //  .padding(bottom = navBarPadding.calculateBottomPadding() / 2 + 20.dp)
                 .fillMaxHeight(0.5f)
         ) {
             LazyColumnWithLabel(

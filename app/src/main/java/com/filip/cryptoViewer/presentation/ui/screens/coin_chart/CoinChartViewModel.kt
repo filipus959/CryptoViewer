@@ -1,7 +1,6 @@
 package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
@@ -13,21 +12,17 @@ import com.filip.cryptoViewer.domain.repository.CoinRepository
 import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.DataPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.time.format.TextStyle
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class CoinChartViewModel @Inject constructor(
-    private val coinRepository: CoinRepository,
-    savedStateHandle: SavedStateHandle
+    private val coinRepository: CoinRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var state by mutableStateOf(CoinChartState())
+    var state by mutableStateOf(CoinChartState.Empty)
         private set
     private var _chartList by mutableStateOf(emptyList<CoinChart>())
     private val chartList: List<CoinChart> get() = _chartList
@@ -42,10 +37,9 @@ class CoinChartViewModel @Inject constructor(
     }
 
     private suspend fun getCoinChart(coinId: String) {
-        state = CoinChartState(isLoading = true)  // Set loading state
+        state = state.copy(isLoading = true)
 
         try {
-            // Assuming this function returns a List<CoinChart> directly
             val coinData = coinRepository.getChartCoinById(coinId)
             _chartList = coinData
 
@@ -62,12 +56,12 @@ class CoinChartViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            // Handle any errors that occur
             state = state.copy(
                 error = e.message ?: "An unexpected error occurred"
             )
         }
     }
+
     fun changeChartRange(days: Int) {
         val modifiedList = chartList.takeLast(days).let { list ->
             when (days) {
@@ -78,63 +72,49 @@ class CoinChartViewModel @Inject constructor(
         }
         updateListState(modifiedList)
     }
+
     private fun updateListState(modifiedList: List<CoinChart>) {
         state = state.copy(
-            coins = modifiedList,
-            isLoading = false,
-            error = ""
+            coins = modifiedList, isLoading = false, error = ""
         )
     }
 
 
-    fun getDataPoints() : List<DataPoint> {
+    fun getDataPoints(): List<DataPoint> {
         val coins = state.coins
         val points = coins?.map { coin ->
-            val zonedDateTime = ZonedDateTime.parse(coin.timestamp, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+            val zonedDateTime =
+                ZonedDateTime.parse(coin.timestamp, DateTimeFormatter.ISO_ZONED_DATE_TIME)
             val timestamp = zonedDateTime.toEpochSecond().toFloat()
-            DataPoint(y = coin.price.toFloat(), x = timestamp, xLabel = formatTimestampToMonthDay(coin.timestamp))
+            DataPoint(
+                y = coin.price.toFloat(),
+                x = timestamp,
+                xLabel = formatTimestampToMonthDay(coin.timestamp)
+            )
 
         }
-       return points ?: emptyList()
+        return points ?: emptyList()
     }
 }
-
-
-
 
 
 fun formatTimestampToMonthDay(timestamp: String): String {
     return try {
-        // Define the input format (ISO 8601)
         val inputFormatter = DateTimeFormatter.ISO_DATE_TIME
-
-        // Parse the timestamp to ZonedDateTime
         val dateTime = ZonedDateTime.parse(timestamp, inputFormatter)
-
-
-
-        // Define the output format
         val outputFormatter = DateTimeFormatter.ofPattern("MM.dd")
 
-        // Format the ZonedDateTime to the desired format
         dateTime.minusDays(1).format(outputFormatter)
     } catch (e: DateTimeParseException) {
-        // Handle parsing errors (e.g., invalid timestamp format)
         "Invalid date"
     }
 }
+
 fun formatNumberWithCommas(numberString: String): String {
-    // Remove any existing non-digit characters
     val cleanedNumber = numberString.replace("[^\\d]".toRegex(), "")
-
-    // Check if the cleaned number is empty or zero
     if (cleanedNumber.isEmpty()) return "0"
-
-    // Reverse the cleaned number to simplify the insertion of commas
     val reversedNumber = cleanedNumber.reversed()
     val withCommasReversed = reversedNumber.chunked(3).joinToString(",")
-
-    // Reverse it back to get the final formatted number
     return withCommasReversed.reversed()
 }
 

@@ -6,6 +6,7 @@ import com.filip.cryptoViewer.presentation.UIState
 data class CoinConverterState(
     override val isLoading: Boolean,
     override val error: String,
+    val result: String,
     val coins : List<CoinTickerItem>?
 ) : UIState
 {
@@ -13,7 +14,8 @@ data class CoinConverterState(
         val Empty = CoinConverterState(
             isLoading = false,
             error = "",
-            coins = emptyList()
+            coins = emptyList(),
+            result = ""
         )
     }
 }

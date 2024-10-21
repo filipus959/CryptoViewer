@@ -38,15 +38,13 @@ import com.plcoding.cryptotracker.crypto.presentation.coin_detail.PriceChart
 
 @Composable
 fun CoinChartScreen(
-    viewModel: CoinChartViewModel = hiltViewModel(),
-    goToDetails: (String) -> Unit
+    viewModel: CoinChartViewModel = hiltViewModel(), goToDetails: (String) -> Unit
 ) {
     val state = viewModel.state
     var expanded by remember { mutableStateOf(false) }
 
     LoadableScreen(state = state) {
-        CoinChartScreenContent(
-            state = state,
+        CoinChartScreenContent(state = state,
             expanded = expanded,
             onExpandClick = { expanded = true },
             onDismissExpand = { expanded = false },
@@ -68,19 +66,17 @@ fun CoinChartScreenContent(
     onDismissExpand: () -> Unit,
     onSelectRange: (Int) -> Unit,
     goToDetails: (String) -> Unit,
-    dataPoints : List<DataPoint>
+    dataPoints: List<DataPoint>
 ) {
     state.coins?.let {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding( top = 32.dp)
+                .padding(top = 32.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            // Price Chart Title and Dropdown Menu
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "Price Chart for ${state.id}",
@@ -104,13 +100,11 @@ fun CoinChartScreenContent(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Price Line Chart
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.5f)
             ) {
-               // PriceLineChart(prices = coins)
                 var selectedDataPoint by remember {
                     mutableStateOf<DataPoint?>(null)
                 }
@@ -120,15 +114,13 @@ fun CoinChartScreenContent(
                 var totalChartWidth by remember {
                     mutableFloatStateOf(0f)
                 }
-                val amountOfVisibleDataPoints = if(labelWidth > 0) {
+                val amountOfVisibleDataPoints = if (labelWidth > 0) {
                     ((totalChartWidth - 2.5 * labelWidth) / labelWidth).toInt()
                 } else {
                     0
                 }
-                val startIndex = (dataPoints.lastIndex - amountOfVisibleDataPoints)
-                    .coerceAtLeast(0)
-                PriceChart(
-                    dataPoints = dataPoints,
+                val startIndex = (dataPoints.lastIndex - amountOfVisibleDataPoints).coerceAtLeast(0)
+                PriceChart(dataPoints = dataPoints,
                     style = ChartStyle(
                         chartLineColor = MaterialTheme.colorScheme.primary,
                         unselectedColor = MaterialTheme.colorScheme.secondary.copy(
@@ -152,13 +144,11 @@ fun CoinChartScreenContent(
                     onSelectedDataPoint = {
                         selectedDataPoint = it
                     },
-                    onXLabelWidthChange = { labelWidth = it }
-                )
+                    onXLabelWidthChange = { labelWidth = it })
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Market Cap Info
             Text(
                 text = "Market cap:",
                 style = MaterialTheme.typography.headlineMedium,
@@ -171,12 +161,8 @@ fun CoinChartScreenContent(
             )
 
             Spacer(Modifier.height(16.dp))
-            // Button to Navigate to Coin Details
-            Button(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                onClick = { goToDetails(state.id) }
-            ) {
+            Button(modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = { goToDetails(state.id) }) {
                 Text(text = "More info about the coin")
             }
             Spacer(Modifier.height(16.dp))

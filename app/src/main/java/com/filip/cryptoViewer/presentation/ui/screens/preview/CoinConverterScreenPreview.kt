@@ -38,7 +38,7 @@ fun PreviewCoinConverterScreen() {
             CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
             CoinTickerItem(id = "2", name = "Ethereum", symbol = "ETH", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
             CoinTickerItem(id = "3", name = "Ripple", symbol = "XRP", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
-        ), error = "", isLoading = false
+        ), error = "", isLoading = false, result = ""
     )
 
     val selectedCoin1 = CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)

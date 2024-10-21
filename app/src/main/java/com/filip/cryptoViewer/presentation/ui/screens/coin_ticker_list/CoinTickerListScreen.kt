@@ -26,31 +26,33 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.filip.cryptoViewer.domain.model.SortCriteria
+import com.filip.cryptoViewer.domain.model.SortField
+import com.filip.cryptoViewer.domain.model.SortOrder
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.components.CoinTickerListItem
 
 
 @Composable
 fun CoinTickerListScreen(
-    viewModel: CoinListViewModel = hiltViewModel(),
-    goToCoinChartScreen: (String) -> Unit
+    viewModel: CoinTickerListViewModel = hiltViewModel(), goToCoinChartScreen: (String) -> Unit
 ) {
     val state = viewModel.state
+
     LoadableScreen(state) {
         CoinTickerListScreenContent(
             state = viewModel.state,
             searchQuery = viewModel.searchQuery,
-            rankArrow = viewModel.rankArrow,
-            changeArrow = viewModel.changeArrow,
-            priceArrow = viewModel.priceArrow,
-            onSortByRank = viewModel::sortCoinsByRank,
-            onSortByChange = viewModel::sortCoinsByChange,
-            onSortByPrice = viewModel::sortCoinsByPrice,
+            rankArrow = viewModel.getArrowForField(SortField.RANK),  // Get arrow from ViewModel
+            changeArrow = viewModel.getArrowForField(SortField.CHANGE),  // Get arrow from ViewModel
+            priceArrow = viewModel.getArrowForField(SortField.PRICE),  // Get arrow from ViewModel
+            onSortByRank = { viewModel.updateSortCriteria(SortField.RANK) },
+            onSortByChange = { viewModel.updateSortCriteria(SortField.CHANGE) },
+            onSortByPrice = { viewModel.updateSortCriteria(SortField.PRICE) },
             onSearchQueryChange = viewModel::onSearchQueryUpdated,
             goToCoinChartScreen = goToCoinChartScreen
         )
     }
-
 }
 
 @Composable
@@ -69,10 +71,7 @@ fun CoinTickerListScreenContent(
     val darkTheme = isSystemInDarkTheme()
 
     state.coins.let { coins ->
-        Column(
-            //     modifier = Modifier
-            //       .padding(bottom = navBarPadding.calculateBottomPadding() / 2)
-        ) {
+        Column {
             Spacer(modifier = Modifier.height(30.dp))
             TextField(
                 value = searchQuery,
@@ -95,14 +94,9 @@ fun CoinTickerListScreenContent(
 
             LazyColumn {
                 items(coins) { coin ->
-                    CoinTickerListItem(
-                        coin = coin,
-                        onItemClick = { goToCoinChartScreen(coin.id) }
-                    )
+                    CoinTickerListItem(coin = coin, onItemClick = { goToCoinChartScreen(coin.id) })
                 }
             }
-
-
         }
     }
 }
@@ -132,14 +126,11 @@ fun SortingRow(
             textAlign = TextAlign.Start
         )
         SortableText(
-            text = "24H Change $changeArrow",
-            onClick = onSortByChange,
-            textAlign = TextAlign.End
+            text = "24H Change $changeArrow", onClick = onSortByChange, textAlign = TextAlign.End
         )
     }
 }
 
-// 4. Sortable Text Composable
 @Composable
 fun SortableText(
     text: String,
@@ -157,4 +148,7 @@ fun SortableText(
         textAlign = textAlign
     )
 }
+
+
+
 
