@@ -165,7 +165,7 @@ class CoinRepositoryImplTest {
             )
         )
 
-
+        `when`(coinTickerItemDao.getAllCoinTickerItems()).thenReturn(flowOf(emptyList())) // or flowOf(mockTickerDtos.map { it.toDbModel() })
         `when`(api.getTickerCoins()).thenReturn(mockTickerDtos)
 
         repository.fetchTickerCoins()
