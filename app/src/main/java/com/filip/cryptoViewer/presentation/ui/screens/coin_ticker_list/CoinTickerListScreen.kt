@@ -17,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.filip.cryptoViewer.domain.model.SortCriteria
 import com.filip.cryptoViewer.domain.model.SortField
 import com.filip.cryptoViewer.domain.model.SortOrder
@@ -37,11 +40,11 @@ import com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.component
 fun CoinTickerListScreen(
     viewModel: CoinTickerListViewModel = hiltViewModel(), goToCoinChartScreen: (String) -> Unit
 ) {
-    val state = viewModel.state
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LoadableScreen(state) {
         CoinTickerListScreenContent(
-            state = viewModel.state,
+            state = viewModel.state.collectAsState().value,
             searchQuery = viewModel.searchQuery,
             rankArrow = viewModel.getArrowForField(SortField.RANK),  // Get arrow from ViewModel
             changeArrow = viewModel.getArrowForField(SortField.CHANGE),  // Get arrow from ViewModel

@@ -8,10 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
-
-//    alias(libs.plugins.jetbrains.kotlin.android)
-//    id("com.google.devtools.ksp")
-//    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -84,6 +81,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.common)
     implementation(libs.generativeai)

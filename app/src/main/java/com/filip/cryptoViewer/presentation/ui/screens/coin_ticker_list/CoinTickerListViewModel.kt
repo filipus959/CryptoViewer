@@ -12,6 +12,8 @@ import com.filip.cryptoViewer.domain.model.SortOrder
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import com.filip.cryptoViewer.domain.usecase.SortAndFilterCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -23,7 +25,7 @@ class CoinTickerListViewModel @Inject constructor(
     private val sortAndFilterCoinsUseCase: SortAndFilterCoinsUseCase
 ) : ViewModel() {
 
-    var state by mutableStateOf(CoinTickerListState.Empty)
+    var state = MutableStateFlow(CoinTickerListState.Empty)
         private set
 
     var searchQuery by mutableStateOf("")
@@ -59,19 +61,21 @@ class CoinTickerListViewModel @Inject constructor(
     private fun sortAndFilterCoins() {
         val filteredList = sortAndFilterCoinsUseCase.filterCoinList(searchQuery, allCoinsData)
         val sortedList = sortAndFilterCoinsUseCase.sortCoins(filteredList, sortCriteria)
-        state = state.copy(coins = sortedList, isLoading = false)
+        state.update { it.copy(coins = sortedList, isLoading = false) }
+      //  state = state.copy(coins = sortedList, isLoading = false)
     }
 
     private suspend fun observeTickerCoins() {
-        state = state.copy(isLoading = true)
+        state.update { it.copy(isLoading = true) }
+       // state = state.copy(isLoading = true)
         try {
             coinRepository.observeTickerCoins().collect { coins ->
                 allCoinsData = coins
                 sortAndFilterCoins()
             }
         } catch (e: Exception) {
-            state =
-                state.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}")
+            state.update { it.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}") }
+           // state = state.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}")
         }
     }
 

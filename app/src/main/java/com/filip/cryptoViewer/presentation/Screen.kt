@@ -1,5 +1,6 @@
 package com.filip.cryptoViewer.presentation
 
+
 sealed class Screen(val route: String) {
     data object CoinTickerListScreen: Screen("coin_ticker_list_screen")
     data object CoinDetailScreen: Screen("coin_detail_screen")
