@@ -16,12 +16,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePaprikaAoi(): CoinPaprikaApi{
+    fun providePaprikaAoi(): CoinPaprikaApi {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CoinPaprikaApi::class.java)
-
     }
 }

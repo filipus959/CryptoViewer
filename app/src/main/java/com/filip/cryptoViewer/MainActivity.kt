@@ -29,16 +29,15 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     Scaffold(
                         modifier = Modifier.navigationBarsPadding(),
-                        bottomBar = { BottomNavBar(navController) }
+                        bottomBar = { BottomNavBar(navController) },
                     ) { innerPadding ->
-                        Box(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()-32.dp, top = 16.dp)) {
+                        Box(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding() - 32.dp, top = 16.dp)) {
                             NavGraph(navController = navController)
                         }
                     }
-                //    CoinTickerListScreen()
+                    //    CoinTickerListScreen()
                 }
             }
         }
     }
 }
-

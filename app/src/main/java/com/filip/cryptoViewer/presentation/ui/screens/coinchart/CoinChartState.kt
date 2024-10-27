@@ -1,8 +1,7 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
+package com.filip.cryptoViewer.presentation.ui.screens.coinchart
 
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.presentation.UIState
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterState
 
 data class CoinChartState(
     override val isLoading: Boolean,
@@ -10,9 +9,8 @@ data class CoinChartState(
     override val error: String,
     val id: String,
     val marketCap: String,
-    val name: String
-) : UIState
-{
+    val name: String,
+) : UIState {
     companion object {
         val Empty = CoinChartState(
             isLoading = false,

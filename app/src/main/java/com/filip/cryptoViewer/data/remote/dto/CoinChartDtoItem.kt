@@ -12,7 +12,5 @@ data class CoinChartDtoItem(
     @SerializedName("volume_24h")
     val volume24h: Long,
     @SerializedName("coinId")
-    val coinId: String
+    val coinId: String,
 )
-
-

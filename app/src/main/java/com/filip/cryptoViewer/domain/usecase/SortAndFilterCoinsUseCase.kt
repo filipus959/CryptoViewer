@@ -6,7 +6,7 @@ import com.filip.cryptoViewer.domain.model.SortField
 import com.filip.cryptoViewer.domain.model.SortOrder
 import javax.inject.Inject
 
-class SortAndFilterCoinsUseCase @Inject constructor(){
+class SortAndFilterCoinsUseCase @Inject constructor() {
 
     fun filterCoinList(query: String, coins: List<CoinTickerItem>): List<CoinTickerItem> {
         return if (query.isBlank()) coins else coins.filter { it.name.contains(query, ignoreCase = true) }

@@ -15,11 +15,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun BottomNavBar(navController: NavHostController) {
     val items = listOf(
         NavigationItem.Home,
-        NavigationItem.Converters
+        NavigationItem.Converters,
     )
 
     NavigationBar(
-        modifier = Modifier.systemBarsPadding()
+        modifier = Modifier.systemBarsPadding(),
     ) {
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
@@ -30,7 +30,7 @@ fun BottomNavBar(navController: NavHostController) {
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.label
+                        contentDescription = item.label,
                     )
                 },
                 label = { Text(item.label) },
@@ -43,7 +43,7 @@ fun BottomNavBar(navController: NavHostController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
             )
         }
     }

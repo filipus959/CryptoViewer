@@ -5,10 +5,11 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "coin_charts",
-        indices = [Index(value = ["coinId", "timestamp"], unique = true)])
-
-data class CoinChartEntity (
+@Entity(
+    tableName = "coin_charts",
+    indices = [Index(value = ["coinId", "timestamp"], unique = true)],
+)
+data class CoinChartEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "coinId")
     val coinId: String = "",
@@ -19,5 +20,5 @@ data class CoinChartEntity (
     @ColumnInfo(name = "timestamp")
     val timestamp: String,
     @ColumnInfo(name = "volume_24h")
-    val volume24h: Long
+    val volume24h: Long,
 )

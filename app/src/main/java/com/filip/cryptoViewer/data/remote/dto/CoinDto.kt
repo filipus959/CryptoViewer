@@ -1,6 +1,5 @@
 package com.filip.cryptoViewer.data.remote.dto
 
-import com.filip.cryptoViewer.domain.model.Coin
 import com.google.gson.annotations.SerializedName
 
 data class CoinDto(
@@ -17,5 +16,5 @@ data class CoinDto(
     @SerializedName("symbol")
     val symbol: String,
     @SerializedName("type")
-    val type: String
+    val type: String,
 )

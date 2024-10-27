@@ -34,7 +34,6 @@ generativeai = "0.9.0"
 spotless = "6.12.1"
 
 [libraries]
-
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 hilt-compiler-ksp = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }

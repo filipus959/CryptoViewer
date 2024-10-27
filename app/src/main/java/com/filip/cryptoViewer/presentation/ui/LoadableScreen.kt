@@ -25,7 +25,7 @@ fun <T : UIState> LoadableScreen(
     state: T,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.TopCenter,
-    content: @Composable BoxScope.(T) -> Unit
+    content: @Composable BoxScope.(T) -> Unit,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -41,7 +41,7 @@ fun <T : UIState> LoadableScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp),
             )
         }
 
@@ -61,12 +61,12 @@ private fun LoadableScreenPreview() {
             state = object : UIState {
                 override var isLoading: Boolean = true
                 override var error: String = "12312"
-            }
+            },
         ) {
             Box(
                 Modifier
                     .size(50.dp)
-                    .background(Color.Blue)
+                    .background(Color.Blue),
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components
+package com.filip.cryptoViewer.presentation.ui.screens.coinchart.components
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -14,5 +14,5 @@ data class ChartStyle(
     val minYLabelSpacing: Dp,
     val verticalPadding: Dp,
     val horizontalPadding: Dp,
-    val xAxisLabelSpacing: Dp
+    val xAxisLabelSpacing: Dp,
 )

@@ -36,5 +36,5 @@ data class USD(
     @SerializedName("volume_24h")
     val volume24h: Double,
     @SerializedName("volume_24h_change_24h")
-    val volume24hChange24h: Double
+    val volume24hChange24h: Double,
 )

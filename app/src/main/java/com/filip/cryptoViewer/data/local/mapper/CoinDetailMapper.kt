@@ -13,7 +13,7 @@ fun CoinDetailDto.toDbModel(): CoinDetailEntity {
         tags = tags,
         coinId = id,
         isActive = isActive,
-        team = team
+        team = team,
     )
 }
 
@@ -26,6 +26,6 @@ fun CoinDetailEntity.toDomainModel(): CoinDetail {
         tags = tags,
         coinId = coinId,
         isActive = isActive,
-        team = team
+        team = team,
     )
 }

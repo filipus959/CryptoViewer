@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_detail
+package com.filip.cryptoViewer.presentation.ui.screens.coindetail
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Constants
 import com.filip.cryptoViewer.domain.repository.CoinRepository
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,12 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CoinDetailViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     var state by mutableStateOf(CoinDetailState.Empty)
-    private set
-
+        private set
 
     init {
         viewModelScope.launch {
@@ -37,12 +35,12 @@ class CoinDetailViewModel @Inject constructor(
             val coinData = coinRepository.getCoinById(coinId)
             state = state.copy(
                 coin = coinData,
-                isLoading = false
+                isLoading = false,
             )
         } catch (e: Exception) {
             state = state.copy(
                 error = e.message ?: "An unexpected error occurred",
-                isLoading = false
+                isLoading = false,
             )
         }
     }

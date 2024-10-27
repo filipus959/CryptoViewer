@@ -1,11 +1,11 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components
+package com.filip.cryptoViewer.presentation.ui.screens.coinchart.components
 
 import android.icu.text.NumberFormat
 import java.util.Locale
 
 data class ValueLabel(
     val value: Float,
-    val unit: String
+    val unit: String,
 ) {
     fun formatted(): String {
         val formatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {

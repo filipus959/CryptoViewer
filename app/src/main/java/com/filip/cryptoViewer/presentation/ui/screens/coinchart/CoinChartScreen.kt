@@ -1,17 +1,12 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
+package com.filip.cryptoViewer.presentation.ui.screens.coinchart
 
-
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -31,20 +26,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ChartRangeMenu
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ChartStyle
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.DataPoint
-import com.plcoding.cryptotracker.crypto.presentation.coin_detail.PriceChart
+import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.ChartRangeMenu
+import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.ChartStyle
+import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.DataPoint
+import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.PriceChart
 
 @Composable
 fun CoinChartScreen(
-    viewModel: CoinChartViewModel = hiltViewModel(), goToDetails: (String) -> Unit
+    viewModel: CoinChartViewModel = hiltViewModel(),
+    goToDetails: (String) -> Unit,
 ) {
     val state = viewModel.state
     var expanded by remember { mutableStateOf(false) }
 
     LoadableScreen(state = state) {
-        CoinChartScreenContent(state = state,
+        CoinChartScreenContent(
+            state = state,
             expanded = expanded,
             onExpandClick = { expanded = true },
             onDismissExpand = { expanded = false },
@@ -53,7 +50,7 @@ fun CoinChartScreen(
                 expanded = false
             },
             goToDetails = goToDetails,
-            dataPoints = viewModel.getDataPoints()
+            dataPoints = viewModel.getDataPoints(),
         )
     }
 }
@@ -66,34 +63,35 @@ fun CoinChartScreenContent(
     onDismissExpand: () -> Unit,
     onSelectRange: (Int) -> Unit,
     goToDetails: (String) -> Unit,
-    dataPoints: List<DataPoint>
+    dataPoints: List<DataPoint>,
 ) {
     state.coins?.let {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 32.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Price Chart for ${state.id}",
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Button(
                     onClick = onExpandClick,
                     modifier = Modifier
                         .padding(end = 8.dp)
-                        .align(Alignment.CenterVertically)
+                        .align(Alignment.CenterVertically),
                 ) {
                     Text(text = "Range")
                     ChartRangeMenu(
                         expanded = expanded,
                         onDismissRequest = onDismissExpand,
-                        onSelectRange = onSelectRange
+                        onSelectRange = onSelectRange,
                     )
                 }
             }
@@ -103,7 +101,7 @@ fun CoinChartScreenContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.5f)
+                    .weight(0.5f),
             ) {
                 var selectedDataPoint by remember {
                     mutableStateOf<DataPoint?>(null)
@@ -120,11 +118,12 @@ fun CoinChartScreenContent(
                     0
                 }
                 val startIndex = (dataPoints.lastIndex - amountOfVisibleDataPoints).coerceAtLeast(0)
-                PriceChart(dataPoints = dataPoints,
+                PriceChart(
+                    dataPoints = dataPoints,
                     style = ChartStyle(
                         chartLineColor = MaterialTheme.colorScheme.primary,
                         unselectedColor = MaterialTheme.colorScheme.secondary.copy(
-                            alpha = 0.3f
+                            alpha = 0.3f,
                         ),
                         selectedColor = MaterialTheme.colorScheme.primary,
                         helperLinesThicknessPx = 5f,
@@ -133,7 +132,7 @@ fun CoinChartScreenContent(
                         minYLabelSpacing = 25.dp,
                         verticalPadding = 8.dp,
                         horizontalPadding = 8.dp,
-                        xAxisLabelSpacing = 8.dp
+                        xAxisLabelSpacing = 8.dp,
                     ),
                     visibleDataPointsIndices = startIndex..dataPoints.lastIndex,
                     unit = "$",
@@ -144,7 +143,8 @@ fun CoinChartScreenContent(
                     onSelectedDataPoint = {
                         selectedDataPoint = it
                     },
-                    onXLabelWidthChange = { labelWidth = it })
+                    onXLabelWidthChange = { labelWidth = it },
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -152,17 +152,19 @@ fun CoinChartScreenContent(
             Text(
                 text = "Market cap:",
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Text(
                 text = formatNumberWithCommas(state.marketCap) + "$",
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
             Spacer(Modifier.height(16.dp))
-            Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { goToDetails(state.id) }) {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = { goToDetails(state.id) },
+            ) {
                 Text(text = "More info about the coin")
             }
             Spacer(Modifier.height(16.dp))

@@ -15,14 +15,14 @@ fun CoinTickerDto.toDbModel() = CoinTickerItemEntity(
     lastUpdated = lastUpdated,
     maxSupply = maxSupply,
     betaValue = betaValue,
-    totalSupply = totalSupply
+    totalSupply = totalSupply,
 )
 
 fun CoinTickerItemEntity.toDomainModel() = CoinTickerItem(
-    id= id,
-    name=name ,
+    id = id,
+    name = name,
     usdPrice = usdPrice,
-    rank= rank,
-    symbol= symbol,
+    rank = rank,
+    symbol = symbol,
     percentChange24h = percentChange24h,
 )

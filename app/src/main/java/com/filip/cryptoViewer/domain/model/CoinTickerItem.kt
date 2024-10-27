@@ -8,4 +8,3 @@ data class CoinTickerItem(
     val rank: Int,
     val symbol: String,
 )
-

@@ -41,11 +41,13 @@ object DatabaseModule {
     fun provideCoinChartDao(appDatabase: AppDatabase): CoinChartDao {
         return appDatabase.coinChartDao()
     }
+
     @Provides
     @Singleton
     fun provideCoinTickerItemDao(appDatabase: AppDatabase): CoinTickerItemDao {
         return appDatabase.coinTickerItemDao()
     }
+
     @Provides
     @Singleton
     fun provideCoinExchangeDao(appDatabase: AppDatabase): CoinExchangeDao {

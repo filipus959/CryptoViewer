@@ -24,7 +24,7 @@ class CoinRepositoryImpl @Inject constructor(
     private val coinTickerItemDao: CoinTickerItemDao,
     private val coinDetailDao: CoinDetailDao,
     private val coinChartDao: CoinChartDao,
-    private val coinExchangeDao: CoinExchangeDao
+    private val coinExchangeDao: CoinExchangeDao,
 ) : CoinRepository {
 
     private val currentDateMinus364Days: LocalDate = LocalDate.now().minusDays(364)
@@ -35,7 +35,7 @@ class CoinRepositoryImpl @Inject constructor(
         NetworkBoundResource(
             fetchFromLocal = { coinTickerItemDao.getAllCoinTickerItems().firstOrNull() },
             fetchFromRemote = { api.getTickerCoins().map { it.toDbModel() } },
-            saveRemoteResult = { coinTickerItemDao.insertAllCoinTickerItems(it) }
+            saveRemoteResult = { coinTickerItemDao.insertAllCoinTickerItems(it) },
         ).fetch()
     }
 
@@ -43,7 +43,7 @@ class CoinRepositoryImpl @Inject constructor(
         return NetworkBoundResource(
             fetchFromLocal = { coinExchangeDao.getCoinExchange(coinId, coinId2, amount) },
             fetchFromRemote = { api.getCoinExchange(coinId, coinId2, amount).toDbModel() },
-            saveRemoteResult = { coinExchangeDao.insertCoinExchange(it) }
+            saveRemoteResult = { coinExchangeDao.insertCoinExchange(it) },
         ).fetch().toDomainModel()
     }
 
@@ -51,7 +51,7 @@ class CoinRepositoryImpl @Inject constructor(
         return NetworkBoundResource(
             fetchFromLocal = { coinDetailDao.getCoinDetailById(coinId) },
             fetchFromRemote = { api.getCoinById(coinId).toDbModel() },
-            saveRemoteResult = { coinDetailDao.insertCoinDetail(it) }
+            saveRemoteResult = { coinDetailDao.insertCoinDetail(it) },
         ).fetch().toDomainModel()
     }
 
@@ -64,7 +64,7 @@ class CoinRepositoryImpl @Inject constructor(
         return NetworkBoundResource(
             fetchFromLocal = { coinChartDao.getCoinChartById(coinId) },
             fetchFromRemote = { api.getChartCoin(coinId, formattedDate).map { it.toDbModel(coinId) } },
-            saveRemoteResult = { coinChartDao.insertAllCoinCharts(it) }
+            saveRemoteResult = { coinChartDao.insertAllCoinCharts(it) },
         ).fetch().map { it.toDomainModel(coinId) }
     }
 }

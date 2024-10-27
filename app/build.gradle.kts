@@ -11,6 +11,16 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
+spotless {
+    kotlin {
+        target("**/*.kt")
+        ktlint()
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+}
+
 android {
     namespace = "com.filip.cryptoViewer"
     compileSdk = 34

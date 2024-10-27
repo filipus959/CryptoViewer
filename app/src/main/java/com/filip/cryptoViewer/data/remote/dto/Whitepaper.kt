@@ -6,5 +6,5 @@ data class Whitepaper(
     @SerializedName("link")
     val link: String,
     @SerializedName("thumbnail")
-    val thumbnail: String
+    val thumbnail: String,
 )

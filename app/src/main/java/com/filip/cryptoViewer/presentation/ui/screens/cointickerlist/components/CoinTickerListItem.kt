@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.components
+package com.filip.cryptoViewer.presentation.ui.screens.cointickerlist.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -19,24 +19,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 
-
 @Composable
 fun CoinTickerListItem(
-    coin: CoinTickerItem, onItemClick: (CoinTickerItem) -> Unit
+    coin: CoinTickerItem,
+    onItemClick: (CoinTickerItem) -> Unit,
 ) {
     val pChange = coin.percentChange24h
 
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onItemClick(coin) }
-        .padding(20.dp),
-        verticalAlignment = CenterVertically) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onItemClick(coin) }
+            .padding(20.dp),
+        verticalAlignment = CenterVertically,
+    ) {
         Text(
             text = "${coin.rank}. ${coin.name} ${coin.symbol}",
             style = MaterialTheme.typography.bodyLarge,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
 
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -46,18 +47,16 @@ fun CoinTickerListItem(
             modifier = Modifier
                 .padding(start = 12.dp)
                 .weight(0.8f),
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
         )
         Text(
-            text = if (pChange > 0) "+${pChange}%" else "${pChange}%",
+            text = if (pChange > 0) "+$pChange%" else "$pChange%",
             color = if (pChange > 0) Color.Green else Color.Red,
             fontStyle = FontStyle.Italic,
             textAlign = TextAlign.End,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
 
         )
-
-
     }
 }
 

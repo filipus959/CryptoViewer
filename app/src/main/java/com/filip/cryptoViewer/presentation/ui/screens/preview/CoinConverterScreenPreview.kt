@@ -7,38 +7,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterScreenContent
-import com.filip.cryptoViewer.presentation.ui.screens.coin_converters.CoinConverterState
+import com.filip.cryptoViewer.presentation.ui.screens.coinconverters.CoinConverterScreenContent
+import com.filip.cryptoViewer.presentation.ui.screens.coinconverters.CoinConverterState
 import com.filip.cryptoViewer.presentation.ui.theme.CryptoViewerTheme
 @Preview(name = "Light Mode")
 @Composable
 fun PreviewLightCoinConverterScreen() {
-
-        CryptoViewerTheme(darkTheme = false) { // Explicitly set light mode
-            PreviewCoinConverterScreen()
-
+    CryptoViewerTheme(darkTheme = false) { // Explicitly set light mode
+        PreviewCoinConverterScreen()
     }
-
 }
 
 @Preview(name = "Dark Mode")
 @Composable
 fun PreviewDarkCoinConverterScreen() {
-
-        CryptoViewerTheme(darkTheme = true) { // Explicitly set dark mode
-            PreviewCoinConverterScreen()
-
+    CryptoViewerTheme(darkTheme = true) { // Explicitly set dark mode
+        PreviewCoinConverterScreen()
     }
-
 }
+
 @Composable
 fun PreviewCoinConverterScreen() {
     val mockState = CoinConverterState(
         coins = listOf(
             CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
             CoinTickerItem(id = "2", name = "Ethereum", symbol = "ETH", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
-            CoinTickerItem(id = "3", name = "Ripple", symbol = "XRP", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
-        ), error = "", isLoading = false, result = "1 BTC = 30 ETH"
+            CoinTickerItem(id = "3", name = "Ripple", symbol = "XRP", rank = 0, usdPrice = 0.0, percentChange24h = 0.0),
+        ),
+        error = "",
+        isLoading = false,
+        result = "1 BTC = 30 ETH",
     )
 
     val selectedCoin1 = CoinTickerItem(id = "1", name = "Bitcoin", symbol = "BTC", rank = 0, usdPrice = 0.0, percentChange24h = 0.0)
@@ -62,6 +60,4 @@ fun PreviewCoinConverterScreen() {
             }
         }
     }
-
-
 }

@@ -20,6 +20,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideCoinRepository(coinService: CoinPaprikaApi, coinTickerItemDao: CoinTickerItemDao, coinDetailDao: CoinDetailDao, coinChartDao: CoinChartDao, coinExchangeDao: CoinExchangeDao): CoinRepository {
-        return CoinRepositoryImpl(coinService, coinTickerItemDao,coinDetailDao,coinChartDao,coinExchangeDao)
+        return CoinRepositoryImpl(coinService, coinTickerItemDao, coinDetailDao, coinChartDao, coinExchangeDao)
     }
 }

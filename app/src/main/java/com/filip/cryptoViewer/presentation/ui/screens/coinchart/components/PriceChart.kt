@@ -1,4 +1,4 @@
-package com.plcoding.cryptotracker.crypto.presentation.coin_detail
+package com.filip.cryptoViewer.presentation.ui.screens.coinchart.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -23,9 +23,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ChartStyle
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.DataPoint
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.ValueLabel
 import kotlin.math.roundToInt
 
 @Composable
@@ -38,10 +35,10 @@ fun PriceChart(
     selectedDataPoint: DataPoint? = null,
     onSelectedDataPoint: (DataPoint) -> Unit = {},
     onXLabelWidthChange: (Float) -> Unit = {},
-    showHelperLines: Boolean = true
+    showHelperLines: Boolean = true,
 ) {
     val textStyle = LocalTextStyle.current.copy(
-        fontSize = style.labelFontSize
+        fontSize = style.labelFontSize,
     )
 
     val visibleDataPoints = remember(dataPoints, visibleDataPointsIndices) {
@@ -80,11 +77,10 @@ fun PriceChart(
                 detectTapGestures(onTap = {
                     // Reset selection if clicked outside the Canvas area
                     isShowingDataPoints = false
-                    onSelectedDataPoint(DataPoint(0f, 0f,""))
+                    onSelectedDataPoint(DataPoint(0f, 0f, ""))
                 })
-            }
+            },
     ) {
-
         Canvas(
             modifier = modifier
                 .fillMaxSize()
@@ -93,16 +89,16 @@ fun PriceChart(
                         val newSelectedDataPointIndex = getSelectedDataPointIndex(
                             touchOffsetX = change.position.x,
                             triggerWidth = xLabelWidth,
-                            drawPoints = drawPoints
+                            drawPoints = drawPoints,
                         )
                         isShowingDataPoints =
                             (newSelectedDataPointIndex + visibleDataPointsIndices.first) in
-                                    visibleDataPointsIndices
+                            visibleDataPointsIndices
                         if (isShowingDataPoints) {
                             onSelectedDataPoint(dataPoints[newSelectedDataPointIndex])
                         }
                     }
-                }
+                },
         ) {
             val minLabelSpacingYPx = style.minYLabelSpacing.toPx()
             val verticalPaddingPx = style.verticalPadding.toPx()
@@ -112,7 +108,7 @@ fun PriceChart(
             val xLabelTextLayoutResults = visibleDataPoints.map {
                 measurer.measure(
                     text = it.xLabel,
-                    style = textStyle.copy(textAlign = TextAlign.Center)
+                    style = textStyle.copy(textAlign = TextAlign.Center),
                 )
             }
             val maxXLabelWidth = xLabelTextLayoutResults.maxOfOrNull { it.size.width } ?: 0
@@ -120,11 +116,15 @@ fun PriceChart(
             val maxXLabelLineCount = xLabelTextLayoutResults.maxOfOrNull { it.lineCount } ?: 0
             val xLabelLineHeight = if (maxXLabelLineCount > 0) {
                 maxXLabelHeight / maxXLabelLineCount
-            } else 0
+            } else {
+                0
+            }
 
             val viewPortHeightPx = size.height -
-                    (maxXLabelHeight + 2 * verticalPaddingPx
-                            + xLabelLineHeight + xAxisLabelSpacingPx)
+                (
+                    maxXLabelHeight + 2 * verticalPaddingPx +
+                        xLabelLineHeight + xAxisLabelSpacingPx
+                    )
 
             // Y-LABEL CALCULATION
             val labelViewPortHeightPx = viewPortHeightPx + xLabelLineHeight
@@ -136,14 +136,14 @@ fun PriceChart(
             val yLabels = (0..labelCountExcludingLastLabel).map {
                 ValueLabel(
                     value = maxYValue - (valueIncrement * it),
-                    unit = unit
+                    unit = unit,
                 )
             }
 
             val yLabelTextLayoutResults = yLabels.map {
                 measurer.measure(
                     text = it.formatted(),
-                    style = textStyle
+                    style = textStyle,
                 )
             }
             val maxYLabelWidth = yLabelTextLayoutResults.maxOfOrNull { it.size.width } ?: 0
@@ -156,48 +156,54 @@ fun PriceChart(
             xLabelWidth = maxXLabelWidth + xAxisLabelSpacingPx
             xLabelTextLayoutResults.forEachIndexed { index, result ->
                 val x = viewPortLeftX + xAxisLabelSpacingPx / 2f +
-                        xLabelWidth * index
+                    xLabelWidth * index
                 drawText(
                     textLayoutResult = result,
                     topLeft = Offset(
                         x = x,
-                        y = viewPortBottomY + xAxisLabelSpacingPx
+                        y = viewPortBottomY + xAxisLabelSpacingPx,
                     ),
                     color = if (index == selectedDataPointIndex) {
                         style.selectedColor
-                    } else style.unselectedColor
+                    } else {
+                        style.unselectedColor
+                    },
                 )
 
                 if (showHelperLines) {
                     drawLine(
                         color = if (selectedDataPointIndex == index) {
                             style.selectedColor
-                        } else style.unselectedColor,
+                        } else {
+                            style.unselectedColor
+                        },
                         start = Offset(
                             x = x + result.size.width / 2f,
-                            y = viewPortBottomY
+                            y = viewPortBottomY,
                         ),
                         end = Offset(
                             x = x + result.size.width / 2f,
-                            y = viewPortTopY
+                            y = viewPortTopY,
                         ),
                         strokeWidth = if (selectedDataPointIndex == index) {
                             style.helperLinesThicknessPx * 1.8f
-                        } else style.helperLinesThicknessPx
+                        } else {
+                            style.helperLinesThicknessPx
+                        },
                     )
                 }
 
                 if (selectedDataPointIndex == index) {
                     val valueLabel = ValueLabel(
                         value = visibleDataPoints[index].y,
-                        unit = unit
+                        unit = unit,
                     )
                     val valueResult = measurer.measure(
                         text = valueLabel.formatted(),
                         style = textStyle.copy(
-                            color = style.selectedColor
+                            color = style.selectedColor,
                         ),
-                        maxLines = 1
+                        maxLines = 1,
                     )
                     val textPositionX =
                         if (selectedDataPointIndex == visibleDataPointsIndices.last) {
@@ -212,30 +218,30 @@ fun PriceChart(
                             textLayoutResult = valueResult,
                             topLeft = Offset(
                                 x = textPositionX,
-                                y = viewPortTopY - valueResult.size.height - 10f
-                            )
+                                y = viewPortTopY - valueResult.size.height - 10f,
+                            ),
                         )
                     }
                 }
             }
 
             val heightRequiredForLabels = xLabelLineHeight *
-                    (labelCountExcludingLastLabel + 1)
+                (labelCountExcludingLastLabel + 1)
             val remainingHeightForLabels = labelViewPortHeightPx - heightRequiredForLabels
             val spaceBetweenLabels = remainingHeightForLabels / labelCountExcludingLastLabel
 
             yLabelTextLayoutResults.forEachIndexed { index, result ->
                 val x = horizontalPaddingPx + maxYLabelWidth - result.size.width.toFloat()
                 val y = viewPortTopY +
-                        index * (xLabelLineHeight + spaceBetweenLabels) -
-                        xLabelLineHeight / 2f
+                    index * (xLabelLineHeight + spaceBetweenLabels) -
+                    xLabelLineHeight / 2f
                 drawText(
                     textLayoutResult = result,
                     topLeft = Offset(
                         x = x,
-                        y = y
+                        y = y,
                     ),
-                    color = style.unselectedColor
+                    color = style.unselectedColor,
                 )
 
                 if (showHelperLines) {
@@ -243,13 +249,13 @@ fun PriceChart(
                         color = style.unselectedColor,
                         start = Offset(
                             x = viewPortLeftX,
-                            y = y + result.size.height.toFloat() / 2f
+                            y = y + result.size.height.toFloat() / 2f,
                         ),
                         end = Offset(
                             x = viewPortRightX,
-                            y = y + result.size.height.toFloat() / 2f
+                            y = y + result.size.height.toFloat() / 2f,
                         ),
-                        strokeWidth = style.helperLinesThicknessPx
+                        strokeWidth = style.helperLinesThicknessPx,
                     )
                 }
             }
@@ -257,14 +263,14 @@ fun PriceChart(
             // visibleDataPointsIndices = 5..20
             drawPoints = visibleDataPointsIndices.map {
                 val x = viewPortLeftX + (it - visibleDataPointsIndices.first) *
-                        xLabelWidth + xLabelWidth / 2f
+                    xLabelWidth + xLabelWidth / 2f
                 // [minYValue; maxYValue] -> [0; 1]
                 val ratio = (dataPoints[it].y - minYValue) / (maxYValue - minYValue)
                 val y = viewPortBottomY - (ratio * viewPortHeightPx)
                 DataPoint(
                     x = x,
                     y = y,
-                    xLabel = dataPoints[it].xLabel
+                    xLabel = dataPoints[it].xLabel,
                 )
             }
 
@@ -293,7 +299,7 @@ fun PriceChart(
                             x2 = conPoints2[i - 1].x,
                             y2 = conPoints2[i - 1].y,
                             x3 = drawPoints[i].x,
-                            y3 = drawPoints[i].y
+                            y3 = drawPoints[i].y,
                         )
                     }
                 }
@@ -303,35 +309,35 @@ fun PriceChart(
                 color = style.chartLineColor,
                 style = Stroke(
                     width = 5f,
-                    cap = StrokeCap.Round
-                )
+                    cap = StrokeCap.Round,
+                ),
             )
 
             drawPoints.forEachIndexed { index, point ->
                 if (isShowingDataPoints) {
                     val circleOffset = Offset(
                         x = point.x,
-                        y = point.y
+                        y = point.y,
                     )
                     drawCircle(
                         color = style.selectedColor,
                         radius = 10f,
-                        center = circleOffset
+                        center = circleOffset,
                     )
 
                     if (selectedDataPointIndex == index) {
                         drawCircle(
                             color = Color.White,
                             radius = 15f,
-                            center = circleOffset
+                            center = circleOffset,
                         )
                         drawCircle(
                             color = style.selectedColor,
                             radius = 15f,
                             center = circleOffset,
                             style = Stroke(
-                                width = 3f
-                            )
+                                width = 3f,
+                            ),
                         )
                     }
                 }
@@ -343,7 +349,7 @@ fun PriceChart(
 private fun getSelectedDataPointIndex(
     touchOffsetX: Float,
     triggerWidth: Float,
-    drawPoints: List<DataPoint>
+    drawPoints: List<DataPoint>,
 ): Int {
     val triggerRangeLeft = touchOffsetX - triggerWidth / 2f
     val triggerRangeRight = touchOffsetX + triggerWidth / 2f
@@ -351,4 +357,3 @@ private fun getSelectedDataPointIndex(
         it.x in triggerRangeLeft..triggerRangeRight
     }
 }
-

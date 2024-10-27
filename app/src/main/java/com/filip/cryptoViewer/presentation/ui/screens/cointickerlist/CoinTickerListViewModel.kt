@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list
+package com.filip.cryptoViewer.presentation.ui.screens.cointickerlist
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,24 +15,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
-
 
 @HiltViewModel
 class CoinTickerListViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
-    private val sortAndFilterCoinsUseCase: SortAndFilterCoinsUseCase
+    private val sortAndFilterCoinsUseCase: SortAndFilterCoinsUseCase,
 ) : ViewModel() {
 
     var state = MutableStateFlow(CoinTickerListState.Empty)
         private set
 
     var searchQuery by mutableStateOf("")
-    private set
+        private set
     private var sortCriteria by mutableStateOf(SortCriteria(SortField.RANK, SortOrder.DESCENDING))
     private var allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
-
 
     init {
         viewModelScope.launch {
@@ -62,12 +59,12 @@ class CoinTickerListViewModel @Inject constructor(
         val filteredList = sortAndFilterCoinsUseCase.filterCoinList(searchQuery, allCoinsData)
         val sortedList = sortAndFilterCoinsUseCase.sortCoins(filteredList, sortCriteria)
         state.update { it.copy(coins = sortedList, isLoading = false) }
-      //  state = state.copy(coins = sortedList, isLoading = false)
+        //  state = state.copy(coins = sortedList, isLoading = false)
     }
 
     private suspend fun observeTickerCoins() {
         state.update { it.copy(isLoading = true) }
-       // state = state.copy(isLoading = true)
+        // state = state.copy(isLoading = true)
         try {
             coinRepository.observeTickerCoins().collect { coins ->
                 allCoinsData = coins
@@ -75,7 +72,7 @@ class CoinTickerListViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             state.update { it.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}") }
-           // state = state.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}")
+            // state = state.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}")
         }
     }
 
@@ -88,5 +85,3 @@ class CoinTickerListViewModel @Inject constructor(
         coinRepository.fetchTickerCoins()
     }
 }
-
-

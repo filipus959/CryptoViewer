@@ -6,7 +6,7 @@ class NetworkBoundResource<ResultType, RequestType>(
     private val fetchFromLocal: suspend () -> ResultType?,
     private val fetchFromRemote: suspend () -> RequestType,
     private val saveRemoteResult: suspend (RequestType) -> Unit,
-    private val shouldFetchFromRemote: Boolean = true
+    private val shouldFetchFromRemote: Boolean = true,
 ) {
 
     suspend fun fetch(): ResultType {

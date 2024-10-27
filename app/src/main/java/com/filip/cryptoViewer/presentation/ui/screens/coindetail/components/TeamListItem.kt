@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components
+package com.filip.cryptoViewer.presentation.ui.screens.coindetail.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,17 +12,16 @@ import com.filip.cryptoViewer.data.remote.dto.TeamMember
 @Composable
 fun TeamListItem(
     teamMember: TeamMember,
-    modifier: Modifier = Modifier
-    ) {
-    Column (
+    modifier: Modifier = Modifier,
+) {
+    Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = teamMember.name,
             style = MaterialTheme.typography.headlineSmall,
-            fontStyle = FontStyle.Italic
+            fontStyle = FontStyle.Italic,
         )
     }
-
 }

@@ -6,17 +6,17 @@ import com.filip.cryptoViewer.domain.model.CoinExchange
 
 fun CoinExchangeDto.toDbModel(): CoinExchangeEntity {
     return CoinExchangeEntity(
-            coinId = baseCurrencyId ,
-            price = price,
-            coinId2 = quoteCurrencyId,
-            amount = amount,
+        coinId = baseCurrencyId,
+        price = price,
+        coinId2 = quoteCurrencyId,
+        amount = amount,
     )
 }
 
 fun CoinExchangeEntity.toDomainModel(): CoinExchange {
     return CoinExchange(
-            price = price,
-            coinId = coinId,
-            coinId2 = coinId2,
+        price = price,
+        coinId = coinId,
+        coinId2 = coinId2,
     )
 }

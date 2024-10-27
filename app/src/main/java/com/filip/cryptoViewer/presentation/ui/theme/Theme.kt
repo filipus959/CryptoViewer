@@ -16,14 +16,13 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = Pink80,
     background = Gray1,
     onPrimary = Gray2,
-    )
+)
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = White1,
-
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -40,7 +39,7 @@ private val LightColorScheme = lightColorScheme(
 fun CryptoViewerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -54,6 +53,6 @@ fun CryptoViewerTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = appTypography,
-        content = content
+        content = content,
     )
 }

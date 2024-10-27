@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components
+package com.filip.cryptoViewer.presentation.ui.screens.coindetail.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,21 +13,22 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CoinTag(
-    tag: String
+    tag: String,
 ) {
-    Box(modifier = Modifier
-        .border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.primary,
-            shape = RoundedCornerShape(100.dp)
-        )
-        .padding(10.dp)
+    Box(
+        modifier = Modifier
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(100.dp),
+            )
+            .padding(10.dp),
     ) {
         Text(
             text = tag,
-            color =  MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
-
 }

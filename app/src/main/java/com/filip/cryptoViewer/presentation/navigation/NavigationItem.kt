@@ -9,5 +9,4 @@ import com.filip.cryptoViewer.presentation.Screen
 sealed class NavigationItem(val route: String, val label: String, val icon: ImageVector) {
     data object Home : NavigationItem(Screen.CoinTickerListScreen.route, "Home", Icons.Default.Home)
     data object Converters : NavigationItem(Screen.CoinConverterScreen.route, "Converters", Icons.Default.Favorite)
-
 }

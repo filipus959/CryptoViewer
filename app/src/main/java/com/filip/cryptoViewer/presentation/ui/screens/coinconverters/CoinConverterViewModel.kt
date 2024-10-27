@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_converters
+package com.filip.cryptoViewer.presentation.ui.screens.coinconverters
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
@@ -19,7 +19,7 @@ class CoinConverterViewModel @Inject constructor(
 ) : ViewModel() {
 
     var state by mutableStateOf(CoinConverterState.Empty)
-    private set
+        private set
 
     private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
     private val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
@@ -80,13 +80,13 @@ class CoinConverterViewModel @Inject constructor(
         isLoading: Boolean = false,
         error: String = "",
         coins: List<CoinTickerItem>? = null,
-        result: String = ""
+        result: String = "",
     ) {
         state = state.copy(
             isLoading = isLoading,
             result = result,
             error = error,
-            coins = coins ?: state.coins
+            coins = coins ?: state.coins,
         )
     }
 
@@ -106,8 +106,12 @@ class CoinConverterViewModel @Inject constructor(
     }
 
     private fun filterCoinList(query: String): List<CoinTickerItem> =
-        if (query.isBlank()) allCoinsData else allCoinsData.filter {
-            it.name.contains(query, ignoreCase = true)
+        if (query.isBlank()) {
+            allCoinsData
+        } else {
+            allCoinsData.filter {
+                it.name.contains(query, ignoreCase = true)
+            }
         }
 
     fun onAmountChange(newAmount: String) {

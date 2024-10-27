@@ -18,5 +18,5 @@ data class CoinExchangeDto(
     @SerializedName("quote_currency_name")
     val quoteCurrencyName: String,
     @SerializedName("quote_price_last_updated")
-    val quotePriceLastUpdated: String
+    val quotePriceLastUpdated: String,
 )

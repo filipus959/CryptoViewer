@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Quotes(
     @SerializedName("USD")
-    val usd: USD
+    val usd: USD,
 )

@@ -20,7 +20,7 @@ import com.filip.cryptoViewer.data.local.entity.CoinTickerItemEntity
 @Database(
     entities = [CoinEntity::class, CoinDetailEntity::class, CoinChartEntity::class, CoinTickerItemEntity::class, CoinExchangeEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -40,7 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "app_database"
+                    "app_database",
                 ).build()
                 INSTANCE = instance
                 instance

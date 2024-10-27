@@ -36,7 +36,7 @@ class CoinPaprikaApiTest {
         // Given
         val mockCoins = listOf(
             CoinDto(id = "bitcoin", is_active = true, is_new = false, name = "Bitcoin", rank = 1, symbol = "BTC", type = "coin"),
-            CoinDto(id = "ethereum", is_active = true, is_new = false, name = "Ethereum", rank = 2, symbol = "ETH", type = "coin")
+            CoinDto(id = "ethereum", is_active = true, is_new = false, name = "Ethereum", rank = 2, symbol = "ETH", type = "coin"),
         )
         Mockito.`when`(api.getCoins()).thenReturn(mockCoins)
 
@@ -67,10 +67,10 @@ class CoinPaprikaApiTest {
                 reddit = listOf("https://reddit.com/r/Bitcoin"),
                 sourceCode = listOf("https://github.com/bitcoin/bitcoin"),
                 website = listOf("https://bitcoin.org"),
-                youtube = listOf("https://youtube.com/bitcoin")
+                youtube = listOf("https://youtube.com/bitcoin"),
             ),
             linksExtended = listOf(
-                LinksExtended(stats = Stats(1,1,1,1), type = "website", url = "https://bitcoin.org")
+                LinksExtended(stats = Stats(1, 1, 1, 1), type = "website", url = "https://bitcoin.org"),
             ),
             logo = "https://example.com/logo.png",
             message = "N/A",
@@ -84,7 +84,7 @@ class CoinPaprikaApiTest {
             tags = listOf(Tag(coinCounter = 1000, icoCounter = 50, id = "1", name = "Cryptocurrency")),
             team = listOf(TeamMember(id = "1", name = "Satoshi Nakamoto", position = "Founder")),
             type = "coin",
-            whitePaper = Whitepaper(link = "https://bitcoin.org/bitcoin.pdf", thumbnail = "https://example.com/thumbnail.png")
+            whitePaper = Whitepaper(link = "https://bitcoin.org/bitcoin.pdf", thumbnail = "https://example.com/thumbnail.png"),
         )
         Mockito.`when`(api.getCoinById(coinId)).thenReturn(mockCoinDetail)
 
@@ -124,12 +124,12 @@ class CoinPaprikaApiTest {
                         percentFromPriceAth = -27.5,
                         price = 50000.0,
                         volume24h = 30000000000.0,
-                        volume24hChange24h = -0.5
-                    )
+                        volume24hChange24h = -0.5,
+                    ),
                 ),
                 rank = 1,
                 symbol = "BTC",
-                totalSupply = 19000000
+                totalSupply = 19000000,
             ),
             CoinTickerDto(
                 betaValue = 1.1,
@@ -156,13 +156,13 @@ class CoinPaprikaApiTest {
                         percentFromPriceAth = -10.0,
                         price = 4000.0,
                         volume24h = 20000000000.0,
-                        volume24hChange24h = -1.0
-                    )
+                        volume24hChange24h = -1.0,
+                    ),
                 ),
                 rank = 2,
                 symbol = "ETH",
-                totalSupply = 120000000
-            )
+                totalSupply = 120000000,
+            ),
         )
         Mockito.`when`(api.getTickerCoins()).thenReturn(mockTickers)
 
@@ -202,12 +202,12 @@ class CoinPaprikaApiTest {
                     percentFromPriceAth = -27.5,
                     price = 50000.0,
                     volume24h = 30000000000.0,
-                    volume24hChange24h = -0.5
-                )
+                    volume24hChange24h = -0.5,
+                ),
             ),
             rank = 1,
             symbol = "BTC",
-            totalSupply = 19000000
+            totalSupply = 19000000,
         )
         Mockito.`when`(api.getTickerCoinByID(coinId)).thenReturn(mockTicker)
 
@@ -229,15 +229,15 @@ class CoinPaprikaApiTest {
                 price = 50000.0,
                 timestamp = "2023-01-01T00:00:00Z",
                 volume24h = 30000000000,
-                coinId = "bitcoin"
+                coinId = "bitcoin",
             ),
             CoinChartDtoItem(
                 marketCap = 810000000000,
                 price = 51000.0,
                 timestamp = "2023-01-02T00:00:00Z",
                 volume24h = 31000000000,
-                coinId = "bitcoin"
-            )
+                coinId = "bitcoin",
+            ),
         )
         Mockito.`when`(api.getChartCoin(coinId, startDate)).thenReturn(mockChart)
 
@@ -248,4 +248,3 @@ class CoinPaprikaApiTest {
         assertEquals(mockChart, result)
     }
 }
-

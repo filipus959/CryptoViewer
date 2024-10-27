@@ -24,5 +24,5 @@ data class CoinDetailEntity(
     @ColumnInfo(name = "tags")
     val tags: List<Tag>,
     @ColumnInfo(name = "team")
-    val team: List<TeamMember>
+    val team: List<TeamMember>,
 )

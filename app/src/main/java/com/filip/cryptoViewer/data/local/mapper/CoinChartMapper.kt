@@ -10,7 +10,7 @@ fun CoinChartDtoItem.toDbModel(coinId: String): CoinChartEntity {
         price = price,
         timestamp = timestamp,
         marketCap = marketCap,
-        volume24h = volume24h
+        volume24h = volume24h,
     )
 }
 
@@ -20,6 +20,6 @@ fun CoinChartEntity.toDomainModel(coinId: String): CoinChart {
         marketCap = marketCap,
         price = price,
         timestamp = timestamp,
-        volume24h = volume24h
+        volume24h = volume24h,
     )
 }

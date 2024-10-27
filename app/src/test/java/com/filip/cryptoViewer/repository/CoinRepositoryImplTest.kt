@@ -54,13 +54,13 @@ class CoinRepositoryImplTest {
         price = 45000.75,
         quoteCurrencyId = "usd",
         quoteCurrencyName = "US Dollar",
-        quotePriceLastUpdated = "2023-09-30T10:15:30Z"
+        quotePriceLastUpdated = "2023-09-30T10:15:30Z",
     )
 
     private val mockCoinExchange = CoinExchange(
         price = 45000.75,
         coinId = "btc",
-        coinId2 = "usd"
+        coinId2 = "usd",
     )
 
     @Before
@@ -77,16 +77,16 @@ class CoinRepositoryImplTest {
     @Test
     fun `test getCoinExchanges - success from API and cache`() = runTest {
         // Mock API and DAO behavior
-        whenever(api.getCoinExchange("btc", "usd",1)).thenReturn(mockCoinExchangeDto)
+        whenever(api.getCoinExchange("btc", "usd", 1)).thenReturn(mockCoinExchangeDto)
         whenever(coinExchangeDao.getCoinExchange("btc", "usd", 1)).thenReturn(
-            mockCoinExchangeDto.toDbModel()
+            mockCoinExchangeDto.toDbModel(),
         )
 
         // Execute method
-        val result = repository.getCoinExchanges("btc", "usd",1)
+        val result = repository.getCoinExchanges("btc", "usd", 1)
 
         // Verify the expected behavior
-        verify(api).getCoinExchange("btc", "usd",1)
+        verify(api).getCoinExchange("btc", "usd", 1)
         verify(coinExchangeDao).insertCoinExchange(mockCoinExchangeDto.toDbModel())
         verify(coinExchangeDao).getCoinExchange("btc", "usd", 1)
 
@@ -121,14 +121,14 @@ class CoinRepositoryImplTest {
                             percentChange12h = 0.0,
                             percentChange15m = 0.0,
                             percentChange30m = 0.0,
-                            percentFromPriceAth = 0.5
-                        )
+                            percentFromPriceAth = 0.5,
+                        ),
                     ),
                     firstDataAt = "",
                     lastUpdated = "",
                     maxSupply = 21000000,
                     totalSupply = 19000000,
-                    betaValue = 0.1
+                    betaValue = 0.1,
                 ),
                 CoinTickerDto(
                     id = "ethereum",
@@ -153,16 +153,16 @@ class CoinRepositoryImplTest {
                             percentChange12h = 0.0,
                             percentChange15m = 0.0,
                             percentChange30m = 0.0,
-                            percentFromPriceAth = 0.5
-                        )
+                            percentFromPriceAth = 0.5,
+                        ),
                     ),
                     firstDataAt = "",
                     lastUpdated = "",
                     maxSupply = 10,
                     totalSupply = 120000000,
-                    betaValue = 0.01
-                )
-            )
+                    betaValue = 0.01,
+                ),
+            ),
         )
 
         `when`(coinTickerItemDao.getAllCoinTickerItems()).thenReturn(flowOf(emptyList())) // or flowOf(mockTickerDtos.map { it.toDbModel() })
@@ -172,7 +172,6 @@ class CoinRepositoryImplTest {
 
         verify(coinTickerItemDao).insertAllCoinTickerItems(mockTickerDtos.map { it.toDbModel() } as ArrayList<CoinTickerItemEntity>)
     }
-
 
     @Test
     fun `test GetCoinById - successfully Returns CoinDetail`() = runBlocking {
@@ -198,18 +197,19 @@ class CoinRepositoryImplTest {
             lastDataAt = "",
             orgStructure = "",
             openSource = false,
-            links = (Links(
-                explorer = emptyList(),
-                facebook = emptyList(),
-                reddit = emptyList(),
-                website = emptyList(),
-                sourceCode = emptyList(),
-                youtube = emptyList()
-            )),
+            links = (
+                Links(
+                    explorer = emptyList(),
+                    facebook = emptyList(),
+                    reddit = emptyList(),
+                    website = emptyList(),
+                    sourceCode = emptyList(),
+                    youtube = emptyList(),
+                )
+                ),
             isNew = false,
             message = "",
-            hardwareWallet = true
-
+            hardwareWallet = true,
 
         )
         `when`(api.getCoinById(coinId)).thenReturn(mockCoinDetail)
@@ -228,7 +228,6 @@ class CoinRepositoryImplTest {
         `when`(coinDetailDao.getCoinDetailById(coinId)).thenReturn(null)
 
         repository.getCoinById(coinId)
-
     }
 
     @Test
@@ -239,8 +238,8 @@ class CoinRepositoryImplTest {
                 id = "bitcoin", name = "Bitcoin", symbol = "BTC", rank = 1,
                 usdPrice = 30000.0, percentChange24h = 0.0,
                 firstDataAt = "", lastUpdated = "",
-                maxSupply = 21000000, betaValue = 1.0, totalSupply = 19000000
-            )
+                maxSupply = 21000000, betaValue = 1.0, totalSupply = 19000000,
+            ),
         )
         `when`(coinTickerItemDao.getAllCoinTickerItems()).thenReturn(flowOf(mockDbItems))
 
@@ -262,9 +261,9 @@ class CoinRepositoryImplTest {
                     price = 30000.0,
                     timestamp = "2023-09-22T00:00:00Z",
                     volume24h = 10000000,
-                    coinId = coinId
-                )
-            )
+                    coinId = coinId,
+                ),
+            ),
         )
 
         val mockEntity = mockChartData.map { it.toDbModel(coinId) }
@@ -287,6 +286,5 @@ class CoinRepositoryImplTest {
         `when`(coinChartDao.getCoinChartById(coinId)).thenReturn(emptyList())
 
         repository.getChartCoinById(coinId)
-
     }
 }

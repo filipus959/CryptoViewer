@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_converters
+package com.filip.cryptoViewer.presentation.ui.screens.coinconverters
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,7 +53,6 @@ fun CoinConverterScreen(
             onAmountChange = viewModel::onAmountChange,
         )
     }
-
 }
 
 @Composable
@@ -73,10 +72,11 @@ fun BoxScope.CoinConverterScreenContent(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 36.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Converter", style = MaterialTheme.typography.headlineMedium
+                text = "Converter",
+                style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -84,13 +84,13 @@ fun BoxScope.CoinConverterScreenContent(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CoinBox(text = selectedCoin1?.name ?: "Select Coin 1", padding = 8.dp)
                 Text(
                     "->",
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
                 CoinBox(text = selectedCoin2?.name ?: "Select Coin 2", padding = 8.dp)
             }
@@ -111,10 +111,9 @@ fun BoxScope.CoinConverterScreenContent(
                     label = { Text("Amount") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done,
-                        keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal // Numeric keyboard
-                    )
+                        keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal, // Numeric keyboard
+                    ),
                 )
-
 
                 Text(
                     text = state.result,
@@ -123,10 +122,9 @@ fun BoxScope.CoinConverterScreenContent(
                     } else {
                         MaterialTheme.typography.headlineLarge
                     },
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
                 )
             }
-
 
             Spacer(modifier = Modifier.height(26.dp))
 
@@ -134,7 +132,7 @@ fun BoxScope.CoinConverterScreenContent(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
                 label = "Search Coins",
-                modifier = Modifier.fillMaxWidth(0.9f)
+                modifier = Modifier.fillMaxWidth(0.9f),
             )
         }
 
@@ -144,7 +142,7 @@ fun BoxScope.CoinConverterScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .fillMaxHeight(0.5f)
+                .fillMaxHeight(0.5f),
         ) {
             LazyColumnWithLabel(
                 label = "From:",
@@ -163,7 +161,6 @@ fun BoxScope.CoinConverterScreenContent(
             )
         }
     }
-
 }
 
 @Composable
@@ -172,22 +169,22 @@ fun LazyColumnWithLabel(
     coins: List<CoinTickerItem>,
     onSelectCoin: (CoinTickerItem) -> Unit,
     selectedCoin: CoinTickerItem?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
         LazyColumn(
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.fillMaxHeight(),
         ) {
             items(coins) { coin ->
                 ListItem(
                     coin = coin,
                     onItemClick = { onSelectCoin(coin) },
-                    isSelected = coin == selectedCoin // Determine if the item is selected
+                    isSelected = coin == selectedCoin, // Determine if the item is selected
                 )
             }
         }
@@ -198,25 +195,24 @@ fun LazyColumnWithLabel(
 fun ListItem(
     coin: CoinTickerItem,
     onItemClick: (String) -> Unit,
-    isSelected: Boolean
+    isSelected: Boolean,
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(if (isSelected) Color.DarkGray else Color.Transparent)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(if (isSelected) Color.DarkGray else Color.Transparent),
     ) {
-
-
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(coin.id) }
-            .padding(20.dp)
-        )
-        {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onItemClick(coin.id) }
+                .padding(20.dp),
+        ) {
             Text(
                 text = "${coin.name} (${coin.symbol})",
                 style = MaterialTheme.typography.bodyLarge,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             Spacer(modifier = Modifier.width(30.dp))
         }
@@ -226,7 +222,7 @@ fun ListItem(
 @Composable
 fun CoinBox(text: String, padding: Dp) {
     Box(
-        modifier = Modifier.padding(padding)
+        modifier = Modifier.padding(padding),
     ) {
         Text(text = text, style = MaterialTheme.typography.headlineMedium)
     }
@@ -234,7 +230,10 @@ fun CoinBox(text: String, padding: Dp) {
 
 @Composable
 fun SearchField(
-    value: String, onValueChange: (String) -> Unit, label: String, modifier: Modifier = Modifier
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
 ) {
     TextField(
         value = value,
@@ -242,6 +241,6 @@ fun SearchField(
         label = { Text(label) },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        singleLine = true
+        singleLine = true,
     )
 }

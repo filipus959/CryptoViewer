@@ -22,5 +22,5 @@ data class CoinTickerDto(
     @SerializedName("symbol")
     val symbol: String,
     @SerializedName("total_supply")
-    val totalSupply: Long
+    val totalSupply: Long,
 )

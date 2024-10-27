@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_detail
+package com.filip.cryptoViewer.presentation.ui.screens.coindetail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,42 +22,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
-import com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components.CoinTag
-import com.filip.cryptoViewer.presentation.ui.screens.coin_detail.components.TeamListItem
+import com.filip.cryptoViewer.presentation.ui.screens.coindetail.components.CoinTag
+import com.filip.cryptoViewer.presentation.ui.screens.coindetail.components.TeamListItem
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun CoinDetailScreen(
-    viewModel: CoinDetailViewModel = hiltViewModel()
+    viewModel: CoinDetailViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state
     LoadableScreen(state) {
         CoinDetailScreenContent(
-            state = state
+            state = state,
         )
     }
-
 }
 
 @Composable
 fun CoinDetailScreenContent(
-    state: CoinDetailState
+    state: CoinDetailState,
 ) {
     state.coin?.let { coin ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(20.dp)
+            contentPadding = PaddingValues(20.dp),
         ) {
             item {
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text = "${coin.rank}. ${coin.name} (${coin.symbol})",
                         style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.weight(8f)
+                        modifier = Modifier.weight(8f),
                     )
                     Text(
                         text = if (coin.isActive) "active" else "inactive",
@@ -66,24 +65,24 @@ fun CoinDetailScreenContent(
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .align(CenterVertically)
-                            .weight(2f)
+                            .weight(2f),
                     )
                 }
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     text = coin.description,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     text = "Tags",
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.headlineSmall,
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 FlowRow(
                     mainAxisSpacing = 10.dp,
                     crossAxisSpacing = 10.dp,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     coin.tags.forEach { tag ->
                         CoinTag(tag = tag.name)
@@ -92,7 +91,7 @@ fun CoinDetailScreenContent(
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     text = "Team members",
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.headlineSmall,
                 )
                 Spacer(modifier = Modifier.height(15.dp))
             }
@@ -102,11 +101,10 @@ fun CoinDetailScreenContent(
                     teamMember = teamMember,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
                 )
                 HorizontalDivider()
             }
         }
     }
-
 }

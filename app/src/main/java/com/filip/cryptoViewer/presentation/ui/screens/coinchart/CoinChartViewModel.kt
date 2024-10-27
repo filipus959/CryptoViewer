@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_chart
+package com.filip.cryptoViewer.presentation.ui.screens.coinchart
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.filip.cryptoViewer.common.Constants
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.domain.repository.CoinRepository
-import com.filip.cryptoViewer.presentation.ui.screens.coin_chart.components.DataPoint
+import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.DataPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
@@ -19,14 +19,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinChartViewModel @Inject constructor(
-    private val coinRepository: CoinRepository, savedStateHandle: SavedStateHandle
+    private val coinRepository: CoinRepository,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     var state by mutableStateOf(CoinChartState.Empty)
         private set
     private var _chartList by mutableStateOf(emptyList<CoinChart>())
     private val chartList: List<CoinChart> get() = _chartList
-
 
     init {
         viewModelScope.launch {
@@ -48,16 +48,16 @@ class CoinChartViewModel @Inject constructor(
                     coins = _chartList,
                     id = coinId,
                     marketCap = _chartList.first().marketCap.toString(),
-                    isLoading = false
+                    isLoading = false,
                 )
             } else {
                 state.copy(
-                    error = "No data available"
+                    error = "No data available",
                 )
             }
         } catch (e: Exception) {
             state = state.copy(
-                error = e.message ?: "An unexpected error occurred"
+                error = e.message ?: "An unexpected error occurred",
             )
         }
     }
@@ -75,10 +75,11 @@ class CoinChartViewModel @Inject constructor(
 
     private fun updateListState(modifiedList: List<CoinChart>) {
         state = state.copy(
-            coins = modifiedList, isLoading = false, error = ""
+            coins = modifiedList,
+            isLoading = false,
+            error = "",
         )
     }
-
 
     fun getDataPoints(): List<DataPoint> {
         val coins = state.coins
@@ -89,14 +90,12 @@ class CoinChartViewModel @Inject constructor(
             DataPoint(
                 y = coin.price.toFloat(),
                 x = timestamp,
-                xLabel = formatTimestampToMonthDay(coin.timestamp)
+                xLabel = formatTimestampToMonthDay(coin.timestamp),
             )
-
         }
         return points ?: emptyList()
     }
 }
-
 
 fun formatTimestampToMonthDay(timestamp: String): String {
     return try {
@@ -117,6 +116,3 @@ fun formatNumberWithCommas(numberString: String): String {
     val withCommasReversed = reversedNumber.chunked(3).joinToString(",")
     return withCommasReversed.reversed()
 }
-
-
-

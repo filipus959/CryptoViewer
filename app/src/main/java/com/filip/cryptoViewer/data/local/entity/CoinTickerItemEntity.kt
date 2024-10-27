@@ -28,5 +28,5 @@ data class CoinTickerItemEntity(
     @ColumnInfo(name = "symbol")
     val symbol: String,
     @ColumnInfo(name = "total_supply")
-    val totalSupply: Long
+    val totalSupply: Long,
 )

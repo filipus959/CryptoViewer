@@ -1,4 +1,4 @@
-package com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list
+package com.filip.cryptoViewer.presentation.ui.screens.cointickerlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,16 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.filip.cryptoViewer.domain.model.SortCriteria
 import com.filip.cryptoViewer.domain.model.SortField
-import com.filip.cryptoViewer.domain.model.SortOrder
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
-import com.filip.cryptoViewer.presentation.ui.screens.coin_ticker_list.components.CoinTickerListItem
-
+import com.filip.cryptoViewer.presentation.ui.screens.cointickerlist.components.CoinTickerListItem
 
 @Composable
 fun CoinTickerListScreen(
-    viewModel: CoinTickerListViewModel = hiltViewModel(), goToCoinChartScreen: (String) -> Unit
+    viewModel: CoinTickerListViewModel = hiltViewModel(),
+    goToCoinChartScreen: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -46,14 +44,14 @@ fun CoinTickerListScreen(
         CoinTickerListScreenContent(
             state = viewModel.state.collectAsState().value,
             searchQuery = viewModel.searchQuery,
-            rankArrow = viewModel.getArrowForField(SortField.RANK),  // Get arrow from ViewModel
-            changeArrow = viewModel.getArrowForField(SortField.CHANGE),  // Get arrow from ViewModel
-            priceArrow = viewModel.getArrowForField(SortField.PRICE),  // Get arrow from ViewModel
+            rankArrow = viewModel.getArrowForField(SortField.RANK), // Get arrow from ViewModel
+            changeArrow = viewModel.getArrowForField(SortField.CHANGE), // Get arrow from ViewModel
+            priceArrow = viewModel.getArrowForField(SortField.PRICE), // Get arrow from ViewModel
             onSortByRank = { viewModel.updateSortCriteria(SortField.RANK) },
             onSortByChange = { viewModel.updateSortCriteria(SortField.CHANGE) },
             onSortByPrice = { viewModel.updateSortCriteria(SortField.PRICE) },
             onSearchQueryChange = viewModel::onSearchQueryUpdated,
-            goToCoinChartScreen = goToCoinChartScreen
+            goToCoinChartScreen = goToCoinChartScreen,
         )
     }
 }
@@ -69,7 +67,7 @@ fun CoinTickerListScreenContent(
     priceArrow: String,
     onSortByRank: () -> Unit,
     onSortByChange: () -> Unit,
-    onSortByPrice: () -> Unit
+    onSortByPrice: () -> Unit,
 ) {
     val darkTheme = isSystemInDarkTheme()
 
@@ -82,7 +80,7 @@ fun CoinTickerListScreenContent(
                 label = { Text("Search Coins") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                singleLine = true
+                singleLine = true,
             )
 
             SortingRow(
@@ -92,7 +90,7 @@ fun CoinTickerListScreenContent(
                 changeArrow = changeArrow,
                 onSortByRank = onSortByRank,
                 onSortByPrice = onSortByPrice,
-                onSortByChange = onSortByChange
+                onSortByChange = onSortByChange,
             )
 
             LazyColumn {
@@ -112,24 +110,26 @@ fun SortingRow(
     changeArrow: String,
     onSortByRank: () -> Unit,
     onSortByPrice: () -> Unit,
-    onSortByChange: () -> Unit
+    onSortByChange: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = if (darkTheme) MaterialTheme.colorScheme.onPrimary else Color.LightGray)
             .padding(horizontal = 20.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         SortableText(text = "#. Coin $rankArrow", onClick = onSortByRank)
         SortableText(
             text = "Price $priceArrow",
             onClick = onSortByPrice,
             paddingStart = 34.dp,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
         )
         SortableText(
-            text = "24H Change $changeArrow", onClick = onSortByChange, textAlign = TextAlign.End
+            text = "24H Change $changeArrow",
+            onClick = onSortByChange,
+            textAlign = TextAlign.End,
         )
     }
 }
@@ -139,7 +139,7 @@ fun SortableText(
     text: String,
     onClick: () -> Unit,
     paddingStart: Dp = 0.dp,
-    textAlign: TextAlign = TextAlign.Start
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     Text(
         text = text,
@@ -148,10 +148,6 @@ fun SortableText(
         modifier = Modifier
             .clickable(onClick = onClick)
             .padding(start = paddingStart),
-        textAlign = textAlign
+        textAlign = textAlign,
     )
 }
-
-
-
-
