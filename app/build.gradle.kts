@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.spotless)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
 }
 
 spotless {
@@ -91,6 +92,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json.v173)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.kotlinx.serialization.json)

@@ -11,6 +11,7 @@ data class CoinChartState(
     val marketCap: String,
     val name: String,
 ) : UIState {
+
     companion object {
         val Empty = CoinChartState(
             isLoading = false,

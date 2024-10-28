@@ -17,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.filip.cryptoViewer.R
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coindetail.components.CoinTag
 import com.filip.cryptoViewer.presentation.ui.screens.coindetail.components.TeamListItem
@@ -59,7 +61,7 @@ fun CoinDetailScreenContent(
                         modifier = Modifier.weight(8f),
                     )
                     Text(
-                        text = if (coin.isActive) "active" else "inactive",
+                        text = if (coin.isActive) stringResource(R.string.active) else stringResource(R.string.inactive),
                         color = if (coin.isActive) Color.Green else Color.Red,
                         fontStyle = FontStyle.Italic,
                         textAlign = TextAlign.End,
@@ -75,7 +77,7 @@ fun CoinDetailScreenContent(
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
-                    text = "Tags",
+                    text = stringResource(R.string.tags),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Spacer(modifier = Modifier.height(15.dp))
@@ -90,7 +92,7 @@ fun CoinDetailScreenContent(
                 }
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
-                    text = "Team members",
+                    text = stringResource(R.string.team_members),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Spacer(modifier = Modifier.height(15.dp))

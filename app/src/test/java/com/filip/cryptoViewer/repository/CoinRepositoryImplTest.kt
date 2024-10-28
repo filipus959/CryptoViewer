@@ -8,7 +8,7 @@ import com.filip.cryptoViewer.data.local.entity.CoinTickerItemEntity
 import com.filip.cryptoViewer.data.local.mapper.toDbModel
 import com.filip.cryptoViewer.data.local.mapper.toDomainModel
 import com.filip.cryptoViewer.data.remote.CoinPaprikaApi
-import com.filip.cryptoViewer.data.remote.dto.CoinChartDtoItem
+import com.filip.cryptoViewer.data.remote.dto.CoinChartDto
 import com.filip.cryptoViewer.data.remote.dto.CoinDetailDto
 import com.filip.cryptoViewer.data.remote.dto.CoinExchangeDto
 import com.filip.cryptoViewer.data.remote.dto.CoinTickerDto
@@ -254,9 +254,9 @@ class CoinRepositoryImplTest {
         val currentDateMinus364Days: LocalDate = LocalDate.now().minusDays(364)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formattedDate = currentDateMinus364Days.format(formatter)
-        val mockChartData = ArrayList<CoinChartDtoItem>(
+        val mockChartData = ArrayList<CoinChartDto>(
             listOf(
-                CoinChartDtoItem(
+                CoinChartDto(
                     marketCap = 500000000,
                     price = 30000.0,
                     timestamp = "2023-09-22T00:00:00Z",

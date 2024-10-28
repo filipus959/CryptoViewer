@@ -6,6 +6,7 @@ import com.filip.cryptoViewer.domain.model.SortField
 import com.filip.cryptoViewer.domain.model.SortOrder
 import javax.inject.Inject
 
+// todo test this and one viewmodel
 class SortAndFilterCoinsUseCase @Inject constructor() {
 
     fun filterCoinList(query: String, coins: List<CoinTickerItem>): List<CoinTickerItem> {

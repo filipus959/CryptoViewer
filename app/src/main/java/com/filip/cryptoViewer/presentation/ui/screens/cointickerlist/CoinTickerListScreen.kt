@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.filip.cryptoViewer.R
 import com.filip.cryptoViewer.domain.model.SortField
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 import com.filip.cryptoViewer.presentation.ui.screens.cointickerlist.components.CoinTickerListItem
@@ -77,7 +79,7 @@ fun CoinTickerListScreenContent(
             TextField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
-                label = { Text("Search Coins") },
+                label = { Text(stringResource(R.string.search_coins)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 singleLine = true,
@@ -119,15 +121,15 @@ fun SortingRow(
             .padding(horizontal = 20.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        SortableText(text = "#. Coin $rankArrow", onClick = onSortByRank)
+        SortableText(text = stringResource(R.string.coin_rank,rankArrow), onClick = onSortByRank)
         SortableText(
-            text = "Price $priceArrow",
+            text = stringResource(R.string.coin_price,priceArrow),
             onClick = onSortByPrice,
             paddingStart = 34.dp,
             textAlign = TextAlign.Start,
         )
         SortableText(
-            text = "24H Change $changeArrow",
+            text = stringResource(R.string.coin_change,changeArrow),
             onClick = onSortByChange,
             textAlign = TextAlign.End,
         )

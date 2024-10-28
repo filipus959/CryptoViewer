@@ -1,4 +1,5 @@
 package com.filip.cryptoViewer.data.repository.implementation
+
 import com.filip.cryptoViewer.data.local.dao.CoinChartDao
 import com.filip.cryptoViewer.data.local.dao.CoinDetailDao
 import com.filip.cryptoViewer.data.local.dao.CoinExchangeDao
@@ -19,6 +20,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+private const val formatterPattern = "yyyy-MM-dd"
+
 class CoinRepositoryImpl @Inject constructor(
     private val api: CoinPaprikaApi,
     private val coinTickerItemDao: CoinTickerItemDao,
@@ -28,7 +31,7 @@ class CoinRepositoryImpl @Inject constructor(
 ) : CoinRepository {
 
     private val currentDateMinus364Days: LocalDate = LocalDate.now().minusDays(364)
-    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(formatterPattern)
     private val formattedDate: String = currentDateMinus364Days.format(formatter)
 
     override suspend fun fetchTickerCoins() {
@@ -39,18 +42,34 @@ class CoinRepositoryImpl @Inject constructor(
         ).fetch()
     }
 
-    override suspend fun getCoinExchanges(coinId: String, coinId2: String, amount: Int): CoinExchange {
+    override suspend fun getCoinExchanges(
+        coinId: String,
+        coinId2: String,
+        amount: Int,
+    ): CoinExchange {
         return NetworkBoundResource(
-            fetchFromLocal = { coinExchangeDao.getCoinExchange(coinId, coinId2, amount) },
-            fetchFromRemote = { api.getCoinExchange(coinId, coinId2, amount).toDbModel() },
+            fetchFromLocal = {
+                coinExchangeDao.getCoinExchange(
+                    coinId = coinId,
+                    coinId2 = coinId2,
+                    amount = amount,
+                )
+            },
+            fetchFromRemote = {
+                api.getCoinExchange(
+                    coinId = coinId,
+                    coinId2 = coinId2,
+                    amount = amount,
+                ).toDbModel()
+            },
             saveRemoteResult = { coinExchangeDao.insertCoinExchange(it) },
         ).fetch().toDomainModel()
     }
 
     override suspend fun getCoinById(coinId: String): CoinDetail {
         return NetworkBoundResource(
-            fetchFromLocal = { coinDetailDao.getCoinDetailById(coinId) },
-            fetchFromRemote = { api.getCoinById(coinId).toDbModel() },
+            fetchFromLocal = { coinDetailDao.getCoinDetailById(coinId = coinId) },
+            fetchFromRemote = { api.getCoinById(coinId = coinId).toDbModel() },
             saveRemoteResult = { coinDetailDao.insertCoinDetail(it) },
         ).fetch().toDomainModel()
     }
@@ -63,7 +82,9 @@ class CoinRepositoryImpl @Inject constructor(
     override suspend fun getChartCoinById(coinId: String): List<CoinChart> {
         return NetworkBoundResource(
             fetchFromLocal = { coinChartDao.getCoinChartById(coinId) },
-            fetchFromRemote = { api.getChartCoin(coinId, formattedDate).map { it.toDbModel(coinId) } },
+            fetchFromRemote = {
+                api.getChartCoin(coinId, formattedDate).map { it.toDbModel(coinId) }
+            },
             saveRemoteResult = { coinChartDao.insertAllCoinCharts(it) },
         ).fetch().map { it.toDomainModel(coinId) }
     }

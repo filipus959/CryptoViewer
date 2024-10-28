@@ -12,25 +12,25 @@ data class USD(
     @SerializedName("market_cap_change_24h")
     val marketCapChange24h: Double,
     @SerializedName("percent_change_12h")
-    val percentChange12h: Double, // % change in last 12 hours
+    val percentChange12h: Double,
     @SerializedName("percent_change_15m")
-    val percentChange15m: Double, // % change in last 15 minutes
+    val percentChange15m: Double,
     @SerializedName("percent_change_1h")
-    val percentChange1h: Double, // % change in last hour
+    val percentChange1h: Double,
     @SerializedName("percent_change_1y")
-    val percentChange1y: Double, // % change in last year
+    val percentChange1y: Double,
     @SerializedName("percent_change_24h")
-    val percentChange24h: Double, // % change in last 24 hours
+    val percentChange24h: Double,
     @SerializedName("percent_change_30d")
-    val percentChange30d: Double, // % change in last 30 days
+    val percentChange30d: Double,
     @SerializedName("percent_change_30m")
-    val percentChange30m: Double, // % change in last 30 minutes
+    val percentChange30m: Double,
     @SerializedName("percent_change_6h")
-    val percentChange6h: Double, // % change in last 6 hours
+    val percentChange6h: Double,
     @SerializedName("percent_change_7d")
-    val percentChange7d: Double, // % change in last 7 days
+    val percentChange7d: Double,
     @SerializedName("percent_from_price_ath")
-    val percentFromPriceAth: Double, // % change from ATH
+    val percentFromPriceAth: Double,
     @SerializedName("price")
     val price: Double,
     @SerializedName("volume_24h")

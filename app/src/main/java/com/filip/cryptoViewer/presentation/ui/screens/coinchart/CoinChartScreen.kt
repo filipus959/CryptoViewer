@@ -22,9 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.filip.cryptoViewer.R
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.ChartRangeMenu
 import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.ChartStyle
@@ -77,7 +79,7 @@ fun CoinChartScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Price Chart for ${state.id}",
+                    text = stringResource(R.string.price_chart_for,state.id),
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.weight(1f),
                 )
@@ -87,7 +89,7 @@ fun CoinChartScreenContent(
                         .padding(end = 8.dp)
                         .align(Alignment.CenterVertically),
                 ) {
-                    Text(text = "Range")
+                    Text(text = stringResource(R.string.range))
                     ChartRangeMenu(
                         expanded = expanded,
                         onDismissRequest = onDismissExpand,
@@ -135,7 +137,7 @@ fun CoinChartScreenContent(
                         xAxisLabelSpacing = 8.dp,
                     ),
                     visibleDataPointsIndices = startIndex..dataPoints.lastIndex,
-                    unit = "$",
+                    unit = stringResource(R.string.unit_dollar),
                     modifier = Modifier
                         .fillMaxWidth()
                         .onSizeChanged { totalChartWidth = it.width.toFloat() },
@@ -150,12 +152,12 @@ fun CoinChartScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Market cap:",
+                text = stringResource(R.string.market_cap),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Text(
-                text = formatNumberWithCommas(state.marketCap) + "$",
+                text = formatNumberWithCommas(state.marketCap) + stringResource(R.string.unit_dollar),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )

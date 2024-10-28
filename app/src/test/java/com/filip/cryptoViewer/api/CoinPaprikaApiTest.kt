@@ -1,7 +1,7 @@
 package com.filip.cryptoViewer.api
 
 import com.filip.cryptoViewer.data.remote.CoinPaprikaApi
-import com.filip.cryptoViewer.data.remote.dto.CoinChartDtoItem
+import com.filip.cryptoViewer.data.remote.dto.CoinChartDto
 import com.filip.cryptoViewer.data.remote.dto.CoinDetailDto
 import com.filip.cryptoViewer.data.remote.dto.CoinDto
 import com.filip.cryptoViewer.data.remote.dto.CoinTickerDto
@@ -224,14 +224,14 @@ class CoinPaprikaApiTest {
         val coinId = "bitcoin"
         val startDate = "2023-01-01"
         val mockChart = arrayListOf(
-            CoinChartDtoItem(
+            CoinChartDto(
                 marketCap = 800000000000,
                 price = 50000.0,
                 timestamp = "2023-01-01T00:00:00Z",
                 volume24h = 30000000000,
                 coinId = "bitcoin",
             ),
-            CoinChartDtoItem(
+            CoinChartDto(
                 marketCap = 810000000000,
                 price = 51000.0,
                 timestamp = "2023-01-02T00:00:00Z",

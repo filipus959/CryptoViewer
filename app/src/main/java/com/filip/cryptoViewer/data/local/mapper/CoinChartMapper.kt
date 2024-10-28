@@ -1,10 +1,10 @@
 package com.filip.cryptoViewer.data.local.mapper
 
 import com.filip.cryptoViewer.data.local.entity.CoinChartEntity
-import com.filip.cryptoViewer.data.remote.dto.CoinChartDtoItem
+import com.filip.cryptoViewer.data.remote.dto.CoinChartDto
 import com.filip.cryptoViewer.domain.model.CoinChart
 
-fun CoinChartDtoItem.toDbModel(coinId: String): CoinChartEntity {
+fun CoinChartDto.toDbModel(coinId: String): CoinChartEntity {
     return CoinChartEntity(
         coinId = coinId,
         price = price,

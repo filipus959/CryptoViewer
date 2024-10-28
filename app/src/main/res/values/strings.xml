@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">CryptoViewer</string>
+    <string name="range_365_days">Last 365 Days</string>
+    <string name="range_30_days">Last 30 Days</string>
+    <string name="range_7_days">Last 7 Days</string>
+    <string name="search_coins">Search Coins</string>
+    <string name="coin_rank">#. Coin %1$s</string>
+    <string name="coin_change">24H Change %1$s</string>
+    <string name="coin_price">Price %1$s</string>
+    <string name="active">active</string>
+    <string name="inactive">inactive</string>
+    <string name="tags">Tags</string>
+    <string name="team_members">Team Members</string>
+    <string name="converter">Converter</string>
+    <string name="select_coin_1">Select Coin 1</string>
+    <string name="select_coin_2">Select Coin 2</string>
+    <string name="amount">Amount</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="price_chart_for">Price Chart For %1$s</string>
+    <string name="range">Range</string>
+    <string name="unit_dollar">$</string>
+    <string name="market_cap">Market cap:</string>
+    <string name="more_info_about_the_coin">More info about the coin</string>
 </resources>

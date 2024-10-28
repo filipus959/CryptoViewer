@@ -26,11 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.filip.cryptoViewer.R
 import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import com.filip.cryptoViewer.presentation.ui.LoadableScreen
 
@@ -75,24 +77,23 @@ fun BoxScope.CoinConverterScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Converter",
+                text = stringResource(R.string.converter),
                 style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Selected coins and conversion result
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                CoinBox(text = selectedCoin1?.name ?: "Select Coin 1", padding = 8.dp)
+                CoinBox(text = selectedCoin1?.name ?: stringResource(R.string.select_coin_1), padding = 8.dp)
                 Text(
                     "->",
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
-                CoinBox(text = selectedCoin2?.name ?: "Select Coin 2", padding = 8.dp)
+                CoinBox(text = selectedCoin2?.name ?: stringResource(R.string.select_coin_2), padding = 8.dp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -108,7 +109,7 @@ fun BoxScope.CoinConverterScreenContent(
                     modifier = Modifier
                         .wrapContentSize()
                         .widthIn(min = 20.dp, max = 200.dp),
-                    label = { Text("Amount") },
+                    label = { Text(text = stringResource(R.string.amount)) },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done,
                         keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal, // Numeric keyboard
@@ -117,7 +118,7 @@ fun BoxScope.CoinConverterScreenContent(
 
                 Text(
                     text = state.result,
-                    style = if (state.result == "Please select two coins") {
+                    style = if (state.result.length > 10) {
                         MaterialTheme.typography.bodySmall
                     } else {
                         MaterialTheme.typography.headlineLarge
@@ -131,7 +132,7 @@ fun BoxScope.CoinConverterScreenContent(
             SearchField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
-                label = "Search Coins",
+                label = stringResource(R.string.search_coins),
                 modifier = Modifier.fillMaxWidth(0.9f),
             )
         }
@@ -145,7 +146,7 @@ fun BoxScope.CoinConverterScreenContent(
                 .fillMaxHeight(0.5f),
         ) {
             LazyColumnWithLabel(
-                label = "From:",
+                label = stringResource(R.string.from),
                 coins = coins,
                 onSelectCoin = onFirstSelection,
                 modifier = Modifier.weight(1f),
@@ -153,7 +154,7 @@ fun BoxScope.CoinConverterScreenContent(
             )
             Spacer(modifier = Modifier.width(8.dp))
             LazyColumnWithLabel(
-                label = "To:",
+                label = stringResource(R.string.to),
                 coins = coins,
                 onSelectCoin = onSecondSelection,
                 modifier = Modifier.weight(1f),
@@ -184,7 +185,7 @@ fun LazyColumnWithLabel(
                 ListItem(
                     coin = coin,
                     onItemClick = { onSelectCoin(coin) },
-                    isSelected = coin == selectedCoin, // Determine if the item is selected
+                    isSelected = coin == selectedCoin,
                 )
             }
         }

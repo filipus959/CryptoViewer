@@ -7,6 +7,7 @@ import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import kotlinx.coroutines.flow.Flow
 
 interface CoinRepository {
+
     suspend fun getCoinById(coinId: String): CoinDetail
     suspend fun observeTickerCoins(): Flow<List<CoinTickerItem>>
     suspend fun getChartCoinById(coinId: String): List<CoinChart>

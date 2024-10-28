@@ -21,8 +21,8 @@ class CoinConverterViewModel @Inject constructor(
     var state by mutableStateOf(CoinConverterState.Empty)
         private set
 
-    private var _allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
-    private val allCoinsData: List<CoinTickerItem> get() = _allCoinsData
+    var allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
+        private set
     var amount by mutableIntStateOf(1)
 
     var selectedCoin1 by mutableStateOf<CoinTickerItem?>(null)
@@ -63,7 +63,7 @@ class CoinConverterViewModel @Inject constructor(
 
         try {
             coinRepository.observeTickerCoins().collect { coins ->
-                _allCoinsData = coins
+                allCoinsData = coins
                 updateListState()
             }
         } catch (e: Exception) {

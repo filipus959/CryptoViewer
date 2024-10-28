@@ -9,6 +9,7 @@ data class CoinConverterState(
     val result: String,
     val coins: List<CoinTickerItem>?,
 ) : UIState {
+
     companion object {
         val Empty = CoinConverterState(
             isLoading = false,

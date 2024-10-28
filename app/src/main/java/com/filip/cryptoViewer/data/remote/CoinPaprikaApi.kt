@@ -1,6 +1,6 @@
 package com.filip.cryptoViewer.data.remote
 
-import com.filip.cryptoViewer.data.remote.dto.CoinChartDtoItem
+import com.filip.cryptoViewer.data.remote.dto.CoinChartDto
 import com.filip.cryptoViewer.data.remote.dto.CoinDetailDto
 import com.filip.cryptoViewer.data.remote.dto.CoinDto
 import com.filip.cryptoViewer.data.remote.dto.CoinExchangeDto
@@ -27,13 +27,12 @@ interface CoinPaprikaApi {
         @Path("coinId") coinId: String,
         @Query("start") date: String,
         @Query("interval") interval: String = "1d",
-    ): ArrayList<CoinChartDtoItem>
+    ): ArrayList<CoinChartDto>
 
     @GET("/v1/price-converter")
     suspend fun getCoinExchange(
         @Query("base_currency_id") coinId: String,
         @Query("quote_currency_id") coinId2: String,
         @Query("amount") amount: Int,
-
     ): CoinExchangeDto
 }

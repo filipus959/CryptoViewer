@@ -19,7 +19,7 @@ class Converters {
         val listType = object : TypeToken<List<String>>() {}.type
         val namesList: List<String> = Gson().fromJson(data, listType)
         // Convert the List<String> back to List<TeamMember> (with name only)
-        return namesList.map { TeamMember(name = it, position = "", id = "") } // Assuming position isn't needed
+        return namesList.map { TeamMember(name = it, position = "", id = "") }
     }
 
     @TypeConverter

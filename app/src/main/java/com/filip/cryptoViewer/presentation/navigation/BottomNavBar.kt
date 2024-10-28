@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -29,7 +31,7 @@ fun BottomNavBar(navController: NavHostController) {
             NavigationBarItem(
                 icon = {
                     Icon(
-                        imageVector = item.icon,
+                        imageVector = ImageVector.vectorResource(id = item.icon),
                         contentDescription = item.label,
                     )
                 },

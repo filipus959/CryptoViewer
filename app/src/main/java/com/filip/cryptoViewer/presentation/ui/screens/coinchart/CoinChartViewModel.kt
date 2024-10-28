@@ -6,9 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filip.cryptoViewer.common.Constants
+import androidx.navigation.toRoute
 import com.filip.cryptoViewer.domain.model.CoinChart
 import com.filip.cryptoViewer.domain.repository.CoinRepository
+import com.filip.cryptoViewer.presentation.CoinChartScreen
 import com.filip.cryptoViewer.presentation.ui.screens.coinchart.components.DataPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,12 +26,12 @@ class CoinChartViewModel @Inject constructor(
 
     var state by mutableStateOf(CoinChartState.Empty)
         private set
-    private var _chartList by mutableStateOf(emptyList<CoinChart>())
-    private val chartList: List<CoinChart> get() = _chartList
+    var chartList by mutableStateOf(emptyList<CoinChart>())
+        private set
 
     init {
         viewModelScope.launch {
-            savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
+            savedStateHandle.toRoute<CoinChartScreen>().coinId.let { coinId ->
                 getCoinChart(coinId)
             }
         }
@@ -41,13 +42,13 @@ class CoinChartViewModel @Inject constructor(
 
         try {
             val coinData = coinRepository.getChartCoinById(coinId)
-            _chartList = coinData
+            chartList = coinData
 
             state = if (coinData.isNotEmpty()) {
                 state.copy(
-                    coins = _chartList,
+                    coins = chartList,
                     id = coinId,
-                    marketCap = _chartList.first().marketCap.toString(),
+                    marketCap = chartList.first().marketCap.toString(),
                     isLoading = false,
                 )
             } else {

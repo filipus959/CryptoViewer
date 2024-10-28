@@ -2,7 +2,7 @@ package com.filip.cryptoViewer.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class CoinChartDtoItem(
+data class CoinChartDto(
     @SerializedName("market_cap")
     val marketCap: Long,
     @SerializedName("price")

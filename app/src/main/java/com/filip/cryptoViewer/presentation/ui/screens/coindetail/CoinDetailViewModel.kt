@@ -5,8 +5,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filip.cryptoViewer.common.Constants
+import androidx.navigation.toRoute
 import com.filip.cryptoViewer.domain.repository.CoinRepository
+import com.filip.cryptoViewer.presentation.CoinDetailScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class CoinDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
+            savedStateHandle.toRoute<CoinDetailScreen>().coinId.let { coinId ->
                 getCoin(coinId)
             }
         }

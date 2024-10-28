@@ -40,7 +40,10 @@ class CoinTickerListViewModel @Inject constructor(
 
     fun getArrowForField(field: SortField): String {
         return if (sortCriteria.field == field) {
-            if (sortCriteria.order == SortOrder.ASCENDING) "↑" else "↓"
+            when (sortCriteria.order) {
+                SortOrder.ASCENDING -> "↑"
+                SortOrder.DESCENDING -> "↓"
+            }
         } else {
             ""
         }
@@ -71,7 +74,12 @@ class CoinTickerListViewModel @Inject constructor(
                 sortAndFilterCoins()
             }
         } catch (e: Exception) {
-            state.update { it.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}") }
+            state.update {
+                it.copy(
+                    isLoading = false,
+                    error = "An error occurred: ${e.localizedMessage}",
+                )
+            }
             // state = state.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}")
         }
     }
