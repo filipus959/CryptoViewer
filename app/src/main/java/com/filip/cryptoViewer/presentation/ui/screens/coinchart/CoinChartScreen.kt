@@ -79,7 +79,7 @@ fun CoinChartScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = stringResource(R.string.price_chart_for,state.id),
+                    text = stringResource(R.string.price_chart_for, state.id),
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.weight(1f),
                 )

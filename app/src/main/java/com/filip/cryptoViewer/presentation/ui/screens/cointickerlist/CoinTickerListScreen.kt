@@ -121,15 +121,15 @@ fun SortingRow(
             .padding(horizontal = 20.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        SortableText(text = stringResource(R.string.coin_rank,rankArrow), onClick = onSortByRank)
+        SortableText(text = stringResource(R.string.coin_rank, rankArrow), onClick = onSortByRank)
         SortableText(
-            text = stringResource(R.string.coin_price,priceArrow),
+            text = stringResource(R.string.coin_price, priceArrow),
             onClick = onSortByPrice,
             paddingStart = 34.dp,
             textAlign = TextAlign.Start,
         )
         SortableText(
-            text = stringResource(R.string.coin_change,changeArrow),
+            text = stringResource(R.string.coin_change, changeArrow),
             onClick = onSortByChange,
             textAlign = TextAlign.End,
         )
