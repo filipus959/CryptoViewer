@@ -62,12 +62,10 @@ class CoinTickerListViewModel @Inject constructor(
         val filteredList = sortAndFilterCoinsUseCase.filterCoinList(searchQuery, allCoinsData)
         val sortedList = sortAndFilterCoinsUseCase.sortCoins(filteredList, sortCriteria)
         state.update { it.copy(coins = sortedList, isLoading = false) }
-        //  state = state.copy(coins = sortedList, isLoading = false)
     }
 
     private suspend fun observeTickerCoins() {
         state.update { it.copy(isLoading = true) }
-        // state = state.copy(isLoading = true)
         try {
             coinRepository.observeTickerCoins().collect { coins ->
                 allCoinsData = coins
@@ -80,7 +78,6 @@ class CoinTickerListViewModel @Inject constructor(
                     error = "An error occurred: ${e.localizedMessage}",
                 )
             }
-            // state = state.copy(isLoading = false, error = "An error occurred: ${e.localizedMessage}")
         }
     }
 
