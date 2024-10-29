@@ -8,6 +8,7 @@ import com.filip.cryptoViewer.presentation.ui.screens.coindetail.CoinDetailViewM
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
@@ -22,8 +23,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import io.mockk.mockk
-
 
 @ExperimentalCoroutinesApi
 class CoinDetailViewModelTest {
@@ -50,7 +49,7 @@ class CoinDetailViewModelTest {
 
         viewModel = CoinDetailViewModel(
             coinRepository = coinRepository,
-            savedStateHandle = savedStateHandle
+            savedStateHandle = savedStateHandle,
         )
     }
 
@@ -70,14 +69,14 @@ class CoinDetailViewModelTest {
             tags = emptyList(),
             team = emptyList(),
             symbol = "TEST",
-            description = "Test description"
+            description = "Test description",
         )
 
         coEvery { coinRepository.getCoinById("testCoinId") } returns mockCoin
 
         advanceUntilIdle()
 
-      //  assertThat(viewModel.state.coin).isEqualTo(mockCoin)
+        //  assertThat(viewModel.state.coin).isEqualTo(mockCoin)
         assertThat(viewModel.state.isLoading).isFalse()
         assertThat(viewModel.state.error).isNotNull()
     }
@@ -93,6 +92,3 @@ class CoinDetailViewModelTest {
         assertThat(viewModel.state.error).isNotNull()
     }
 }
-
-
-

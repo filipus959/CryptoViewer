@@ -21,7 +21,7 @@ class SortAndFilterCoinsUseCaseTest {
         testCoins = listOf(
             CoinTickerItem(id = "1", name = "Bitcoin", usdPrice = 40000.0, percentChange24h = 2.5, rank = 1, symbol = "BTC"),
             CoinTickerItem(id = "2", name = "Ethereum", usdPrice = 3000.0, percentChange24h = -1.2, rank = 2, symbol = "ETH"),
-            CoinTickerItem(id = "3", name = "Cardano", usdPrice = 1.5, percentChange24h = 0.5, rank = 3, symbol = "ADA")
+            CoinTickerItem(id = "3", name = "Cardano", usdPrice = 1.5, percentChange24h = 0.5, rank = 3, symbol = "ADA"),
         )
     }
 
