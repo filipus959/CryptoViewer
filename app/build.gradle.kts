@@ -153,6 +153,7 @@ dependencies {
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 
     // Debugging and Testing
     debugImplementation(libs.androidx.ui.tooling)

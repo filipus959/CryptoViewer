@@ -1,13 +1,17 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import app.cash.turbine.test
 import com.filip.cryptoViewer.domain.model.CoinDetail
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import com.filip.cryptoViewer.presentation.CoinDetailScreen
+import com.filip.cryptoViewer.presentation.ui.screens.coindetail.CoinDetailState
 import com.filip.cryptoViewer.presentation.ui.screens.coindetail.CoinDetailViewModel
 import com.google.common.truth.Truth.assertThat
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
@@ -31,15 +35,18 @@ class CoinDetailViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: CoinDetailViewModel
-    private lateinit var coinRepository: CoinRepository
     private lateinit var savedStateHandle: SavedStateHandle
 
     private val testDispatcher = StandardTestDispatcher()
     private val testScope = TestScope(testDispatcher)
 
+    @MockK
+    lateinit var coinRepository: CoinRepository
+
     @Before
     fun setup() {
-        coinRepository = mockk()
+        MockKAnnotations.init(this)
+
         savedStateHandle = mockk()
 
         Dispatchers.setMain(testDispatcher)
@@ -60,7 +67,7 @@ class CoinDetailViewModelTest {
     }
 
     @Test
-    fun `state is updated with coin data when getCoin is successful`() = testScope.runTest {
+    fun `state is updated with coin data when getCoin is successful`() = runTest(testDispatcher) {
         val mockCoin = CoinDetail(
             coinId = "testCoinId",
             name = "Test Coin",
@@ -72,13 +79,20 @@ class CoinDetailViewModelTest {
             description = "Test description",
         )
 
-        coEvery { coinRepository.getCoinById("testCoinId") } returns mockCoin
+        coEvery { coinRepository.getCoinById("testCoinId") } answers { mockCoin }
+        // simulate view observing state, which triggers it's production
 
-        advanceUntilIdle()
-
-        //  assertThat(viewModel.state.coin).isEqualTo(mockCoin)
-        assertThat(viewModel.state.isLoading).isFalse()
-        assertThat(viewModel.state.error).isNotNull()
+        viewModel.state.test {
+            assertThat(awaitItem()).isEqualTo(
+                CoinDetailState(isLoading = false, coin = null, error = ""),
+            )
+            assertThat(awaitItem()).isEqualTo(
+                CoinDetailState(isLoading = true, coin = null, error = ""),
+            )
+            assertThat(awaitItem()).isEqualTo(
+                CoinDetailState(isLoading = false, coin = mockCoin, error = ""),
+            )
+        }
     }
 
     @Test
@@ -87,8 +101,8 @@ class CoinDetailViewModelTest {
 
         advanceUntilIdle()
 
-        assertThat(viewModel.state.coin).isNull()
-        assertThat(viewModel.state.isLoading).isFalse()
-        assertThat(viewModel.state.error).isNotNull()
+        assertThat(viewModel.state.value.coin).isNull()
+        assertThat(viewModel.state.value.isLoading).isFalse()
+        assertThat(viewModel.state.value.error).isNotNull()
     }
 }
