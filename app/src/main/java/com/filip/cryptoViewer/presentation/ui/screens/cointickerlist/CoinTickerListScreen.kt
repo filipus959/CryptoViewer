@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +43,7 @@ fun CoinTickerListScreen(
 
     LoadableScreen(state) {
         CoinTickerListScreenContent(
-            state = viewModel.state.collectAsState().value,
+            state = state,
             searchQuery = viewModel.searchQuery,
             rankArrow = viewModel.getArrowForField(SortField.RANK), // Get arrow from ViewModel
             changeArrow = viewModel.getArrowForField(SortField.CHANGE), // Get arrow from ViewModel
@@ -52,7 +51,7 @@ fun CoinTickerListScreen(
             onSortByRank = { viewModel.updateSortCriteria(SortField.RANK) },
             onSortByChange = { viewModel.updateSortCriteria(SortField.CHANGE) },
             onSortByPrice = { viewModel.updateSortCriteria(SortField.PRICE) },
-            onSearchQueryChange = viewModel::onSearchQueryUpdated,
+            onSearchQueryChange = viewModel::onSearchQueryUpdate,
             goToCoinChartScreen = goToCoinChartScreen,
         )
     }

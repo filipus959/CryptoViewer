@@ -5,49 +5,76 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filip.cryptoViewer.domain.model.CoinTickerItem
 import com.filip.cryptoViewer.domain.model.SortCriteria
 import com.filip.cryptoViewer.domain.model.SortField
 import com.filip.cryptoViewer.domain.model.SortOrder
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import com.filip.cryptoViewer.domain.usecase.SortAndFilterCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class CoinTickerListViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
     private val sortAndFilterCoinsUseCase: SortAndFilterCoinsUseCase,
+    // todo inject ioDispatcher here
 ) : ViewModel() {
 
-    var state = MutableStateFlow(CoinTickerListState.Empty)
-        private set
+    private val _sortCriteria = MutableStateFlow(SortCriteria(SortField.RANK, SortOrder.DESCENDING))
 
+    // todo write why this is needed
+    private val _searchQueryFlow = MutableStateFlow("")
     var searchQuery by mutableStateOf("")
         private set
-    private var sortCriteria by mutableStateOf(SortCriteria(SortField.RANK, SortOrder.DESCENDING))
-    private var allCoinsData by mutableStateOf(emptyList<CoinTickerItem>())
 
-    init {
-        viewModelScope.launch {
-            fetchTickerCoins()
-            observeTickerCoins()
+    // todo test this viewmodel
+    val state: StateFlow<CoinTickerListState> = combine(
+        coinRepository.observeTickerCoins(),
+        _searchQueryFlow,
+        _sortCriteria,
+    ) { allCoins, query, sortCriteria ->
+        val filteredList = sortAndFilterCoinsUseCase.filterCoinList(query, allCoins)
+        val sortedList = sortAndFilterCoinsUseCase.sortCoins(filteredList, sortCriteria)
+
+        CoinTickerListState(coins = sortedList, isLoading = false, error = "")
+    }
+        .onStart {
+            emit(CoinTickerListState.Empty.copy(isLoading = true))
+            tryFetchingTickerCoins()
+        }
+        .flowOn(Dispatchers.IO)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = CoinTickerListState.Empty,
+        )
+
+    private suspend fun FlowCollector<CoinTickerListState>.tryFetchingTickerCoins() {
+        try {
+            coinRepository.fetchTickerCoins()
+        } catch (e: Exception) {
+            val errorState = CoinTickerListState.Empty.copy(
+                isLoading = false,
+                error = e.message ?: "An unexpected error occurred",
+            )
+            emit(errorState)
         }
     }
 
-    fun getArrowForField(field: SortField): String {
-        return if (sortCriteria.field == field) {
-            when (sortCriteria.order) {
-                SortOrder.ASCENDING -> "↑"
-                SortOrder.DESCENDING -> "↓"
-            }
-        } else {
-            ""
+    private var sortCriteria: SortCriteria
+        get() = _sortCriteria.value
+        set(value) {
+            _sortCriteria.value = value
         }
-    }
 
     fun updateSortCriteria(field: SortField) {
         sortCriteria = if (sortCriteria.field == field) {
@@ -55,38 +82,17 @@ class CoinTickerListViewModel @Inject constructor(
         } else {
             SortCriteria(field = field, order = SortOrder.ASCENDING)
         }
-        sortAndFilterCoins()
     }
 
-    private fun sortAndFilterCoins() {
-        val filteredList = sortAndFilterCoinsUseCase.filterCoinList(searchQuery, allCoinsData)
-        val sortedList = sortAndFilterCoinsUseCase.sortCoins(filteredList, sortCriteria)
-        state.update { it.copy(coins = sortedList, isLoading = false) }
-    }
-
-    private suspend fun observeTickerCoins() {
-        state.update { it.copy(isLoading = true) }
-        try {
-            coinRepository.observeTickerCoins().collect { coins ->
-                allCoinsData = coins
-                sortAndFilterCoins()
-            }
-        } catch (e: Exception) {
-            state.update {
-                it.copy(
-                    isLoading = false,
-                    error = "An error occurred: ${e.localizedMessage}",
-                )
-            }
+    fun getArrowForField(field: SortField): String =
+        if (sortCriteria.field == field) {
+            if (sortCriteria.order == SortOrder.ASCENDING) "↑" else "↓"
+        } else {
+            ""
         }
-    }
 
-    fun onSearchQueryUpdated(query: String) {
+    fun onSearchQueryUpdate(query: String) {
         searchQuery = query
-        sortAndFilterCoins()
-    }
-
-    private suspend fun fetchTickerCoins() {
-        coinRepository.fetchTickerCoins()
+        _searchQueryFlow.value = query
     }
 }

@@ -7,7 +7,6 @@ data class CoinTickerListState(
     override val isLoading: Boolean,
     val coins: List<CoinTickerItem>,
     override val error: String,
-    val searchQuery: String = "",
 ) : UIState {
     companion object {
         val Empty = CoinTickerListState(

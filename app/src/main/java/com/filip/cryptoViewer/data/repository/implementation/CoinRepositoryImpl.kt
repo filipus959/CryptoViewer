@@ -74,7 +74,7 @@ class CoinRepositoryImpl @Inject constructor(
         ).fetch().toDomainModel()
     }
 
-    override suspend fun observeTickerCoins(): Flow<List<CoinTickerItem>> {
+    override fun observeTickerCoins(): Flow<List<CoinTickerItem>> {
         return coinTickerItemDao.getAllCoinTickerItems()
             .map { it.map { dbItem -> dbItem.toDomainModel() } }
     }

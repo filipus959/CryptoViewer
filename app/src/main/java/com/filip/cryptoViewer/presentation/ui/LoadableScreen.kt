@@ -32,7 +32,6 @@ fun <T : UIState> LoadableScreen(
     ) {
         content(state)
 
-        // Error Message
         if (state.error.isNotBlank()) {
             Text(
                 text = state.error,
@@ -45,7 +44,6 @@ fun <T : UIState> LoadableScreen(
             )
         }
 
-        // Loading Indicator
         if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }

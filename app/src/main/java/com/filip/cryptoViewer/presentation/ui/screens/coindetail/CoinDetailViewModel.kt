@@ -10,39 +10,41 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class CoinDetailViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    val state: StateFlow<CoinDetailState> = flow { emit(produceState()) }
-        .onStart { emit(CoinDetailState.Empty.copy(isLoading = true)) }
+    private val coinId = savedStateHandle.toRoute<CoinDetailScreen>().coinId
+
+    val state: StateFlow<CoinDetailState> = flow {
+        emit(CoinDetailState.Empty.copy(isLoading = true))
+        emit(produceState())
+    }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
             initialValue = CoinDetailState.Empty,
         )
 
-    private suspend fun produceState() = try {
-        val coinData = coinRepository.getCoinById(
-            coinId = savedStateHandle.toRoute<CoinDetailScreen>().coinId,
-        )
-
-        CoinDetailState(
-            coin = coinData,
-            isLoading = false,
-            error = "",
-        )
-    } catch (e: Exception) {
-        CoinDetailState(
-            coin = null,
-            error = e.message ?: "An unexpected error occurred",
-            isLoading = false,
-        )
+    private suspend fun produceState(): CoinDetailState {
+        return try {
+            val coinData = coinRepository.getCoinById(coinId)
+            CoinDetailState(
+                coin = coinData,
+                isLoading = false,
+                error = "",
+            )
+        } catch (e: Exception) {
+            CoinDetailState(
+                coin = null,
+                isLoading = false,
+                error = e.message ?: "An unexpected error occurred",
+            )
+        }
     }
 }
