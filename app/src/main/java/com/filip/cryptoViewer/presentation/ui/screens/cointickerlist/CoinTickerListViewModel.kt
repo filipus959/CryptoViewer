@@ -5,13 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.filip.cryptoViewer.di.IoDispatcher
 import com.filip.cryptoViewer.domain.model.SortCriteria
 import com.filip.cryptoViewer.domain.model.SortField
 import com.filip.cryptoViewer.domain.model.SortOrder
 import com.filip.cryptoViewer.domain.repository.CoinRepository
 import com.filip.cryptoViewer.domain.usecase.SortAndFilterCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,17 +27,19 @@ import javax.inject.Inject
 class CoinTickerListViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
     private val sortAndFilterCoinsUseCase: SortAndFilterCoinsUseCase,
-    // todo inject ioDispatcher here
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _sortCriteria = MutableStateFlow(SortCriteria(SortField.RANK, SortOrder.DESCENDING))
 
-    // todo write why this is needed
+    // due to texfield nature and state handling
+    // we need to separate the search query
+    // flow from field that texfield is using for
+    // updating content to avoid unintended behavior
     private val _searchQueryFlow = MutableStateFlow("")
     var searchQuery by mutableStateOf("")
         private set
 
-    // todo test this viewmodel
     val state: StateFlow<CoinTickerListState> = combine(
         coinRepository.observeTickerCoins(),
         _searchQueryFlow,
@@ -44,14 +47,13 @@ class CoinTickerListViewModel @Inject constructor(
     ) { allCoins, query, sortCriteria ->
         val filteredList = sortAndFilterCoinsUseCase.filterCoinList(query, allCoins)
         val sortedList = sortAndFilterCoinsUseCase.sortCoins(filteredList, sortCriteria)
-
         CoinTickerListState(coins = sortedList, isLoading = false, error = "")
     }
         .onStart {
             emit(CoinTickerListState.Empty.copy(isLoading = true))
             tryFetchingTickerCoins()
         }
-        .flowOn(Dispatchers.IO)
+        .flowOn(ioDispatcher)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
